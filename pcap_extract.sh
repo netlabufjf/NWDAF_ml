@@ -13,12 +13,12 @@ PCAP_LIST_SIZE=$(wc -w <<< "$PCAP_LIST")
 time { # track execution time
 echo "[INFO] Exporting PCAP files"
 for i in ${PCAP_LIST[@]}; do
-    tshark -r $PCAP_FOLDER$i -T json > $OUT_FOLDER/"$i"_output".json"
+    tshark -r $PCAP_FOLDER$i -T json > $OUT_FOLDER/"${i%.*}.json"
     
     tshark -r $PCAP_FOLDER$i -T fields \
     -e frame.number -e frame.time_relative -e ip.src -e ip.dst -e _ws.col.protocol -e frame.len -e _ws.col.info \
     -E header=y -E separator=, -E quote=d -E occurrence=f \
-     > $OUT_FOLDER/"$i"_output".csv"
+     > $OUT_FOLDER/"${i%.*}.csv"
 
      # To customize the "-e flags" (display filters), see https://www.wireshark.org/docs/dfref/
      # For more information: https://manpages.ubuntu.com/manpages/jammy/man1/tshark.1.html
