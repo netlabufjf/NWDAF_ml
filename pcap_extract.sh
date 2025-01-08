@@ -7,7 +7,10 @@ PCAP_LIST=$(ls $PCAP_FOLDER | grep .pcap)
 COUNTER=0
 PCAP_LIST_SIZE=$(wc -w <<< "$PCAP_LIST")
 
+# TIME_START=$(date +%s) # record start time
+
 # PCAP to JSON and CSV
+time { # track execution time
 echo "[INFO] Exporting PCAP files"
 for i in ${PCAP_LIST[@]}; do
     tshark -r $PCAP_FOLDER$i -T json > $OUT_FOLDER/"$i"_output".json"
@@ -40,3 +43,9 @@ for i in ${JSON_LIST[@]}; do
     echo "[INFO] Status: $COUNTER of $JSON_LIST_SIZE ($PROGRESS %)"
 done
 unset JSON_LIST # clean up after usage
+
+echo "[DEBUG] Execution time:"
+}
+
+# TIME_END=$(date +%s) # record end time
+# echo "[DEBUG] Execution time: $((TIME_END-TIME_START)) seconds"
