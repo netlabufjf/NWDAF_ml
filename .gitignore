@@ -6,3 +6,6 @@ pyvenv/
 
 # ML results folder
 ML_test_code/results/*
+
+# Datasets
+pcap/*
