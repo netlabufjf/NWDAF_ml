@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
-PCAP_FOLDER=./pcap/input/
-OUT_FOLDER=./pcap/output/
+PCAP_FOLDER=./pcap/input/ # read raw PCAP files from here
+OUT_FOLDER=./pcap/output/1-PCAP-export/ # save the output there
 
 PCAP_LIST=$(ls $PCAP_FOLDER | grep .pcap)
 COUNTER=0
