@@ -44,10 +44,13 @@ def print_frequency_data(freq_data_list):
         for column_name, freq_series in item.items():
             print(f"Frequency information for {column_name}:")
             print(freq_series)
+            file_name_without_format = os.path.splitext(input_files_names[counter - 1])[0] # remove '.csv' from old file name
+            freq_series.to_csv(os.path.join(output_files_path, file_name_without_format + column_name + ".csv"))
         print("[INFO] Finished printing data frame", counter)
 
 # File paths
-input_files_path = "./pcap/output/"
+input_files_path = "./pcap/output/1-PCAP-export/" # read CSV files from here
+output_files_path = "./pcap/output/2-stats/" # save the output there
 
 # get the list of all CSV files in the inference directory
 input_files_names = [f for f in os.listdir(input_files_path) if f.endswith('.csv')]
