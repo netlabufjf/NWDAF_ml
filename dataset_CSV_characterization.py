@@ -42,10 +42,10 @@ def print_frequency_data(freq_data_list):
     for counter, item in enumerate(freq_data_list, start=1):
         print("[INFO] Frequency data extracted from data frame number", counter)
         for column_name, freq_series in item.items():
-            print(f"Frequency information for {column_name}:")
-            print(freq_series)
             file_name_without_format = os.path.splitext(input_files_names[counter - 1])[0] # remove '.csv' from old file name
             freq_series.to_csv(os.path.join(output_files_path, file_name_without_format + "." + column_name + ".csv"))
+            print(f"Frequency information for {column_name} of {file_name_without_format}:")
+            print(freq_series)
         print("[INFO] Finished printing data frame", counter)
 
 # File paths

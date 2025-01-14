@@ -11,7 +11,7 @@ PCAP_LIST_SIZE=$(wc -w <<< "$PCAP_LIST")
 
 # PCAP to JSON and CSV
 time { # track execution time
-echo "[INFO] Exporting PCAP files"
+echo "[INFO] Exporting $PCAP_LIST_SIZE PCAP files"
 for i in ${PCAP_LIST[@]}; do
     tshark -r $PCAP_FOLDER$i -T json > $OUT_FOLDER/"${i%.*}.json"
     
