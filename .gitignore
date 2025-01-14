@@ -4,8 +4,5 @@ pyvenv/
 # Ignore the ML model binary file
 *.pkl
 
-# ML results folder
-ML_test_code/results/*
-
 # Datasets
 pcap/*
