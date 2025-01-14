@@ -45,7 +45,7 @@ def print_frequency_data(freq_data_list):
             print(f"Frequency information for {column_name}:")
             print(freq_series)
             file_name_without_format = os.path.splitext(input_files_names[counter - 1])[0] # remove '.csv' from old file name
-            freq_series.to_csv(os.path.join(output_files_path, file_name_without_format + column_name + ".csv"))
+            freq_series.to_csv(os.path.join(output_files_path, file_name_without_format + "." + column_name + ".csv"))
         print("[INFO] Finished printing data frame", counter)
 
 # File paths
