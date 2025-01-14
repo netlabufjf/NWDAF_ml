@@ -52,12 +52,12 @@ def print_frequency_data(freq_data_list):
 input_files_path = "./pcap/output/1-PCAP-export/" # read CSV files from here
 output_files_path = "./pcap/output/2-stats/" # save the output there
 
-# get the list of all CSV files in the inference directory
+# get the list of all CSV files in the input directory
 input_files_names = [f for f in os.listdir(input_files_path) if f.endswith('.csv')]
 # input_files_names = [f for f in os.listdir(input_files_path) if f.endswith('test.csv') | f.endswith('5g1.csv')] # initial tests
-# create a list of file paths by joining the inference directory path with each file name
+# create a list of file paths by joining the input directory path with each file name
 input_file_paths = [os.path.join(input_files_path, f) for f in input_files_names]
-# TODO create an option menu to choose which file(s) to input to next steps
+# TODO create an option menu to choose which file(s) to use on next steps
 
 # Read CSV files
 input_dfs = [read_csv(path) for path in input_file_paths]
