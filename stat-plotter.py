@@ -17,25 +17,6 @@ def read_csv(file_path):
         print("[ERROR]", type(e).__name__, e)
         exit()
 
-# File paths
-input_files_path = "./pcap/output/2-stats/" # read CSV files from here
-output_files_path = "./pcap/output/2-stats/graphs/" # save the output there
-
-# Get file names and paths for protocol and length data
-input_file_names_protocol = [f for f in os.listdir(input_files_path) if f.endswith('protocol.csv')]
-input_file_paths_protocol = [os.path.join(input_files_path, f) for f in input_file_names_protocol]
-input_file_names_length = [f for f in os.listdir(input_files_path) if f.endswith('len.csv')]
-input_file_paths_length = [os.path.join(input_files_path, f) for f in input_file_names_length]
-
-# Read CSV files
-input_dfs_protocol = [read_csv(path) for path in input_file_paths_protocol]
-input_dfs_length = [read_csv(path) for path in input_file_paths_length]
-
-# Check if at least one file was found for each type
-if not input_dfs_protocol and not input_dfs_length: # TODO improve this check to filter per type
-    print(f"[ERROR] No CSV files found on {input_files_path}")
-    exit()
-
 # Create chart for each DataFrame
 def plot_graph(df_to_plot, input_file_name, column_label, x_label, y_label, plt_type):
     for i, df in enumerate(df_to_plot):
@@ -73,6 +54,25 @@ def plot_graph(df_to_plot, input_file_name, column_label, x_label, y_label, plt_
 
         # plt.show() # DEBUG
         plt.clf()  # Clear the figure to create a new plot
+
+# File paths
+input_files_path = "./pcap/output/2-stats/" # read CSV files from here
+output_files_path = "./pcap/output/2-stats/graphs/" # save the output there
+
+# Get file names and paths for protocol and length data
+input_file_names_protocol = [f for f in os.listdir(input_files_path) if f.endswith('protocol.csv')]
+input_file_paths_protocol = [os.path.join(input_files_path, f) for f in input_file_names_protocol]
+input_file_names_length = [f for f in os.listdir(input_files_path) if f.endswith('len.csv')]
+input_file_paths_length = [os.path.join(input_files_path, f) for f in input_file_names_length]
+
+# Read CSV files
+input_dfs_protocol = [read_csv(path) for path in input_file_paths_protocol]
+input_dfs_length = [read_csv(path) for path in input_file_paths_length]
+
+# Check if at least one file was found for each type
+if not input_dfs_protocol and not input_dfs_length: # TODO improve this check to filter per type
+    print(f"[ERROR] No CSV files found on {input_files_path}")
+    exit()
 
 # Create plots for both protocol and length data
 plot_graph(input_dfs_protocol, input_file_names_protocol, '_ws.col.protocol', 'Protocol Label', 'Frequency', 'bar')
