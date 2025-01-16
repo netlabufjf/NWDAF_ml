@@ -24,8 +24,9 @@ def plot_graph(df_to_plot, input_file_name, column_label, x_label, y_label, plt_
         
         # Adjust plot parameters according to each plot type
         if (plt_type == 'line'):
-            plt.plot(df[column_label], df['count'], marker='o')
-            # TODO improve line plots to plot a large number of datapoints correctly
+            plt.figure(figsize=(15, 6)) # Set figure size
+            sorted_df = df.sort_values(by=column_label) # sort data before plotting
+            plt.plot(sorted_df[column_label], sorted_df['count'], marker='.', linestyle=':')
         elif (plt_type == 'bar'):
             x = df[column_label]
             y = df['count'] # get the count column data
@@ -33,7 +34,6 @@ def plot_graph(df_to_plot, input_file_name, column_label, x_label, y_label, plt_
             
             plt.bar(x, y, align='center')
             plt.xticks(x, labels, rotation=15)
-            plt.yscale('log')
             # Add the counts as labels above each bar
             for j in range(len(y)):
                 plt.text(j, y[j], str(y[j]), ha='center', va='bottom')
@@ -41,6 +41,7 @@ def plot_graph(df_to_plot, input_file_name, column_label, x_label, y_label, plt_
             print("[ERROR] Could not set plt_type correctly, currently it is:", plt_type)
             exit()
                 
+        plt.yscale('log')
         file_name_without_format = os.path.splitext(input_file_name[i])[0] # remove '.csv' from old file name
         plt.title(file_name_without_format)
         plt.xlabel(x_label)
