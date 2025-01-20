@@ -31,12 +31,15 @@ def plot_graph(df_to_plot, input_file_name, column_label, x_label, y_label, plt_
             x = df[column_label]
             y = df['count'] # get the count column data
             labels = [str(x) for x in df[column_label]] # convert all labels to strings (required by plt.barh())
+            total_count = y.sum()
             
             plt.bar(x, y, align='center')
             plt.xticks(x, labels, rotation=15)
-            # Add the counts as labels above each bar
+            # Add the counts and percentages as labels above each bar
             for j in range(len(y)):
-                plt.text(j, y[j], str(y[j]), ha='center', va='bottom')
+                percentage = round((y[j]/total_count)*100, 1)
+                label_text = f"{y[j]} ({percentage}%)" # format the label text with both count and percentage
+                plt.text(j, y[j], label_text, ha='center', va='bottom')
         else:
             print("[ERROR] Could not set plt_type correctly, currently it is:", plt_type)
             exit()
