@@ -3,6 +3,11 @@
 PCAP_FOLDER=./pcap/input/ # read raw PCAP files from here
 OUT_FOLDER=./pcap/output/1-PCAP-export/ # save the output there
 
+# set IFS to break only on new line (so the input files can have white space on their names)
+# for more info: https://www.linuxquestions.org/questions/programming-9/bash-put-output-from-%60ls%60-into-an-array-346719/#post1765355
+IFS='
+'
+
 PCAP_LIST=$(ls $PCAP_FOLDER | grep .pcap)
 COUNTER=0
 PCAP_LIST_SIZE=$(wc -w <<< "$PCAP_LIST")
