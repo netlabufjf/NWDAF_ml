@@ -10,7 +10,7 @@ IFS='
 
 PCAP_LIST=$(ls $PCAP_FOLDER | grep .pcap)
 COUNTER=0
-PCAP_LIST_SIZE=$(wc -w <<< "$PCAP_LIST")
+PCAP_LIST_SIZE=$(wc -l <<< "$PCAP_LIST")
 
 # TIME_START=$(date +%s) # record start time
 
@@ -35,7 +35,7 @@ wait
 unset PCAP_LIST # clean up after usage
 
 JSON_LIST=$(ls $OUT_FOLDER | grep .json)
-JSON_LIST_SIZE=$(wc -w <<< "$JSON_LIST")
+JSON_LIST_SIZE=$(wc -l <<< "$JSON_LIST")
 COUNTER=0
 
 # Drop duplicated fields on JSON
