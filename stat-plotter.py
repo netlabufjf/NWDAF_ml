@@ -54,7 +54,8 @@ def plot_graph(df_to_plot, input_file_name, column_label, x_label, y_label, plt_
         print(f"[INFO] Plots of {x_label} for {input_file_name[i]} have been saved") # TODO improve messages on screen
 
         # plt.show() # DEBUG
-        plt.clf()  # Clear the figure to create a new plot
+        plt.clf()  # clear the figure to create a new plot
+        plt.close() # close each figure after finishing to free RAM
 
 # File paths
 input_files_path = "./pcap/output/2-stats/" # read CSV files from here
