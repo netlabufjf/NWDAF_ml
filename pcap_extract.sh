@@ -41,7 +41,7 @@ COUNTER=0
 # Drop duplicated fields on JSON
 echo "[INFO] Removing JSON duplicated entries"
 for i in ${JSON_LIST[@]}; do
-    sed -i '/"ip.addr":/d; /"ip.host":/d' $OUT_FOLDER/$i &
+    sed -i '/"ip.addr":/d; /"ip.host":/d ; /"udp.port":/d' $OUT_FOLDER/$i &
 
     ((COUNTER+=1))
     PROGRESS=$(bc <<< "scale=2;$COUNTER*100/$JSON_LIST_SIZE")
