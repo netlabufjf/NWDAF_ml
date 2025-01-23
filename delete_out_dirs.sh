@@ -7,5 +7,5 @@ echo "[INFO] Removing the output directory"
 rm -rf ./pcap/output
 
 echo "[INFO] Reconstructing the output directory structure"
-mkdir -p ./pcap/output/{1-PCAP-export,2-stats/graphs/}
+mkdir -p ./pcap/output/{1-PCAP-export,2-stats/graphs/,3-JSON-export}
 echo "[INFO] Done"
