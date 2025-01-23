@@ -1,4 +1,5 @@
 import pandas as pd
+import glob
 
 def read_csv(file_path):
     """
@@ -27,3 +28,27 @@ def read_csv(file_path):
         traceback.print_exception(*sys.exc_info())
         print("[ERRO]", type(e).__name__, e)
         exit()
+
+def glob_get_files_list(path, file_format='*'):
+    """
+    A function to list files in a given directory
+
+    Parameters
+    ----------
+        path : string
+            A path that points to where the file list should be constructed from.
+        file_format : string
+            The format of the files to be listed. By default it reads any available.
+
+    Returns
+    ----------
+        list
+            The list of files found by glob.
+    """
+    files = glob.glob(path + '*.' + file_format)
+
+    if not files: # check if glob is empty
+            print("[ERRO] No files were read by glob. Please, check its parameters")
+            exit()
+
+    return files
