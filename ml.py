@@ -2,7 +2,7 @@ import os
 import pandas as pd
 # import glob
 
-from util import glob_get_files_list
+from util import glob_get_files_list,read_csv
 
 # File paths
 input_files_path = "./pcap/output/4-ML/preprocess/labeled_files/" # read CSV files from here
@@ -48,12 +48,22 @@ def read_and_label_data(file_path, remove_old_files=False):
     
     print("[DEBU] Labeled data successfully saved to", new_file_name_and_path) # DEBUG
 
+def categorical_data_to_dummy(file_path):
+    df = read_csv(file_path)
+    columns_to_exclude = ["Source_IP", "Destination_IP"] # TODO deal with these columns later (or leave them excluded)
+    df = df.drop(columns=columns_to_exclude)
+    df_dummies = pd.get_dummies(df)
 
+    return df_dummies
+    
 # List of CSV files
 csv_files = glob_get_files_list(input_files_path, "csv")
 
 # Label all data inside CSV files
 [read_and_label_data(file, False) for file in csv_files]
 
-# TODO read the labeled data
-# TODO implement ML models
+# Update the list of CSV files
+csv_files = glob_get_files_list(output_files_path_labeled_data, "csv")
+
+a = categorical_data_to_dummy(csv_files[0]) # TODO generalize this construction to iterate over all files
+a.to_csv("a.csv", index=False)
