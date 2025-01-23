@@ -3,19 +3,7 @@ import pandas as pd
 import os
 import matplotlib.pyplot as plt
 
-def read_csv(file_path):
-    try:
-        # Read the CSV file into a DataFrame
-        df = pd.read_csv(file_path)
-        return df
-    except FileNotFoundError:
-        print(f"[ERROR] File not found at path {file_path}")
-        exit()
-    except Exception as e:
-        # printing stack trace 
-        traceback.print_exception(*sys.exc_info())
-        print("[ERROR]", type(e).__name__, e)
-        exit()
+from util import read_csv
 
 # Create chart for each DataFrame
 def plot_graph(df_to_plot, input_file_name, column_label, x_label, y_label, plt_type):

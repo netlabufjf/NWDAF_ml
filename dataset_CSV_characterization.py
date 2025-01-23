@@ -4,19 +4,7 @@ import sys
 import pandas as pd
 import os
 
-def read_csv(file_path):
-    try:
-        # Read the CSV file into a DataFrame
-        df = pd.read_csv(file_path)
-        return df
-    except FileNotFoundError:
-        print(f"[ERROR] File not found at path {file_path}")
-        exit()
-    except Exception as e:
-        # printing stack trace 
-        traceback.print_exception(*sys.exc_info())
-        print("[ERROR]", type(e).__name__, e)
-        exit()
+from util import read_csv
 
 def extract_frequency_info(data_frames, column_names):
     freq_data_list = []
