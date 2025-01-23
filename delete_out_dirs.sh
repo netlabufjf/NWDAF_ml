@@ -3,9 +3,10 @@
 echo -e "[WARN] ALL the data in the output folders will be \033[31mDELETED\033[0m !"
 read -p "Press ENTER to continue or Ctrl+C to abort now"
 
-echo "[INFO] Removing the output directory"
+echo -n "[INFO] Removing the output directory ... "
 rm -rf ./pcap/output
+echo "[ OK ]"
 
-echo "[INFO] Reconstructing the output directory structure"
+echo -n "[INFO] Reconstructing the output directory structure ... "
 mkdir -p ./pcap/output/{1-PCAP-export,2-stats/graphs/,3-JSON-export,4-ML/preprocess/{labeled_files,labeled_data}}
-echo "[INFO] Done"
+echo "[ OK ]"
