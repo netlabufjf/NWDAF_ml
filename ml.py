@@ -79,16 +79,18 @@ def preprocess_data(files_path, output_dir):
         print("[INFO] Preprocessed data saved to:", out_file_path)
         exit()
 
-# List of CSV files
+# Buid the CSV files list
 csv_files = glob_get_files_list(input_files_path, "csv")
 
-# Label all data inside CSV files
-[read_and_label_data(file, False) for file in csv_files]
+# Preprocess the data
+preprocess_data(csv_files, output_files_path_preprocessed_data)
 
 # Update the list of CSV files
-csv_files = glob_get_files_list(output_files_path_labeled_data, "csv")
+csv_files = glob_get_files_list(output_files_path_preprocessed_data, "csv")
 
-preprocess_data(output_files_path_labeled_data, output_files_path_preprocessed_data)
+# Label all data inside CSV files
+[read_and_label_data(file, output_files_path_labeled_data, False) for file in csv_files]
+
 
 # TODO implement ML models
 
