@@ -14,41 +14,44 @@ output_files_path_preprocessed_data = output_files_path_base + "preprocess/data_
 # Function to read and label data in CSV files
 def read_and_label_data(file_path, out_dir, remove_old_files=False):
     # Read the CSV file
-    df = pd.read_csv(file_path)
-    
-    # Assign labels based on filenames
-    if 'embb' in file_path:
-        label = 1
-    elif 'urllc' in file_path:
-        label = 2
-    elif 'mmtc' in file_path:
-        label = 3
-    else:
-        raise ValueError(f"Could not determine label from filename {file_path}")
-        exit()
-    
     file_name_without_path = file_path.split('/')[-1] # get old file name
     new_file_name_and_path = out_dir + os.path.splitext(file_name_without_path)[0] + "_labeled.csv"
-    
-    # Add label to DataFrame
-    print(f"[INFO] Labeling {file_name_without_path} ... ", end='')
-    df['label'] = label
-    df.to_csv(new_file_name_and_path, index=False)
-    print("[ OK ]")
+    if not os.path.exists(new_file_name_and_path):
+        df = pd.read_csv(file_path)
+        
+        # Assign labels based on filenames
+        if 'embb' in file_path:
+            label = 1
+        elif 'urllc' in file_path:
+            label = 2
+        elif 'mmtc' in file_path:
+            label = 3
+        else:
+            raise ValueError(f"Could not determine label from filename {file_path}")
+            exit()
+        
+        
+        # Add label to DataFrame
+        print(f"[INFO] Labeling {file_name_without_path} ... ", end='')
+        df['label'] = label
+        df.to_csv(new_file_name_and_path, index=False)
+        print("[ OK ]")
 
-    # if storage space is constrained, update remove_old_files to True to free some space
-    if (remove_old_files):
-        try:
-            os.remove(file_path)
-            print(f"[DEBU] File '{file_path}' has been deleted successfully.") # DEBUG
-        except FileNotFoundError:
-            print(f"[ERRO] File in '{file_path}' not found.")
-        except PermissionError:
-            print(f"[ERRO] Permission denied to delete the file in '{file_path}'.")
-        except Exception as e:
-            print(f"[ERRO] Error occurred while deleting the file: {e}")
-    
-    print("[DEBU] Labeled data successfully saved to", new_file_name_and_path) # DEBUG
+        # if storage space is constrained, update remove_old_files to True to free some space
+        if (remove_old_files):
+            try:
+                os.remove(file_path)
+                print(f"[DEBU] File '{file_path}' has been deleted successfully.") # DEBUG
+            except FileNotFoundError:
+                print(f"[ERRO] File in '{file_path}' not found.")
+            except PermissionError:
+                print(f"[ERRO] Permission denied to delete the file in '{file_path}'.")
+            except Exception as e:
+                print(f"[ERRO] Error occurred while deleting the file: {e}")
+        
+        print("[DEBU] Labeled data successfully saved to", new_file_name_and_path) # DEBUG
+    else:
+        print(f"[INFO] The file {file_name_without_path} was already labeled")
 
 def categorical_data_to_dummy(file_path):
     df = read_csv(file_path)
@@ -61,24 +64,28 @@ def categorical_data_to_dummy(file_path):
 def preprocess_data(files_path, output_dir):
     for i in files_path:
         file_name = i.split('/')[-1]
-        print("[INFO] Working with", file_name)
-        df = df.dropna(axis=1, how='all') # drop columns where all values are None
-        df = categorical_data_to_dummy(i) # transform categorical features
-        df.drop(columns=["Packet_no"], axis=1, inplace=True) # drop packet number to avoid using it in the models
-        
-        # Normalize features using standardization
-        # using MinMax to avoid giving more importance to a given feature
-        # for more information: https://scikit-learn.org/stable/auto_examples/preprocessing/plot_all_scaling.html
-        scaler = MinMaxScaler() 
-        data_features_names = list(df)
-        scaler.fit(df[data_features_names])
-        df[data_features_names] = scaler.transform(df[data_features_names])
-
-        # Save the normalized data
         out_file_path = output_dir + file_name
-        df.to_csv(out_file_path, index=False)
-        print("[INFO] Preprocessed data saved to:", out_file_path)
-        exit()
+        if not os.path.exists(out_file_path):
+            df = read_csv(i)
+            print("[INFO] Working with", file_name)
+            df = df.dropna(axis=1, how='all') # drop columns where all values are None
+            df = categorical_data_to_dummy(df) # transform categorical features
+            df.drop(columns=["Packet_no"], axis=1, inplace=True) # drop packet number to avoid using it in the models
+            
+            # Normalize features using standardization
+            # using MinMax to avoid giving more importance to a given feature
+            # for more information: https://scikit-learn.org/stable/auto_examples/preprocessing/plot_all_scaling.html
+            scaler = MinMaxScaler() 
+            data_features_names = list(df)
+            scaler.fit(df[data_features_names])
+            df[data_features_names] = scaler.transform(df[data_features_names])
+
+            # Save the normalized data
+            df.to_csv(out_file_path, index=False)
+            print("[INFO] Preprocessed data saved to:", out_file_path)
+        else:
+            print(f"[INFO] The file {file_name} was already preprocessed")
+
 
 # Buid the CSV files list
 csv_files = glob_get_files_list(input_files_path, "csv")
