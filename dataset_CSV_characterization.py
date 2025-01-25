@@ -67,6 +67,7 @@ for col in columns_to_remove:
 input_freq_data_list = extract_frequency_info(input_dfs, column_names)
 
 # Print frequency information
-print("[INFO] Printing data frequency information")
-print_frequency_data(input_freq_data_list)
-print("[INFO] Finished printing data frequency information")
+# Commented out for now, left here for debug purposes
+# print("[INFO] Printing data frequency information")
+# print_frequency_data(input_freq_data_list)
+# print("[INFO] Finished printing data frequency information")
