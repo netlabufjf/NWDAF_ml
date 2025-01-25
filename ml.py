@@ -6,7 +6,7 @@ from sklearn.linear_model import LogisticRegression
 from sklearn.tree import DecisionTreeClassifier
 from sklearn.metrics import accuracy_score,confusion_matrix
 
-from util import glob_get_files_list,read_csv
+from util import glob_get_files_list,read_csv,delete_files
 
 # File paths
 input_files_path = "./pcap/output/4-ML/preprocess/labeled_files/" # read CSV files from here
@@ -42,15 +42,7 @@ def read_and_label_data(file_path, out_dir, remove_old_files=False):
 
         # if storage space is constrained, update remove_old_files to True to free some space
         if (remove_old_files):
-            try:
-                os.remove(file_path)
-                print(f"[DEBU] File '{file_path}' has been deleted successfully.") # DEBUG
-            except FileNotFoundError:
-                print(f"[ERRO] File in '{file_path}' not found.")
-            except PermissionError:
-                print(f"[ERRO] Permission denied to delete the file in '{file_path}'.")
-            except Exception as e:
-                print(f"[ERRO] Error occurred while deleting the file: {e}")
+            delete_files(file_name_without_path, file_path)
         
         print("[DEBU] Labeled data successfully saved to", new_file_name_and_path) # DEBUG
     else:
