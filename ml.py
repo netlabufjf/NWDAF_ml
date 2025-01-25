@@ -98,6 +98,35 @@ csv_files = glob_get_files_list(output_files_path_preprocessed_data, "csv")
 # Label all data inside CSV files
 [read_and_label_data(file, output_files_path_labeled_data, False) for file in csv_files]
 
+# Update the list of CSV files
+csv_files = glob_get_files_list(output_files_path_labeled_data, "csv")
 
-# TODO implement ML models
+# Load labeled data
+data = pd.concat([read_csv(file) for file in csv_files], ignore_index=True)
+
+# Prepare data for supervised learning
+X = data.drop('label', axis=1)  # Features
+y = data['label']  # Target variable
+
+# Now X and y are ready for supervised learning
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.3, random_state=42)
+
+# Baseline classifier (LR)
+# model = LogisticRegression() # TODO drop NAN values first
+# model.fit(X_train, y_train)
+
+# Evaluate the model
+# y_pred = model.predict(X_test)
+# print(f"Accuracy: {accuracy_score(y_test, y_pred)}")
+
+# DT
+clf = DecisionTreeClassifier()
+clf.fit(X_train, y_train)
+y_pred = clf.predict(X_test)
+
+# Model evaluation
+accuracy = accuracy_score(y_test, y_pred)
+cm = confusion_matrix(y_test, y_pred)
+print(f"Accuracy: {accuracy}")
+print(f"Confusion Matrix:\n{cm}")
 
