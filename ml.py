@@ -12,7 +12,7 @@ output_files_path_labeled_data = output_files_path_base + "preprocess/labeled_da
 output_files_path_preprocessed_data = output_files_path_base + "preprocess/data_ready_to_ml/" # save the labeled output files there
 
 # Function to read and label data in CSV files
-def read_and_label_data(file_path, remove_old_files=False):
+def read_and_label_data(file_path, out_dir, remove_old_files=False):
     # Read the CSV file
     df = pd.read_csv(file_path)
     
@@ -28,7 +28,7 @@ def read_and_label_data(file_path, remove_old_files=False):
         exit()
     
     file_name_without_path = file_path.split('/')[-1] # get old file name
-    new_file_name_and_path = output_files_path_labeled_data + os.path.splitext(file_name_without_path)[0] + "_labeled.csv"
+    new_file_name_and_path = out_dir + os.path.splitext(file_name_without_path)[0] + "_labeled.csv"
     
     # Add label to DataFrame
     print(f"[INFO] Labeling {file_name_without_path} ... ", end='')
