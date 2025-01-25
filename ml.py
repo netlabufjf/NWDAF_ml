@@ -128,8 +128,15 @@ clf.fit(X_train, y_train)
 y_pred = clf.predict(X_test)
 
 # Model evaluation
+print("DT")
 accuracy = accuracy_score(y_test, y_pred)
 cm = confusion_matrix(y_test, y_pred)
 print(f"Accuracy: {accuracy}")
 print(f"Confusion Matrix:\n{cm}")
 
+print("LightGBM")
+# More info: https://scikit-learn.org/stable/modules/generated/sklearn.ensemble.HistGradientBoostingClassifier.html
+clf = HistGradientBoostingClassifier().fit(X, y)
+accuracy = clf.score(X, y)
+
+print(f"Mean Accuracy: {accuracy}")
