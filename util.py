@@ -52,3 +52,25 @@ def glob_get_files_list(path, file_format='*'):
             exit()
 
     return files
+
+def delete_files(file_name, path):
+    """
+    A function to delete a file from a given directory
+
+    Parameters
+    ----------
+        file_name : string
+            The file name that should be deleted.
+        path : string
+            A path that points to where the file should be deleted from.
+    """
+    file_path = path + file_name
+    try:
+        os.remove(file_path)
+        print(f"[DEBU] File {file_name} has been deleted successfully from {path}") # DEBUG
+    except FileNotFoundError:
+        print(f"[ERRO] File in {file_path} not found")
+    except PermissionError:
+        print(f"[ERRO] Permission denied to delete the file {file_name} in {path}")
+    except Exception as e:
+        print(f"[ERRO] Error occurred while deleting the file: {e}")
