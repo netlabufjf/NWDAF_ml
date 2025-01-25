@@ -40,6 +40,8 @@ def print_frequency_data(freq_data_list):
 input_files_path = "./pcap/output/1-PCAP-export/" # read CSV files from here
 output_files_path = "./pcap/output/2-stats/" # save the output there
 
+print("[INFO] Creating statistical data")
+
 # get the list of all CSV files in the input directory
 input_files_names = [f for f in os.listdir(input_files_path) if f.endswith('.csv')]
 # input_files_names = [f for f in os.listdir(input_files_path) if f.endswith('test.csv') | f.endswith('5g1.csv')] # initial tests
@@ -71,3 +73,4 @@ input_freq_data_list = extract_frequency_info(input_dfs, column_names)
 # print("[INFO] Printing data frequency information")
 # print_frequency_data(input_freq_data_list)
 # print("[INFO] Finished printing data frequency information")
+print("[INFO] Creating statistical data successfully finished")
