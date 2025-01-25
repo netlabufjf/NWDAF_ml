@@ -1,6 +1,7 @@
 import os
 import pandas as pd
 # import glob
+from sklearn.preprocessing import MinMaxScaler
 
 from util import glob_get_files_list,read_csv
 
@@ -8,6 +9,7 @@ from util import glob_get_files_list,read_csv
 input_files_path = "./pcap/output/4-ML/preprocess/labeled_files/" # read CSV files from here
 output_files_path_base = "./pcap/output/4-ML/" # save the output there
 output_files_path_labeled_data = output_files_path_base + "preprocess/labeled_data/" # save the labeled output files there
+output_files_path_preprocessed_data = output_files_path_base + "preprocess/data_ready_to_ml/" # save the labeled output files there
 
 # Function to read and label data in CSV files
 def read_and_label_data(file_path, remove_old_files=False):
@@ -56,6 +58,27 @@ def categorical_data_to_dummy(file_path):
 
     return df_dummies
     
+def preprocess_data(files_path, output_dir):
+    for i in csv_files:
+        file_name = i.split('/')[-1]
+        print("[INFO] Working with", file_name)
+        df = categorical_data_to_dummy(i) # transform categorical features
+        df.drop(columns=["Packet_no"], axis=1, inplace=True) # drop packet number to avoid using it in the models
+        
+        # Normalize features using standardization
+        # using MinMax to avoid giving more importance to a given feature
+        # for more information: https://scikit-learn.org/stable/auto_examples/preprocessing/plot_all_scaling.html
+        scaler = MinMaxScaler() 
+        data_features_names = list(df)
+        scaler.fit(df[data_features_names])
+        df[data_features_names] = scaler.transform(df[data_features_names])
+
+        # Save the normalized data
+        out_file_path = output_files_path_preprocessed_data + file_name
+        df.to_csv(out_file_path, index=False)
+        print("[INFO] Preprocessed data saved to:", out_file_path)
+        exit()
+
 # List of CSV files
 csv_files = glob_get_files_list(input_files_path, "csv")
 
@@ -65,5 +88,7 @@ csv_files = glob_get_files_list(input_files_path, "csv")
 # Update the list of CSV files
 csv_files = glob_get_files_list(output_files_path_labeled_data, "csv")
 
-a = categorical_data_to_dummy(csv_files[0]) # TODO generalize this construction to iterate over all files
-a.to_csv("a.csv", index=False)
+preprocess_data(output_files_path_labeled_data, output_files_path_preprocessed_data)
+
+# TODO implement ML models
+
