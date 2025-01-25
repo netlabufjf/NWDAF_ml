@@ -59,7 +59,7 @@ def categorical_data_to_dummy(file_path):
     return df_dummies
     
 def preprocess_data(files_path, output_dir):
-    for i in csv_files:
+    for i in files_path:
         file_name = i.split('/')[-1]
         print("[INFO] Working with", file_name)
         df = categorical_data_to_dummy(i) # transform categorical features
@@ -74,7 +74,7 @@ def preprocess_data(files_path, output_dir):
         df[data_features_names] = scaler.transform(df[data_features_names])
 
         # Save the normalized data
-        out_file_path = output_files_path_preprocessed_data + file_name
+        out_file_path = output_dir + file_name
         df.to_csv(out_file_path, index=False)
         print("[INFO] Preprocessed data saved to:", out_file_path)
         exit()
