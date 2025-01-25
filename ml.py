@@ -9,10 +9,10 @@ from sklearn.metrics import accuracy_score,confusion_matrix
 from util import glob_get_files_list,read_csv,delete_files
 
 # File paths
-input_files_path = "./pcap/output/4-ML/preprocess/labeled_files/" # read CSV files from here
-output_files_path_base = "./pcap/output/4-ML/" # save the output there
-output_files_path_labeled_data = output_files_path_base + "preprocess/labeled_data/" # save the labeled output files there
-output_files_path_preprocessed_data = output_files_path_base + "preprocess/data_ready_to_ml/" # save the labeled output files there
+working_folder = "./pcap/output/4-ML/"
+input_files_path = working_folder + "preprocess/labeled_files/" # read CSV files from here
+output_files_path_preprocessed_data = working_folder + "preprocess/data_ready_to_ml/" # save preprocessed data there
+output_files_path_labeled_data = working_folder + "preprocess/labeled_data/" # save the labeled output files there
 
 # Function to read and label data in CSV files
 def read_and_label_data(file_path, out_dir, remove_old_files=False):
