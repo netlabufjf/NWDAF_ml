@@ -62,6 +62,7 @@ def preprocess_data(files_path, output_dir):
     for i in files_path:
         file_name = i.split('/')[-1]
         print("[INFO] Working with", file_name)
+        df = df.dropna(axis=1, how='all') # drop columns where all values are None
         df = categorical_data_to_dummy(i) # transform categorical features
         df.drop(columns=["Packet_no"], axis=1, inplace=True) # drop packet number to avoid using it in the models
         
