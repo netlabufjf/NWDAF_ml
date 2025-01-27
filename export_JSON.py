@@ -1,8 +1,10 @@
 import os
+import time
 
 from joblib import Parallel, delayed
 from pcap_json2csv.json2csv import parse
 
+start_time = time.time() # record the start of execution
 number_of_parallel_jobs=int(os.cpu_count()/2) # take half of reported CPU threads
 # File paths
 input_files_path = "./pcap/output/1-PCAP-export/" # read JSON files from here
@@ -37,3 +39,5 @@ except KeyboardInterrupt:
 # swap the lines on the block above with these below to disable the parallel execution
 # for i in input_file_paths:
 #     export_json(i)
+end_time = time.time() # record the end of execution
+print("Execution time:", end_time - start_time, "(s)") # TODO save this on disk
