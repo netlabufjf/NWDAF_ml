@@ -4,6 +4,7 @@ import pickle
 from sklearn.preprocessing import MinMaxScaler
 from sklearn.model_selection import train_test_split,cross_val_score
 from sklearn.linear_model import LogisticRegression
+from sklearn.ensemble import HistGradientBoostingClassifier
 from sklearn.tree import DecisionTreeClassifier
 from sklearn.metrics import accuracy_score,confusion_matrix
 
@@ -135,7 +136,7 @@ cm = confusion_matrix(y_test, y_pred)
 print(f"Accuracy: {accuracy}")
 print(f"Confusion Matrix:\n{cm}")
 
-print("LightGBM")
+print("HGB")
 # More info: https://scikit-learn.org/stable/modules/generated/sklearn.ensemble.HistGradientBoostingClassifier.html
 clf = HistGradientBoostingClassifier().fit(X, y)
 save_model_locally(clf, "histogram_gradient_boosting", output_files_path_models)
