@@ -1,5 +1,6 @@
 import os
 import pandas as pd
+import pickle
 from sklearn.preprocessing import MinMaxScaler
 from sklearn.model_selection import train_test_split,cross_val_score
 from sklearn.linear_model import LogisticRegression
@@ -13,6 +14,13 @@ working_folder = "./pcap/output/4-ML/"
 input_files_path = working_folder + "preprocess/labeled_files/" # read CSV files from here
 output_files_path_preprocessed_data = working_folder + "preprocess/data_ready_to_ml/" # save preprocessed data there
 output_files_path_labeled_data = working_folder + "preprocess/labeled_data/" # save the labeled output files there
+output_files_path_models = working_folder + "models/" # save the model files there
+
+def save_model_locally(model, file_name, out_dir):
+    file_path = out_dir + file_name + ".pkl"
+    pickle.dump(model, open(file_path, 'wb'))
+    model_name = model.__class__.__name__
+    print(f"[INFO] Model {model_name} sucessfully saved on {file_path}")
 
 # Function to read and label data in CSV files
 def read_and_label_data(file_path, out_dir, remove_old_files=False):
@@ -117,6 +125,7 @@ X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.3, random_
 # DT
 clf = DecisionTreeClassifier()
 clf.fit(X_train, y_train)
+save_model_locally(clf, "decision_tree", output_files_path_models)
 y_pred = clf.predict(X_test)
 
 # Model evaluation
@@ -129,6 +138,7 @@ print(f"Confusion Matrix:\n{cm}")
 print("LightGBM")
 # More info: https://scikit-learn.org/stable/modules/generated/sklearn.ensemble.HistGradientBoostingClassifier.html
 clf = HistGradientBoostingClassifier().fit(X, y)
+save_model_locally(clf, "histogram_gradient_boosting", output_files_path_models)
 accuracy = clf.score(X, y)
 
 print(f"Mean Accuracy: {accuracy}")
