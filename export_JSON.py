@@ -22,22 +22,24 @@ if not input_file_paths:
     exit()
 
 # parse all JSON files read
-def export_json(file):
+def export_json(file, progress_bar_slow_print):
     try:
-        parse(file, output_files_path)
+        parse(file, output_files_path, progress_bar_slow_print)
     except KeyboardInterrupt:
         print("\n[ERRO] Operation interrupted by the user")
         exit()
     print(f"\n[INFO] Export of {file} done")
 
 try:
+    slowdown_print=True
     print(f"[INFO] Running in parallel using {number_of_parallel_jobs} threads")
-    Parallel(n_jobs=number_of_parallel_jobs)(delayed(export_json)(i) for i in input_file_paths)
+    Parallel(n_jobs=number_of_parallel_jobs)(delayed(export_json)(i, slowdown_print) for i in input_file_paths)
 except KeyboardInterrupt:
     print("[ERRO] User asked to quit")
     exit()
 # swap the lines on the block above with these below to disable the parallel execution
 # for i in input_file_paths:
-#     export_json(i)
+#     slowdown_print=False
+#     export_json(i, slowdown_print)
 end_time = time.time() # record the end of execution
 print("Execution time:", end_time - start_time, "(s)") # TODO save this on disk
