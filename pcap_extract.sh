@@ -20,6 +20,8 @@ extract_JSON_and_CSV () {
     local PCAP_FOLDER=$2
     local OUT_FOLDER=$3
 
+    echo "[INFO] Extracting data from $FILE_NAME"
+
     tshark -r $PCAP_FOLDER$FILE_NAME -T json > $OUT_FOLDER/"${FILE_NAME%.*}.json" && \
     tshark -r $PCAP_FOLDER$FILE_NAME -T fields \
     -e frame.number -e frame.time_relative -e ip.src -e ip.dst -e _ws.col.protocol -e frame.len -e _ws.col.info \
@@ -33,6 +35,8 @@ extract_JSON_and_CSV () {
 field_remover () {
     local FILE_NAME=$1
     local OUT_FOLDER=$2
+
+    echo "[INFO] Removing dupplicated fields from $FILE_NAME"
 
     sed -i '/"ip.addr":/d; /"ip.host":/d ; /"udp.port":/d' $OUT_FOLDER/$FILE_NAME
 }
