@@ -12,7 +12,7 @@ FILES=("$CSV_FOLDER"*.csv)
 FILES_LIST_SIZE=${#FILES[@]}
 
 if [ $FILES_LIST_SIZE -eq 0 ]; then
-    echo "No CSV files found in the directory: $CSV_FOLDER"
+    echo "[ERRO] No CSV files found in the directory: $CSV_FOLDER"
     exit 1
 fi
 
@@ -72,7 +72,7 @@ for FILE in "${FILES[@]}"; do
     
     # Move and rename the file
     mv "$FILE" "$NEW_FILE"
-    echo "[DEBU] Moved and renamed '$FILE' to '$NEW_FILE'" # DEBUG
+    # echo "[DEBU] Moved and renamed '$FILE' to '$NEW_FILE'" # DEBUG
 done
 
 echo "[INFO] All files have been processed"
