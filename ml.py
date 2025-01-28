@@ -108,12 +108,22 @@ csv_files = glob_get_files_list(output_files_path_preprocessed_data, "csv")
 # Update the list of CSV files
 csv_files = glob_get_files_list(output_files_path_labeled_data, "csv")
 
-# Load labeled data
-data = pd.concat([read_csv(file) for file in csv_files], ignore_index=True)
+# Load labeled training data
+training_data = pd.DataFrame()
+for file in csv_files:
+    if 'training' in file:
+        df = read_csv(file)
+        training_data = pd.concat([training_data, df], ignore_index=True)
+    elif 'inference' in file:
+        # print("[DEBU] Skipped inference file found at", file) # DEBUG
+        pass
+    else:
+        raise ValueError(f"[ERRO] Could not determine data set type from filename {file}")
+        exit()
 
 # Prepare data for supervised learning
-X = data.drop('label', axis=1)  # Features
-y = data['label']  # Target variable
+X = training_data.drop('label', axis=1)  # Features
+y = training_data['label']  # Target variable
 
 # Now X and y are ready for supervised learning
 X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.3, random_state=42)
