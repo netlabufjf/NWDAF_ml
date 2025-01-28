@@ -152,6 +152,11 @@ cm = confusion_matrix(y_test, y_pred)
 print(f"Accuracy: {accuracy}")
 print(f"Confusion Matrix:\n{cm}")
 
+# Record feature importance for Decision Tree
+importance_with_columns = pd.DataFrame({'feature': X_train.columns, 'importance': clf.feature_importances_})
+importance_with_columns.sort_values(by='importance', ascending=False, inplace=True, ignore_index=True)
+importance_with_columns.to_csv("dt_feature_importance.csv", header=True)
+
 print("HGB")
 # More info: https://scikit-learn.org/stable/modules/generated/sklearn.ensemble.HistGradientBoostingClassifier.html
 clf = HistGradientBoostingClassifier().fit(X, y)
