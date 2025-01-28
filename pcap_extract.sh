@@ -42,7 +42,7 @@ field_remover () {
 
     echo "[INFO] Removing dupplicated fields from $FILE_NAME"
 
-    sed -i '/"ip.addr":/d; /"ip.host":/d ; /"udp.port":/d' $OUT_FOLDER/$FILE_NAME
+    sed -i '/"ip.addr":/d; /"ip.host":/d ; /"udp.port":/d' $OUT_FOLDER$FILE_NAME
 }
 
 time { # track execution time
