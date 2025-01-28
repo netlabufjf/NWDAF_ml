@@ -28,12 +28,12 @@ def extract_frequency_info(data_frames, column_names):
 
 def print_and_save_frequency_data(freq_data_list):
     for counter, item in enumerate(freq_data_list, start=1):
-        print("[INFO] Frequency data extracted from data frame number", counter)
+        # print("[DEBU] Frequency data extracted from data frame number", counter) # DEBUG
         for column_name, freq_series in item.items():
             file_name_without_format = os.path.splitext(input_files_names[counter - 1])[0] # remove '.csv' from old file name
             freq_series.to_csv(os.path.join(output_files_path, file_name_without_format + "." + column_name + ".csv"))
-            print(f"[DEBU] Frequency information for {column_name} of {file_name_without_format}:\n {freq_series}")
-        print("[INFO] Finished printing data frame", counter)
+            # print(f"[DEBU] Frequency information for {column_name} of {file_name_without_format}:\n {freq_series}") # DEBUG
+        # print("[DEBU] Finished printing data frame", counter) # DEBUG
 
 # File paths
 input_files_path = "./pcap/output/1-PCAP-export/" # read CSV files from here
@@ -68,6 +68,5 @@ for col in columns_to_remove:
 input_freq_data_list = extract_frequency_info(input_dfs, column_names)
 
 # Print frequency information
-# Commented out for now, left here for debug purposes
 print_and_save_frequency_data(input_freq_data_list)
 print("[INFO] Creating statistical data successfully finished")
