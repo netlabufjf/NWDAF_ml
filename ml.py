@@ -1,11 +1,14 @@
 import os
 import pandas as pd
 import pickle
+from numpy import mean,std
 from sklearn.preprocessing import MinMaxScaler
 from sklearn.model_selection import train_test_split,cross_val_score,RepeatedStratifiedKFold
 from sklearn.linear_model import LogisticRegression
 from sklearn.ensemble import HistGradientBoostingClassifier
 from sklearn.tree import DecisionTreeClassifier
+from lightgbm import LGBMClassifier
+from xgboost import XGBClassifier
 from sklearn.metrics import accuracy_score,confusion_matrix
 
 from util import glob_get_files_list,read_csv,delete_files
@@ -146,3 +149,31 @@ save_model_locally(clf, "histogram_gradient_boosting", output_files_path_models)
 accuracy = clf.score(X, y)
 
 print(f"Mean Accuracy: {accuracy}")
+
+# clf = LGBMClassifier(max_bin=255, n_estimators=100) # TODO hyper param optimization
+clf = LGBMClassifier()
+clf.fit(X_train, y_train)
+save_model_locally(clf, "light_gradient_boosting_machine", output_files_path_models)
+# lgbm_scores = cross_val_score(clf, X, y, scoring='accuracy', cv=cv, n_jobs=8) # TODO run crossval
+# print(f'LightGBM Accuracy: {mean(lgbm_scores):.3f} ({std(lgbm_scores):.3f})')
+y_pred = clf.predict(X_test)
+
+print("LightGBM")
+accuracy = accuracy_score(y_test, y_pred)
+cm = confusion_matrix(y_test, y_pred)
+print(f"Accuracy: {accuracy}")
+print(f"Confusion Matrix:\n{cm}")
+
+# clf = XGBClassifier(tree_method='approx', max_bin=255, n_estimators=100) # TODO hyper param optimization
+clf = XGBClassifier()
+clf.fit(X_train, y_train)
+save_model_locally(clf, "extreme_gradient_boosting", output_files_path_models)
+# xgb_scores = cross_val_score(clf, X, y, scoring='accuracy', cv=cv, n_jobs=8) # TODO run crossval
+# print(f'XGBoost Accuracy: {mean(xgb_scores):.3f} ({std(xgb_scores):.3f})')
+y_pred = clf.predict(X_test)
+
+print("XGB")
+accuracy = accuracy_score(y_test, y_pred)
+cm = confusion_matrix(y_test, y_pred)
+print(f"Accuracy: {accuracy}")
+print(f"Confusion Matrix:\n{cm}")
