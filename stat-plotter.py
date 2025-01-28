@@ -36,7 +36,7 @@ def plot_graph(df_to_plot, input_file_name, column_label, x_label, y_label, plt_
         file_name_without_format = os.path.splitext(input_file_name[i])[0] # remove '.csv' from old file name
         plt.title(file_name_without_format)
         plt.xlabel(x_label)
-        plt.ylabel(y_label)
+        plt.ylabel(y_label + "(Logarithmic Scale)")
         plt.tight_layout()
         
         # Save plot
