@@ -33,11 +33,11 @@ def read_and_label_data(file_path, out_dir, remove_old_files=False):
         
         # Assign labels based on filenames
         if 'embb' in file_path:
-            label = 1
+            label = 0
         elif 'urllc' in file_path:
-            label = 2
+            label = 1
         elif 'mmtc' in file_path:
-            label = 3
+            label = 2
         else:
             raise ValueError(f"Could not determine label from filename {file_path}")
             exit()
