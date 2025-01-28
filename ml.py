@@ -156,9 +156,12 @@ print("HGB")
 # More info: https://scikit-learn.org/stable/modules/generated/sklearn.ensemble.HistGradientBoostingClassifier.html
 clf = HistGradientBoostingClassifier().fit(X, y)
 save_model_locally(clf, "histogram_gradient_boosting", output_files_path_models)
-accuracy = clf.score(X, y)
-
-print(f"Mean Accuracy: {accuracy}")
+mean_accuracy = clf.score(X, y)
+accuracy = accuracy_score(y_test, y_pred)
+cm = confusion_matrix(y_test, y_pred)
+print(f"Mean Accuracy: {mean_accuracy}")
+print(f"Accuracy: {accuracy}")
+print(f"Confusion Matrix:\n{cm}")
 
 # clf = LGBMClassifier(max_bin=255, n_estimators=100) # TODO hyper param optimization
 clf = LGBMClassifier(verbose=-1)
