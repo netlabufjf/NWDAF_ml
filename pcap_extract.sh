@@ -41,10 +41,6 @@ time { # track execution time
 echo "[INFO] Exporting $PCAP_LIST_SIZE PCAP files"
 for i in ${PCAP_LIST[@]}; do
     extract_JSON_and_CSV $i $PCAP_FOLDER $OUT_FOLDER &
-
-    ((COUNTER+=1))
-    PROGRESS=$(bc <<< "scale=2;$COUNTER*100/$PCAP_LIST_SIZE")
-    echo "[INFO] Status: $COUNTER of $PCAP_LIST_SIZE ($PROGRESS %)"
 done
 wait
 unset PCAP_LIST # clean up after usage
@@ -57,10 +53,6 @@ COUNTER=0
 echo "[INFO] Removing JSON duplicated entries"
 for i in ${JSON_LIST[@]}; do
     field_remover $i $OUT_FOLDER &
-
-    ((COUNTER+=1))
-    PROGRESS=$(bc <<< "scale=2;$COUNTER*100/$JSON_LIST_SIZE")
-    echo "[INFO] Status: $COUNTER of $JSON_LIST_SIZE ($PROGRESS %)"
 done
 wait
 unset JSON_LIST # clean up after usage
