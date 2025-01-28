@@ -1,16 +1,20 @@
 #!/usr/bin/env bash
 
-PCAP_FOLDER=./pcap/input/ # read raw PCAP files from here
-OUT_FOLDER=./pcap/output/1-PCAP-export/ # save the output there
+TRAINING_PCAP_FOLDER=./pcap/input/training_data/ # read training raw PCAP files from here
+INFERENCE_PCAP_FOLDER=./pcap/input/inference_data/ # read inference raw PCAP files from here
+TRAINING_OUT_FOLDER=./pcap/output/1-PCAP-export/training/ # save the training output there
+INFERENCE_OUT_FOLDER=./pcap/output/1-PCAP-export/inference/ # save the inference output there 
 
 # set IFS to break only on new line (so the input files can have white space on their names)
 # for more info: https://www.linuxquestions.org/questions/programming-9/bash-put-output-from-%60ls%60-into-an-array-346719/#post1765355
 IFS='
 '
 
-PCAP_LIST=$(ls $PCAP_FOLDER | grep .pcap)
-COUNTER=0
-PCAP_LIST_SIZE=$(wc -l <<< "$PCAP_LIST")
+TRAINING_PCAP_LIST=("$TRAINING_PCAP_FOLDER"*.pcap)
+INFERENCE_PCAP_LIST=("$INFERENCE_PCAP_FOLDER"*.pcap)
+TRAINING_PCAP_LIST_SIZE=${#TRAINING_PCAP_LIST[@]}
+INFERENCE_PCAP_LIST_SIZE=${#INFERENCE_PCAP_LIST[@]}
+TOTAL_LIST_SIZE=$((TRAINING_PCAP_LIST_SIZE + INFERENCE_PCAP_LIST_SIZE))
 
 # TIME_START=$(date +%s) # record start time
 
@@ -42,24 +46,44 @@ field_remover () {
 }
 
 time { # track execution time
-echo "[INFO] Exporting $PCAP_LIST_SIZE PCAP files"
-for i in ${PCAP_LIST[@]}; do
-    extract_JSON_and_CSV $i $PCAP_FOLDER $OUT_FOLDER &
-done
+echo "[INFO] Exporting $TRAINING_PCAP_LIST_SIZE training and $INFERENCE_PCAP_LIST_SIZE inference PCAP files"
+if [ $TRAINING_PCAP_LIST_SIZE -ne 0 ]; then
+    for i in "${TRAINING_PCAP_LIST[@]}"; do
+        extract_JSON_and_CSV "${i##*/}" $TRAINING_PCAP_FOLDER $TRAINING_OUT_FOLDER &
+    done
+fi
+if [ $INFERENCE_PCAP_LIST_SIZE -ne 0 ]; then
+    for j in "${INFERENCE_PCAP_LIST[@]}"; do
+        extract_JSON_and_CSV "${j##*/}" $INFERENCE_PCAP_FOLDER $INFERENCE_OUT_FOLDER &
+    done
+fi
 wait
-unset PCAP_LIST # clean up after usage
+unset TRAINING_PCAP_LIST # clean up after usage
+unset INFERENCE_PCAP_LIST_SIZE # clean up after usage
+echo "[INFO] All $TOTAL_LIST_SIZE files have been successfully exported"
 
-JSON_LIST=$(ls $OUT_FOLDER | grep .json)
-JSON_LIST_SIZE=$(wc -l <<< "$JSON_LIST")
-COUNTER=0
+TRAINING_JSON_LIST=("$TRAINING_OUT_FOLDER"*.json)
+INFERENCE_JSON_LIST=("$INFERENCE_OUT_FOLDER"*.json)
+TRAINING_JSON_LIST_SIZE=${#TRAINING_JSON_LIST[@]}
+INFERENCE_JSON_LIST_SIZE=${#INFERENCE_JSON_LIST[@]}
+TOTAL_LIST_SIZE=$((TRAINING_JSON_LIST_SIZE + INFERENCE_JSON_LIST_SIZE))
 
 # Drop duplicated fields on JSON
-echo "[INFO] Removing JSON duplicated entries"
-for i in ${JSON_LIST[@]}; do
-    field_remover $i $OUT_FOLDER &
-done
+echo "[INFO] Removing JSON duplicated entries from $TOTAL_LIST_SIZE files"
+if [ $TRAINING_JSON_LIST_SIZE -ne 0 ]; then
+    for i in "${TRAINING_JSON_LIST[@]}"; do
+        field_remover "${i##*/}" $TRAINING_OUT_FOLDER &
+    done
+fi
+if [ $INFERENCE_JSON_LIST_SIZE -ne 0 ]; then
+    for j in "${INFERENCE_JSON_LIST[@]}"; do
+        field_remover "${j##*/}" $INFERENCE_OUT_FOLDER &
+    done
+fi
 wait
-unset JSON_LIST # clean up after usage
+unset TRAINING_JSON_LIST # clean up after usage
+unset INFERENCE_JSON_LIST # clean up after usage
+echo "[INFO] All $TOTAL_LIST_SIZE files have been processed"
 
 echo "[DEBUG] Execution time:"
 }
