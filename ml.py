@@ -2,7 +2,7 @@ import os
 import pandas as pd
 import pickle
 from sklearn.preprocessing import MinMaxScaler
-from sklearn.model_selection import train_test_split,cross_val_score
+from sklearn.model_selection import train_test_split,cross_val_score,RepeatedStratifiedKFold
 from sklearn.linear_model import LogisticRegression
 from sklearn.ensemble import HistGradientBoostingClassifier
 from sklearn.tree import DecisionTreeClassifier
@@ -114,6 +114,9 @@ y = data['label']  # Target variable
 
 # Now X and y are ready for supervised learning
 X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.3, random_state=42)
+
+# Cross validation steps
+cv = RepeatedStratifiedKFold(n_splits=10, n_repeats=3, random_state=42)
 
 # Baseline classifier (LR)
 # model = LogisticRegression() # TODO drop NAN values first
