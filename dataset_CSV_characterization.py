@@ -26,7 +26,7 @@ def extract_frequency_info(data_frames, column_names):
 
     return freq_data_list
 
-def print_frequency_data(freq_data_list):
+def print_and_save_frequency_data(freq_data_list):
     for counter, item in enumerate(freq_data_list, start=1):
         print("[INFO] Frequency data extracted from data frame number", counter)
         for column_name, freq_series in item.items():
@@ -69,7 +69,5 @@ input_freq_data_list = extract_frequency_info(input_dfs, column_names)
 
 # Print frequency information
 # Commented out for now, left here for debug purposes
-# print("[INFO] Printing data frequency information")
-# print_frequency_data(input_freq_data_list)
-# print("[INFO] Finished printing data frequency information")
+print_and_save_frequency_data(input_freq_data_list)
 print("[INFO] Creating statistical data successfully finished")
