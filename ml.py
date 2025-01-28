@@ -161,7 +161,7 @@ accuracy = clf.score(X, y)
 print(f"Mean Accuracy: {accuracy}")
 
 # clf = LGBMClassifier(max_bin=255, n_estimators=100) # TODO hyper param optimization
-clf = LGBMClassifier()
+clf = LGBMClassifier(verbose=-1)
 clf.fit(X_train, y_train)
 save_model_locally(clf, "light_gradient_boosting_machine", output_files_path_models)
 # lgbm_scores = cross_val_score(clf, X, y, scoring='accuracy', cv=cv, n_jobs=8) # TODO run crossval
