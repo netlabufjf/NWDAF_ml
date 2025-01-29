@@ -60,12 +60,6 @@ def read_and_label_data(file_path, out_dir, remove_old_files=False):
     else:
         print(f"[INFO] The file {file_name_without_path} was already labeled")
 
-def categorical_data_to_dummy(df):
-    columns_to_exclude = ["Source_IP", "Destination_IP"] # TODO deal with these columns later (or leave them excluded)
-    df = df.drop(columns=columns_to_exclude)
-    df_dummies = pd.get_dummies(df)
-
-    return df_dummies
     
 def preprocess_data(files_path, output_dir):
     for i in files_path:
