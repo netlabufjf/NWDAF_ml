@@ -1,0 +1,89 @@
+import pandas as pd
+import numpy as np
+import pickle
+
+from datetime import datetime
+from util import glob_get_files_list,read_csv
+
+models_folder = "./pcap/output/4-ML/models/" # read the models from here
+data_folder = "./pcap/output/4-ML/preprocess/labeled_data/" # read the inference data from here
+results_folder = "./pcap/output/4-ML/inference_results/" # save the results here
+
+# Buid the PKL and CSV files lists
+pkl_files = glob_get_files_list(models_folder, "pkl")
+inference_data_files = glob_get_files_list(data_folder, "csv")
+
+def label_id_to_text(id):
+    # Assign labels based on id
+    if id == 0:
+        label = 'eMBB'
+    elif id == 1:
+        label = 'URLLC'
+    elif id == 2:
+        label = 'mMTC'
+    else:
+        raise ValueError(f"Could not determine label from id {id}")
+        exit()
+    return label
+
+for file in inference_data_files:
+    file_name = file.split('/')[-1]
+
+    if 'inference' in file:
+        print("[INFO] Running inference on", file_name)
+        
+        # Initialize results_df with columns
+        results_df = pd.DataFrame(columns=["file_name", "model_name", "inference_result_label", "inference_result", "inference_result_count_0", "inference_result_count_1", "inference_result_count_2"])
+        
+        data = read_csv(file) # load inference data
+
+        for path in pkl_files:
+            model = pickle.load(open(path, 'rb')) # load model from disk
+            model_name = model.__class__.__name__ 
+            print("[INFO] Using", model_name)
+            
+            inference_data = data.drop('label', axis=1)  # remove the label column
+            
+            # LinearSVC doesn't calculate probabilities
+            if (model_name != 'LinearSVC'):
+                pred_proba = model.predict_proba(inference_data)  # get prediction probabilities for each class
+                
+                # calculate the maximum probability for each sample and its corresponding class
+                max_prob_idx = np.argmax(pred_proba, axis=1)
+                max_class = pred_proba[np.arange(len(pred_proba)), max_prob_idx]  # get the maximum probability for each sample
+                inference_result = np.array([model.classes_[i] for i in max_prob_idx])  # get the class corresponding to the maximum probability index
+                
+                # count the occurrences of each predicted class
+                inference_result_counts = pd.Series(inference_result).value_counts()
+                
+                # print("[DEBU] Inference result:", inference_result_counts.idxmax())  # DEBUG
+                # print("[DEBU] Labels and their occurrences:\n", inference_result_counts)  # DEBUG
+                
+            else:
+                y_pred = model.predict(inference_data)
+                inference_result = pd.Series([model.classes_[i] for i in y_pred])
+                inference_result_counts = inference_result.value_counts()
+                # print("[DEBU] Inference result:", inference_result.idxmax())  # DEBUG
+            
+            inference_result_label = label_id_to_text(inference_result_counts.idxmax())
+
+            new_row = {
+                "file_name": file_name,
+                "model_name": model_name,
+                "inference_result_label": inference_result_label,
+                "inference_result": inference_result_counts.idxmax(),
+                "inference_result_count_0": inference_result_counts[0] if 0 in inference_result_counts else np.nan,
+                "inference_result_count_1": inference_result_counts[1] if 1 in inference_result_counts else np.nan,
+                "inference_result_count_2": inference_result_counts[2] if 2 in inference_result_counts else np.nan
+            }
+            
+            # Add new row to the dataframe using loc[] method
+            results_df.loc[len(results_df)] = [file_name, model_name, inference_result_label, inference_result_counts.idxmax(), inference_result_counts[0] if 0 in inference_result_counts else np.nan, inference_result_counts[1] if 1 in inference_result_counts else np.nan, inference_result_counts[2] if 2 in inference_result_counts else np.nan]
+            
+        # Save the results dataframe to a CSV file with a unique filename based on the current time
+        timestamp = datetime.now().strftime("%Y%m%d-%H%M%S")
+        filename = f"results_{timestamp}.csv"
+        results_df.to_csv(f"{results_folder}{file_name}_{timestamp}_inference_results.csv", index=False)
+        
+    else:
+        print(f"[WARN] Skipping file {file_name}")
