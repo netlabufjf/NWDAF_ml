@@ -78,7 +78,7 @@ for file in inference_data_files:
             }
             
             # Add new row to the dataframe using loc[] method
-            results_df.loc[len(results_df)] = [file_name, model_name, inference_result_label, inference_result_counts.idxmax(), inference_result_counts[0] if 0 in inference_result_counts else np.nan, inference_result_counts[1] if 1 in inference_result_counts else np.nan, inference_result_counts[2] if 2 in inference_result_counts else np.nan]
+            results_df.loc[len(results_df)] = new_row
             
         # Save the results dataframe to a CSV file with a unique filename based on the current time
         timestamp = datetime.now().strftime("%Y%m%d-%H%M%S")
