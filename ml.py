@@ -140,12 +140,15 @@ X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.3, random_
 cv = RepeatedStratifiedKFold(n_splits=10, n_repeats=3, random_state=42)
 
 # Baseline classifier (LR)
-# model = LogisticRegression() # TODO drop NAN values first
-# model.fit(X_train, y_train)
+model = LogisticRegression()
+model.fit(X_train, y_train)
 
 # Evaluate the model
-# y_pred = model.predict(X_test)
-# print(f"Accuracy: {accuracy_score(y_test, y_pred)}")
+print("LR")
+y_pred = model.predict(X_test)
+cm = confusion_matrix(y_test, y_pred)
+print(f"Accuracy: {accuracy_score(y_test, y_pred)}")
+print(f"Confusion Matrix:\n{cm}")
 
 # DT
 clf = DecisionTreeClassifier()
