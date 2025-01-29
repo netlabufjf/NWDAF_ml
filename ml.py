@@ -5,8 +5,9 @@ from numpy import mean,std
 from sklearn.preprocessing import MinMaxScaler,OrdinalEncoder
 from sklearn.model_selection import train_test_split,cross_val_score,RepeatedStratifiedKFold
 from sklearn.linear_model import LogisticRegression
-from sklearn.ensemble import HistGradientBoostingClassifier
+from sklearn.ensemble import HistGradientBoostingClassifier,RandomForestClassifier
 from sklearn.tree import DecisionTreeClassifier
+from sklearn.neural_network import MLPClassifier
 from lightgbm import LGBMClassifier
 from xgboost import XGBClassifier
 from sklearn.metrics import accuracy_score,confusion_matrix
@@ -167,6 +168,37 @@ print(f"Confusion Matrix:\n{cm}")
 importance_with_columns = pd.DataFrame({'feature': X_train.columns, 'importance': clf.feature_importances_})
 importance_with_columns.sort_values(by='importance', ascending=False, inplace=True, ignore_index=True)
 importance_with_columns.to_csv("dt_feature_importance.csv", header=True)
+
+# RF
+clf = RandomForestClassifier()
+clf.fit(X_train, y_train)
+save_model_locally(clf, "random_forest", output_files_path_models)
+y_pred = clf.predict(X_test)
+
+# Model evaluation
+print("RF")
+accuracy = accuracy_score(y_test, y_pred)
+cm = confusion_matrix(y_test, y_pred)
+print(f"Accuracy: {accuracy}")
+print(f"Confusion Matrix:\n{cm}")
+
+# Record feature importance for Decision Tree
+importance_with_columns = pd.DataFrame({'feature': X_train.columns, 'importance': clf.feature_importances_})
+importance_with_columns.sort_values(by='importance', ascending=False, inplace=True, ignore_index=True)
+importance_with_columns.to_csv("rf_feature_importance.csv", header=True)
+
+# MLP
+clf = MLPClassifier()
+clf.fit(X_train, y_train)
+save_model_locally(clf, "multilayer_perceptron", output_files_path_models)
+y_pred = clf.predict(X_test)
+
+# Model evaluation
+print("MLP")
+accuracy = accuracy_score(y_test, y_pred)
+cm = confusion_matrix(y_test, y_pred)
+print(f"Accuracy: {accuracy}")
+print(f"Confusion Matrix:\n{cm}")
 
 print("HGB")
 # More info: https://scikit-learn.org/stable/modules/generated/sklearn.ensemble.HistGradientBoostingClassifier.html
