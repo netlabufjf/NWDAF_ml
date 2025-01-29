@@ -2,7 +2,7 @@ import os
 import pandas as pd
 import pickle
 from numpy import mean,std
-from sklearn.preprocessing import MinMaxScaler
+from sklearn.preprocessing import MinMaxScaler,OrdinalEncoder
 from sklearn.model_selection import train_test_split,cross_val_score,RepeatedStratifiedKFold
 from sklearn.linear_model import LogisticRegression
 from sklearn.ensemble import HistGradientBoostingClassifier
@@ -68,10 +68,24 @@ def preprocess_data(files_path, output_dir):
         if not os.path.exists(out_file_path):
             df = read_csv(i)
             print("[INFO] Working with", file_name)
-            df = df.dropna(axis=1, how='all') # drop columns where all values are None
-            df = categorical_data_to_dummy(df) # transform categorical features
+            # Drop some data
+            # df = df.dropna(axis=1, how='all') # drop columns where all values are None
+            # NOTE doing so was creating an inconsistent number of available features
+            # which was expected, but most models I've tested can't handle this
+            df.drop(columns=["Source_IP", "Destination_IP"], axis=1, inplace=True) # drop IP addresses to avoid using them in the models
             df.drop(columns=["Packet_no"], axis=1, inplace=True) # drop packet number to avoid using it in the models
             
+            # Encode the categorical features
+            feature_encoder = OrdinalEncoder()
+            for col in df.columns:
+                if col == "TCP_compl_str" or col == "TCP_flags_str" or col == "Frame_protocols":
+                    df[col] = feature_encoder.fit_transform(df[[col]])
+            
+            # Change None (NaN type) to an int
+            df.fillna(-1, inplace=True) # required by models like LR that can't handle NaN data
+            # NOTE -1 is a valid int while not representing valid data (which starts with 0)
+            # df.dropna(inplace=True) # not required for now (see "fillna line" above)
+
             # Normalize features using standardization
             # using MinMax to avoid giving more importance to a given feature
             # for more information: https://scikit-learn.org/stable/auto_examples/preprocessing/plot_all_scaling.html
