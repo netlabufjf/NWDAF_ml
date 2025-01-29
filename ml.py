@@ -8,6 +8,7 @@ from sklearn.linear_model import LogisticRegression
 from sklearn.ensemble import HistGradientBoostingClassifier,RandomForestClassifier
 from sklearn.tree import DecisionTreeClassifier
 from sklearn.neural_network import MLPClassifier
+from sklearn.svm import LinearSVC
 from lightgbm import LGBMClassifier
 from xgboost import XGBClassifier
 from sklearn.metrics import accuracy_score,confusion_matrix
@@ -195,6 +196,19 @@ y_pred = clf.predict(X_test)
 
 # Model evaluation
 print("MLP")
+accuracy = accuracy_score(y_test, y_pred)
+cm = confusion_matrix(y_test, y_pred)
+print(f"Accuracy: {accuracy}")
+print(f"Confusion Matrix:\n{cm}")
+
+# SVM
+clf = LinearSVC()
+clf.fit(X_train, y_train)
+save_model_locally(clf, "support_vector_machine_linear", output_files_path_models)
+y_pred = clf.predict(X_test)
+
+# Model evaluation
+print("SVM (Linear)")
 accuracy = accuracy_score(y_test, y_pred)
 cm = confusion_matrix(y_test, y_pred)
 print(f"Accuracy: {accuracy}")
