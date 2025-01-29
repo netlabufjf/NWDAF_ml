@@ -11,7 +11,12 @@ from sklearn.neural_network import MLPClassifier
 from sklearn.svm import LinearSVC
 from lightgbm import LGBMClassifier
 from xgboost import XGBClassifier
-from sklearn.metrics import accuracy_score,confusion_matrix
+from sklearn.metrics import (accuracy_score,
+                            precision_score,
+                            recall_score,
+                            f1_score,
+                            auc,
+                            confusion_matrix)
 
 from util import glob_get_files_list,read_csv,delete_files
 
@@ -102,6 +107,35 @@ def preprocess_data(files_path, output_dir):
         else:
             print(f"[INFO] The file {file_name} was already preprocessed")
 
+def train_models(model):
+    model_name = model.__class__.__name__
+
+    print("[INFO] Training model", model_name)
+    model.fit(X_train, y_train)
+
+    save_model_locally(model, model_name, output_files_path_models)
+
+    y_pred = model.predict(X_test)
+    cm = confusion_matrix(y_test, y_pred)
+    print("[INFO] Accuracy:", round(accuracy_score(y_test, y_pred), 10)) # TODO calculate more metrics for all models
+    print(f"[DEBU] Confusion Matrix:\n{cm}") # TODO plot and save this matrix
+
+    if (model_name == 'DecisionTreeClassifier'):
+        print("[INFO] Precision :", round(precision_score(y_test, y_pred, average="weighted"), 10))
+        print("[INFO] Recall    :", round(recall_score(y_test, y_pred, average="weighted"), 10))
+        print("[INFO]F1-score  :", round(f1_score(y_test, y_pred, average="weighted"), 10))
+        # print("[INFO] F1-score/class :", f1_score(y_test, y_pred, average=None, labels=TODO)) # TODO finish this
+
+        # Record feature importance for Decision Tree
+        importance_with_columns = pd.DataFrame({'feature': X_train.columns, 'importance': model.feature_importances_})
+        importance_with_columns.sort_values(by='importance', ascending=False, inplace=True, ignore_index=True)
+        importance_with_columns.to_csv("dt_feature_importance.csv", header=True)
+    
+    elif (model_name == 'RandomForestClassifier'):
+        # Record feature importance for Random Forest
+        importance_with_columns = pd.DataFrame({'feature': X_train.columns, 'importance': model.feature_importances_})
+        importance_with_columns.sort_values(by='importance', ascending=False, inplace=True, ignore_index=True)
+        importance_with_columns.to_csv("rf_feature_importance.csv", header=True)
 
 # Buid the CSV files list
 csv_files = glob_get_files_list(input_files_path, "csv")
@@ -141,114 +175,28 @@ X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.3, random_
 # Cross validation steps
 cv = RepeatedStratifiedKFold(n_splits=10, n_repeats=3, random_state=42)
 
-# Baseline classifier (LR)
-model = LogisticRegression()
-model.fit(X_train, y_train)
+model_names_list = ['LR', 'DT', 'RF', 'MLP', 'SVM', 'HGB', 'LightGBM', 'XGB']
 
-# Evaluate the model
-print("LR")
-y_pred = model.predict(X_test)
-cm = confusion_matrix(y_test, y_pred)
-print(f"Accuracy: {accuracy_score(y_test, y_pred)}")
-print(f"Confusion Matrix:\n{cm}")
+for i in model_names_list:
+    match i:
+        case 'LR':
+            clf = LogisticRegression()
+        case 'DT':
+            clf = DecisionTreeClassifier()
+        case 'RF':
+            clf = RandomForestClassifier()
+        case 'MLP':
+            clf = MLPClassifier()
+        case 'SVM':
+            clf = LinearSVC()
+        case 'HGB':
+            clf = HistGradientBoostingClassifier()
+        case 'LightGBM':
+            clf = LGBMClassifier(verbose=-1)
+        case 'XGB':
+            clf = XGBClassifier()
+        case _:
+            print("[ERRO] Failed to load the model")
+            exit()
 
-# DT
-clf = DecisionTreeClassifier()
-clf.fit(X_train, y_train)
-save_model_locally(clf, "decision_tree", output_files_path_models)
-y_pred = clf.predict(X_test)
-
-# Model evaluation
-print("DT")
-accuracy = accuracy_score(y_test, y_pred)
-cm = confusion_matrix(y_test, y_pred)
-print(f"Accuracy: {accuracy}")
-print(f"Confusion Matrix:\n{cm}")
-
-# Record feature importance for Decision Tree
-importance_with_columns = pd.DataFrame({'feature': X_train.columns, 'importance': clf.feature_importances_})
-importance_with_columns.sort_values(by='importance', ascending=False, inplace=True, ignore_index=True)
-importance_with_columns.to_csv("dt_feature_importance.csv", header=True)
-
-# RF
-clf = RandomForestClassifier()
-clf.fit(X_train, y_train)
-save_model_locally(clf, "random_forest", output_files_path_models)
-y_pred = clf.predict(X_test)
-
-# Model evaluation
-print("RF")
-accuracy = accuracy_score(y_test, y_pred)
-cm = confusion_matrix(y_test, y_pred)
-print(f"Accuracy: {accuracy}")
-print(f"Confusion Matrix:\n{cm}")
-
-# Record feature importance for Decision Tree
-importance_with_columns = pd.DataFrame({'feature': X_train.columns, 'importance': clf.feature_importances_})
-importance_with_columns.sort_values(by='importance', ascending=False, inplace=True, ignore_index=True)
-importance_with_columns.to_csv("rf_feature_importance.csv", header=True)
-
-# MLP
-clf = MLPClassifier()
-clf.fit(X_train, y_train)
-save_model_locally(clf, "multilayer_perceptron", output_files_path_models)
-y_pred = clf.predict(X_test)
-
-# Model evaluation
-print("MLP")
-accuracy = accuracy_score(y_test, y_pred)
-cm = confusion_matrix(y_test, y_pred)
-print(f"Accuracy: {accuracy}")
-print(f"Confusion Matrix:\n{cm}")
-
-# SVM
-clf = LinearSVC()
-clf.fit(X_train, y_train)
-save_model_locally(clf, "support_vector_machine_linear", output_files_path_models)
-y_pred = clf.predict(X_test)
-
-# Model evaluation
-print("SVM (Linear)")
-accuracy = accuracy_score(y_test, y_pred)
-cm = confusion_matrix(y_test, y_pred)
-print(f"Accuracy: {accuracy}")
-print(f"Confusion Matrix:\n{cm}")
-
-print("HGB")
-# More info: https://scikit-learn.org/stable/modules/generated/sklearn.ensemble.HistGradientBoostingClassifier.html
-clf = HistGradientBoostingClassifier().fit(X, y)
-save_model_locally(clf, "histogram_gradient_boosting", output_files_path_models)
-mean_accuracy = clf.score(X, y)
-accuracy = accuracy_score(y_test, y_pred)
-cm = confusion_matrix(y_test, y_pred)
-print(f"Mean Accuracy: {mean_accuracy}")
-print(f"Accuracy: {accuracy}")
-print(f"Confusion Matrix:\n{cm}")
-
-# clf = LGBMClassifier(max_bin=255, n_estimators=100) # TODO hyper param optimization
-clf = LGBMClassifier(verbose=-1)
-clf.fit(X_train, y_train)
-save_model_locally(clf, "light_gradient_boosting_machine", output_files_path_models)
-# lgbm_scores = cross_val_score(clf, X, y, scoring='accuracy', cv=cv, n_jobs=8) # TODO run crossval
-# print(f'LightGBM Accuracy: {mean(lgbm_scores):.3f} ({std(lgbm_scores):.3f})')
-y_pred = clf.predict(X_test)
-
-print("LightGBM")
-accuracy = accuracy_score(y_test, y_pred)
-cm = confusion_matrix(y_test, y_pred)
-print(f"Accuracy: {accuracy}")
-print(f"Confusion Matrix:\n{cm}")
-
-# clf = XGBClassifier(tree_method='approx', max_bin=255, n_estimators=100) # TODO hyper param optimization
-clf = XGBClassifier()
-clf.fit(X_train, y_train)
-save_model_locally(clf, "extreme_gradient_boosting", output_files_path_models)
-# xgb_scores = cross_val_score(clf, X, y, scoring='accuracy', cv=cv, n_jobs=8) # TODO run crossval
-# print(f'XGBoost Accuracy: {mean(xgb_scores):.3f} ({std(xgb_scores):.3f})')
-y_pred = clf.predict(X_test)
-
-print("XGB")
-accuracy = accuracy_score(y_test, y_pred)
-cm = confusion_matrix(y_test, y_pred)
-print(f"Accuracy: {accuracy}")
-print(f"Confusion Matrix:\n{cm}")
+    train_models(clf)
