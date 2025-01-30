@@ -14,19 +14,6 @@ results_folder = "./pcap/output/4-ML/inference_results/" # save the results here
 pkl_files = glob_get_files_list(models_folder, "pkl")
 inference_data_files = glob_get_files_list(data_folder, "csv")
 
-def label_id_to_text(id):
-    # Assign labels based on id
-    if id == 0:
-        label = 'eMBB'
-    elif id == 1:
-        label = 'URLLC'
-    elif id == 2:
-        label = 'mMTC'
-    else:
-        raise ValueError(f"Could not determine label from id {id}")
-        exit()
-    return label
-
 def run_inference(models_file_list, inference_data_file_list):
     for file in inference_data_file_list:
         file_name = file.split('/')[-1]

@@ -74,3 +74,24 @@ def delete_files(file_name, path):
         print(f"[ERRO] Permission denied to delete the file {file_name} in {path}")
     except Exception as e:
         print(f"[ERRO] Error occurred while deleting the file: {e}")
+
+def label_id_to_text(id):
+    """
+    A function to transform a label id to its textual name
+
+    Parameters
+    ----------
+        id : int
+            The id that should be returned.
+    """
+    # Assign label based on id
+    if id == 0:
+        label = 'eMBB'
+    elif id == 1:
+        label = 'URLLC'
+    elif id == 2:
+        label = 'mMTC'
+    else:
+        raise ValueError(f"Could not determine label from id {id}")
+        exit()
+    return label
