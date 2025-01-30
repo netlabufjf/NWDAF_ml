@@ -72,6 +72,28 @@ def read_and_label_data(file_path, out_dir, remove_old_files=False):
     else:
         print(f"[INFO] The file {file_name_without_path} was already labeled")
 
+# Load and prepare splits from labeled training data
+def read_train_data(csv_file_list):
+    training_data = pd.DataFrame()
+    for file in csv_file_list:
+        if 'training' in file:
+            df = read_csv(file)
+            training_data = pd.concat([training_data, df], ignore_index=True)
+        elif 'inference' in file:
+            # print("[DEBU] Skipped inference file found at", file) # DEBUG
+            pass
+        else:
+            raise ValueError(f"[ERRO] Could not determine data set type from filename {file}")
+            exit()
+
+    # Prepare data for supervised learning
+    X = training_data.drop('label', axis=1)  # Features
+    y = training_data['label']  # Target variable
+
+    # Now X and y are ready for supervised learning
+    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.3, random_state=42)
+
+    return X_train, X_test, y_train, y_test
     
 def preprocess_data(files_path, output_dir):
     columns_preprocess_time_df = ["file_name", "file_num_rows", "preprocess_time_ms", "preprocess_disk_time_ms", "preprocess_total_time_ms"]
@@ -140,7 +162,7 @@ def preprocess_data(files_path, output_dir):
     if len(preprocess_time_df) != 0:
         preprocess_time_df.to_csv(f"{output_files_path_results}{timestamp}_preprocess_time.csv", index=False)
 
-def train_models(model):
+def train_models(model, X_train, X_test, y_train, y_test):
     model_name = model.__class__.__name__
     data_num_rows = len(X_train)
 
@@ -207,25 +229,8 @@ csv_files = glob_get_files_list(output_files_path_preprocessed_data, "csv")
 # Update the list of CSV files
 csv_files = glob_get_files_list(output_files_path_labeled_data, "csv")
 
-# Load labeled training data
-training_data = pd.DataFrame()
-for file in csv_files:
-    if 'training' in file:
-        df = read_csv(file)
-        training_data = pd.concat([training_data, df], ignore_index=True)
-    elif 'inference' in file:
-        # print("[DEBU] Skipped inference file found at", file) # DEBUG
-        pass
-    else:
-        raise ValueError(f"[ERRO] Could not determine data set type from filename {file}")
-        exit()
-
-# Prepare data for supervised learning
-X = training_data.drop('label', axis=1)  # Features
-y = training_data['label']  # Target variable
-
-# Now X and y are ready for supervised learning
-X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.3, random_state=42)
+# Prepare data splits to train the models
+X_train, X_test, y_train, y_test = read_train_data(csv_files)
 
 # Cross validation steps
 cv = RepeatedStratifiedKFold(n_splits=10, n_repeats=3, random_state=42)
@@ -257,4 +262,4 @@ for i in model_names_list:
             print("[ERRO] Failed to load the model")
             exit()
 
-    train_models(clf)
+    train_models(clf, X_train, X_test, y_train, y_test)
