@@ -178,7 +178,7 @@ def train_models(model, X_train, X_test, y_train, y_test):
     y_pred = model.predict(X_test)
     cm = confusion_matrix(y_test, y_pred)
     
-    # Evaluation data
+    # Model evaluation data
     accuracy = accuracy_score(y_test, y_pred)
     precision_avg = precision_score(y_test, y_pred, average="weighted")
     recall_avg = recall_score(y_test, y_pred, average="weighted")
@@ -187,7 +187,7 @@ def train_models(model, X_train, X_test, y_train, y_test):
     f_score_class1 = f1_score(y_test, y_pred, average=None, labels=[1])[0]
     f_score_class2 = f1_score(y_test, y_pred, average=None, labels=[2])[0]
 
-    print("[DEBU] Accuracy:", round(accuracy, 10)) # TODO calculate more metrics for all models
+    print("[DEBU] Accuracy:", round(accuracy, 10))
     print(f"[DEBU] Confusion Matrix:\n{cm}") # TODO plot and save this matrix
     print("[DEBU] Precision :", round(precision_avg, 10))
     print("[DEBU] Recall    :", round(recall_avg, 10))
