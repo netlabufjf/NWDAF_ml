@@ -34,7 +34,9 @@ def run_inference(models_file_list, inference_data_file_list):
             print("[INFO] Running inference on", file_name)
             
             # Initialize results_df with columns
-            results_df = pd.DataFrame(columns=["file_name", "model_name", "inference_result_label", "inference_result", "inference_result_count_0", "inference_result_count_1", "inference_result_count_2"])
+            results_df = pd.DataFrame(columns=["file_name", "file_num_rows", "model_name",
+                        "inference_result_label", "inference_result", 
+                        "inference_result_count_0", "inference_result_count_1", "inference_result_count_2"])
             
             data = read_csv(file) # load inference data
             data_num_rows = len(data)
