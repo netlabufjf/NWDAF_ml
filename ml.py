@@ -196,13 +196,13 @@ def train_models(model, X_train, X_test, y_train, y_test):
         # Record feature importance for Decision Tree
         importance_with_columns = pd.DataFrame({'feature': X_train.columns, 'importance': model.feature_importances_})
         importance_with_columns.sort_values(by='importance', ascending=False, inplace=True, ignore_index=True)
-        importance_with_columns.to_csv("dt_feature_importance.csv", header=True)
+        importance_with_columns.to_csv(f"{output_files_path_results}{timestamp}_dt_feature_importance.csv", header=True)
     
     elif (model_name == 'RandomForestClassifier'):
         # Record feature importance for Random Forest
         importance_with_columns = pd.DataFrame({'feature': X_train.columns, 'importance': model.feature_importances_})
         importance_with_columns.sort_values(by='importance', ascending=False, inplace=True, ignore_index=True)
-        importance_with_columns.to_csv("rf_feature_importance.csv", header=True)
+        importance_with_columns.to_csv(f"{output_files_path_results}{timestamp}_rf_feature_importance.csv", header=True)
 
     training_time_ms = (training_time_end - training_time_begin) / 10**6
     training_disk_time_ms = (training_disk_time_end - training_disk_time_begin) / 10**6
