@@ -141,11 +141,16 @@ def preprocess_data(files_path, output_dir):
 
 def train_models(model):
     model_name = model.__class__.__name__
+    data_num_rows = len(X_train)
 
     print("[INFO] Training model", model_name)
+    training_time_begin = time_ns()
     model.fit(X_train, y_train)
+    training_time_end = time_ns()
 
+    training_disk_time_begin = time_ns()
     save_model_locally(model, model_name, output_files_path_models)
+    training_disk_time_end = time_ns()
 
     y_pred = model.predict(X_test)
     cm = confusion_matrix(y_test, y_pred)
@@ -168,6 +173,23 @@ def train_models(model):
         importance_with_columns = pd.DataFrame({'feature': X_train.columns, 'importance': model.feature_importances_})
         importance_with_columns.sort_values(by='importance', ascending=False, inplace=True, ignore_index=True)
         importance_with_columns.to_csv("rf_feature_importance.csv", header=True)
+
+    training_time_ms = (training_time_end - training_time_begin) / 10**6
+    training_disk_time_ms = (training_disk_time_end - training_disk_time_begin) / 10**6
+    training_total_time_ms = training_time_ms + training_disk_time_ms
+
+    new_row = {
+            columns_training_time_df[0]: model_name,
+            columns_training_time_df[1]: data_num_rows,
+            columns_training_time_df[2]: training_time_ms,
+            columns_training_time_df[3]: training_disk_time_ms,
+            columns_training_time_df[4]: training_total_time_ms,
+        }
+    
+    # Add new row to the dataframe using loc[] method
+    training_time_df.loc[len(training_time_df)] = new_row
+
+    training_time_df.to_csv(f"{output_files_path_results}{timestamp}_training_time.csv", index=False)
 
 # Buid the CSV files list
 csv_files = glob_get_files_list(input_files_path, "csv")
@@ -208,6 +230,9 @@ X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.3, random_
 cv = RepeatedStratifiedKFold(n_splits=10, n_repeats=3, random_state=42)
 
 model_names_list = ['LR', 'DT', 'RF', 'MLP', 'SVM', 'HGB', 'LightGBM', 'XGB']
+
+columns_training_time_df = ["model_name", "data_num_rows", "training_time_ms", "training_disk_time_ms", "training_total_time_ms"]
+training_time_df = pd.DataFrame(columns=columns_training_time_df) # df to save the results
 
 for i in model_names_list:
     match i:
