@@ -202,17 +202,17 @@ def train_models(model, X_train, X_test, y_train, y_test):
     f_score_class1 = f1_score(y_test, y_pred, average=None, labels=[1])[0]
     f_score_class2 = f1_score(y_test, y_pred, average=None, labels=[2])[0]
 
-    print("[DEBU] Accuracy:", round(accuracy, 10))
-    print(f"[DEBU] Confusion Matrix:\n{cm}") # TODO plot and save this matrix
-    print("[DEBU] Precision :", round(precision_avg, 10))
-    print("[DEBU] Recall    :", round(recall_avg, 10))
-    print("[DEBU] F1-score  :", round(f_score_avg, 10))
-    print("[DEBU] F1-score/class :", f1_score(y_test, y_pred, average=None, labels=[0, 1, 2]))
+    # print("[DEBU] Accuracy:", round(accuracy, 10))
+    # print(f"[DEBU] Confusion Matrix:\n{cm}")
+    # print("[DEBU] Precision :", round(precision_avg, 10))
+    # print("[DEBU] Recall    :", round(recall_avg, 10))
+    # print("[DEBU] F1-score  :", round(f_score_avg, 10))
+    # print("[DEBU] F1-score/class :", f1_score(y_test, y_pred, average=None, labels=[0, 1, 2]))
     if (model_name != "LinearSVC"): # LinearSVC doesn't implement proba
         auc_score = roc_auc_score(y_test, model.predict_proba(X_test), average='macro', multi_class='ovo', labels=[0, 1, 2])
-        print("[DEBU] ROC AUC Score :", round(auc_score, 10))
+        # print("[DEBU] ROC AUC Score :", round(auc_score, 10))
     else:
-        print("[DEBU] ROC AUC Score : Not calculated for", model_name)
+        # print("[DEBU] ROC AUC Score : Not calculated for", model_name)
         auc_score = None
 
     if (model_name == 'DecisionTreeClassifier'):
