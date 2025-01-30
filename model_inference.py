@@ -34,11 +34,12 @@ def run_inference(models_file_list, inference_data_file_list):
         if 'inference' in file:
             print("[INFO] Running inference on", file_name)
             
-            # Initialize results_df with columns
-            results_df = pd.DataFrame(columns=["file_name", "file_num_rows", "model_name",
+            columns = ["file_name", "file_num_rows", "model_name",
                         "inference_result_label", "inference_result", 
                         "inference_result_count_0", "inference_result_count_1", "inference_result_count_2",
-                        "inf_pred_time_ms", "inf_total_time_ms"])
+                        "inf_pred_time_ms", "inf_total_time_ms"]
+            # Initialize results_df with columns
+            results_df = pd.DataFrame(columns=columns)
             
             data = read_csv(file) # load inference data
             data_num_rows = len(data)
@@ -66,16 +67,16 @@ def run_inference(models_file_list, inference_data_file_list):
                 inference_pred_time = (inference_pred_time_end - inference_pred_time_begin) / 10**6
 
                 new_row = {
-                    "file_name": file_name,
-                    "file_num_rows": data_num_rows,
-                    "model_name": model_name,
-                    "inference_result_label": inference_result_label,
-                    "inference_result": inference_result_int,
-                    "inference_result_count_0": int(inference_result_counts[0]) if 0 in inference_result_counts else np.nan,
-                    "inference_result_count_1": int(inference_result_counts[1]) if 1 in inference_result_counts else np.nan,
-                    "inference_result_count_2": int(inference_result_counts[2]) if 2 in inference_result_counts else np.nan,
-                    "inf_pred_time_ms": inference_pred_time,
-                    "inf_total_time_ms": total_inference_time,
+                    columns[0]: file_name,
+                    columns[1]: data_num_rows,
+                    columns[2]: model_name,
+                    columns[3]: inference_result_label,
+                    columns[4]: inference_result_int,
+                    columns[5]: int(inference_result_counts[0]) if 0 in inference_result_counts else np.nan,
+                    columns[6]: int(inference_result_counts[1]) if 1 in inference_result_counts else np.nan,
+                    columns[7]: int(inference_result_counts[2]) if 2 in inference_result_counts else np.nan,
+                    columns[8]: inference_pred_time,
+                    columns[9]: total_inference_time,
                 }
                 
                 # Add new row to the dataframe using loc[] method
