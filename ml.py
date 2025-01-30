@@ -183,6 +183,9 @@ def train_models(model, X_train, X_test, y_train, y_test):
     precision_avg = precision_score(y_test, y_pred, average="weighted")
     recall_avg = recall_score(y_test, y_pred, average="weighted")
     f_score_avg = f1_score(y_test, y_pred, average="weighted")
+    f_score_class0 = f1_score(y_test, y_pred, average=None, labels=[0])
+    f_score_class1 = f1_score(y_test, y_pred, average=None, labels=[1])
+    f_score_class2 = f1_score(y_test, y_pred, average=None, labels=[2])
 
     print("[INFO] Accuracy:", round(accuracy, 10)) # TODO calculate more metrics for all models
     print(f"[DEBU] Confusion Matrix:\n{cm}") # TODO plot and save this matrix
@@ -213,10 +216,13 @@ def train_models(model, X_train, X_test, y_train, y_test):
             columns_training_results_df[2]: accuracy,
             columns_training_results_df[3]: precision_avg,
             columns_training_results_df[4]: recall_avg,
-            columns_training_results_df[5]: f_score,
-            columns_training_results_df[6]: training_time_ms,
-            columns_training_results_df[7]: training_disk_time_ms,
-            columns_training_results_df[8]: training_total_time_ms,
+            columns_training_results_df[5]: f_score_avg,
+            columns_training_results_df[6]: f_score_class0,
+            columns_training_results_df[7]: f_score_class1,
+            columns_training_results_df[8]: f_score_class2,
+            columns_training_results_df[9]: training_time_ms,
+            columns_training_results_df[10]: training_disk_time_ms,
+            columns_training_results_df[11]: training_total_time_ms,
         }
     
     # Add new row to the dataframe using loc[] method
@@ -247,7 +253,8 @@ cv = RepeatedStratifiedKFold(n_splits=10, n_repeats=3, random_state=42)
 
 model_names_list = ['LR', 'DT', 'RF', 'MLP', 'SVM', 'HGB', 'LightGBM', 'XGB']
 
-columns_training_results_df = ["model_name", "data_num_rows", "accuracy", "precision_avg", "recall_avg", "f1_score", 
+columns_training_results_df = ["model_name", "data_num_rows", "accuracy", "precision_avg", "recall_avg", 
+                            "f1_score_avg", "f1_score_class0", "f1_score_class1", "f1_score_class2",
                             "training_time_ms", "training_disk_time_ms", "training_total_time_ms"]
 training_results_df = pd.DataFrame(columns=columns_training_results_df) # df to save the results
 
