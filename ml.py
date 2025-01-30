@@ -229,6 +229,7 @@ def train_models(model, X_train, X_test, y_train, y_test):
     training_results_df.loc[len(training_results_df)] = new_row
 
     training_results_df.to_csv(f"{output_files_path_results}{timestamp}_training_results.csv", index=False)
+    print(f"[INFO] {model_name} training finished")
 
 # Buid the CSV files list
 csv_files = glob_get_files_list(input_files_path, "csv")
