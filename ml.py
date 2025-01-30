@@ -183,9 +183,9 @@ def train_models(model, X_train, X_test, y_train, y_test):
     precision_avg = precision_score(y_test, y_pred, average="weighted")
     recall_avg = recall_score(y_test, y_pred, average="weighted")
     f_score_avg = f1_score(y_test, y_pred, average="weighted")
-    f_score_class0 = f1_score(y_test, y_pred, average=None, labels=[0])
-    f_score_class1 = f1_score(y_test, y_pred, average=None, labels=[1])
-    f_score_class2 = f1_score(y_test, y_pred, average=None, labels=[2])
+    f_score_class0 = f1_score(y_test, y_pred, average=None, labels=[0])[0]
+    f_score_class1 = f1_score(y_test, y_pred, average=None, labels=[1])[0]
+    f_score_class2 = f1_score(y_test, y_pred, average=None, labels=[2])[0]
 
     print("[DEBU] Accuracy:", round(accuracy, 10)) # TODO calculate more metrics for all models
     print(f"[DEBU] Confusion Matrix:\n{cm}") # TODO plot and save this matrix
