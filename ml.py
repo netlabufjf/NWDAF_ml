@@ -187,12 +187,12 @@ def train_models(model, X_train, X_test, y_train, y_test):
     f_score_class1 = f1_score(y_test, y_pred, average=None, labels=[1])
     f_score_class2 = f1_score(y_test, y_pred, average=None, labels=[2])
 
-    print("[INFO] Accuracy:", round(accuracy, 10)) # TODO calculate more metrics for all models
+    print("[DEBU] Accuracy:", round(accuracy, 10)) # TODO calculate more metrics for all models
     print(f"[DEBU] Confusion Matrix:\n{cm}") # TODO plot and save this matrix
-    print("[INFO] Precision :", round(precision_avg, 10))
-    print("[INFO] Recall    :", round(recall_avg, 10))
-    print("[INFO] F1-score  :", round(f_score_avg, 10))
-    print("[INFO] F1-score/class :", f1_score(y_test, y_pred, average=None, labels=[0, 1, 2]))
+    print("[DEBU] Precision :", round(precision_avg, 10))
+    print("[DEBU] Recall    :", round(recall_avg, 10))
+    print("[DEBU] F1-score  :", round(f_score_avg, 10))
+    print("[DEBU] F1-score/class :", f1_score(y_test, y_pred, average=None, labels=[0, 1, 2]))
 
     if (model_name == 'DecisionTreeClassifier'):
         # Record feature importance for Decision Tree
