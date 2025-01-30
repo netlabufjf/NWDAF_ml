@@ -48,15 +48,16 @@ def run_inference(models_file_list, inference_data_file_list):
                 y_pred = model.predict(inference_data)
                 inference_result = pd.Series([model.classes_[i] for i in y_pred])
                 inference_result_counts = inference_result.value_counts()
-                    # print("[DEBU] Inference result:", inference_result.idxmax())  # DEBUG
-                
-                inference_result_label = label_id_to_text(inference_result_counts.idxmax())
+                inference_result_int = inference_result_counts.idxmax()
+                inference_result_label = label_id_to_text(inference_result_int)
+                # print(f"[DEBU] Inference result: {inference_result_int} ({inference_result_label})")  # DEBUG
+                # print(f"[DEBU] Labels and their occurrences:\n{inference_result_counts}")  # DEBUG
 
                 new_row = {
                     "file_name": file_name,
                     "model_name": model_name,
                     "inference_result_label": inference_result_label,
-                    "inference_result": inference_result_counts.idxmax(),
+                    "inference_result": inference_result_int,
                     "inference_result_count_0": inference_result_counts[0] if 0 in inference_result_counts else np.nan,
                     "inference_result_count_1": inference_result_counts[1] if 1 in inference_result_counts else np.nan,
                     "inference_result_count_2": inference_result_counts[2] if 2 in inference_result_counts else np.nan
