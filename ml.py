@@ -2,6 +2,8 @@ import os
 import pandas as pd
 import pickle
 from numpy import mean,std
+from datetime import datetime
+from time import time_ns
 from sklearn.preprocessing import MinMaxScaler,OrdinalEncoder
 from sklearn.model_selection import train_test_split,cross_val_score,RepeatedStratifiedKFold
 from sklearn.linear_model import LogisticRegression
@@ -26,6 +28,9 @@ input_files_path = working_folder + "preprocess/labeled_files/" # read CSV files
 output_files_path_preprocessed_data = working_folder + "preprocess/data_ready_to_ml/" # save preprocessed data there
 output_files_path_labeled_data = working_folder + "preprocess/labeled_data/" # save the labeled output files there
 output_files_path_models = working_folder + "models/" # save the model files there
+output_files_path_results = output_files_path_models + "training_results/" # save the model files there
+
+timestamp = datetime.now().strftime("%Y%m%d-%H%M%S")
 
 def save_model_locally(model, file_name, out_dir):
     file_path = out_dir + file_name + ".pkl"
@@ -69,12 +74,19 @@ def read_and_label_data(file_path, out_dir, remove_old_files=False):
 
     
 def preprocess_data(files_path, output_dir):
+    columns_time_df = ["file_name", "file_num_rows", "preprocess_time_ms", "preprocess_disk_time_ms", "preprocess_total_time_ms"]
+    time_df = pd.DataFrame(columns=columns_time_df) # df to save the results
+
     for i in files_path:
         file_name = i.split('/')[-1]
         out_file_path = output_dir + file_name
+        preprocess_time_begin = time_ns()
+
         if not os.path.exists(out_file_path):
             df = read_csv(i)
+            data_num_rows = len(df)
             print("[INFO] Working with", file_name)
+
             # Drop some data
             # df = df.dropna(axis=1, how='all') # drop columns where all values are None
             # NOTE doing so was creating an inconsistent number of available features
@@ -100,12 +112,32 @@ def preprocess_data(files_path, output_dir):
             data_features_names = list(df)
             scaler.fit(df[data_features_names])
             df[data_features_names] = scaler.transform(df[data_features_names])
+            preprocess_time_end = time_ns()
 
             # Save the normalized data
+            preprocess_disk_time_begin = time_ns()
             df.to_csv(out_file_path, index=False)
+            preprocess_disk_time_end = time_ns()
             print("[INFO] Preprocessed data saved to:", out_file_path)
+            
+            preprocess_disk_time_ms = (preprocess_disk_time_end - preprocess_disk_time_begin) / 10**6
+            preprocess_time_ms = (preprocess_time_end - preprocess_time_begin) / 10**6
+            preprocess_total_time_ms = (preprocess_time_ms + preprocess_disk_time_ms)
+
+            new_row = {
+                    columns_time_df[0]: file_name,
+                    columns_time_df[1]: data_num_rows,
+                    columns_time_df[2]: preprocess_time_ms,
+                    columns_time_df[3]: preprocess_disk_time_ms,
+                    columns_time_df[4]: preprocess_total_time_ms,
+                }
+                
+            # Add new row to the dataframe using loc[] method
+            time_df.loc[len(time_df)] = new_row
         else:
             print(f"[INFO] The file {file_name} was already preprocessed")
+
+    time_df.to_csv(f"{output_files_path_results}{timestamp}_preprocess_time.csv", index=False)
 
 def train_models(model):
     model_name = model.__class__.__name__
