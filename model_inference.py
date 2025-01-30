@@ -45,25 +45,9 @@ def run_inference(models_file_list, inference_data_file_list):
                 
                 inference_data = data.drop('label', axis=1)  # remove the label column
                 
-                # LinearSVC doesn't calculate probabilities
-                if (model_name != 'LinearSVC'):
-                    pred_proba = model.predict_proba(inference_data)  # get prediction probabilities for each class
-                    
-                    # calculate the maximum probability for each sample and its corresponding class
-                    max_prob_idx = np.argmax(pred_proba, axis=1)
-                    max_class = pred_proba[np.arange(len(pred_proba)), max_prob_idx]  # get the maximum probability for each sample
-                    inference_result = np.array([model.classes_[i] for i in max_prob_idx])  # get the class corresponding to the maximum probability index
-                    
-                    # count the occurrences of each predicted class
-                    inference_result_counts = pd.Series(inference_result).value_counts()
-                    
-                    # print("[DEBU] Inference result:", inference_result_counts.idxmax())  # DEBUG
-                    # print("[DEBU] Labels and their occurrences:\n", inference_result_counts)  # DEBUG
-                    
-                else:
-                    y_pred = model.predict(inference_data)
-                    inference_result = pd.Series([model.classes_[i] for i in y_pred])
-                    inference_result_counts = inference_result.value_counts()
+                y_pred = model.predict(inference_data)
+                inference_result = pd.Series([model.classes_[i] for i in y_pred])
+                inference_result_counts = inference_result.value_counts()
                     # print("[DEBU] Inference result:", inference_result.idxmax())  # DEBUG
                 
                 inference_result_label = label_id_to_text(inference_result_counts.idxmax())
