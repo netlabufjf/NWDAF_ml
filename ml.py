@@ -137,7 +137,8 @@ def preprocess_data(files_path, output_dir):
         else:
             print(f"[INFO] The file {file_name} was already preprocessed")
 
-    preprocess_time_df.to_csv(f"{output_files_path_results}{timestamp}_preprocess_time.csv", index=False)
+    if len(preprocess_time_df) != 0:
+        preprocess_time_df.to_csv(f"{output_files_path_results}{timestamp}_preprocess_time.csv", index=False)
 
 def train_models(model):
     model_name = model.__class__.__name__
