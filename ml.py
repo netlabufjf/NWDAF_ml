@@ -177,13 +177,20 @@ def train_models(model, X_train, X_test, y_train, y_test):
 
     y_pred = model.predict(X_test)
     cm = confusion_matrix(y_test, y_pred)
-    print("[INFO] Accuracy:", round(accuracy_score(y_test, y_pred), 10)) # TODO calculate more metrics for all models
+    
+    # Evaluation data
+    accuracy = accuracy_score(y_test, y_pred)
+    precision_avg = precision_score(y_test, y_pred, average="weighted")
+    recall_avg = recall_score(y_test, y_pred, average="weighted")
+    f_score = f1_score(y_test, y_pred, average="weighted")
+
+    print("[INFO] Accuracy:", round(accuracy, 10)) # TODO calculate more metrics for all models
     print(f"[DEBU] Confusion Matrix:\n{cm}") # TODO plot and save this matrix
 
     if (model_name == 'DecisionTreeClassifier'):
-        print("[INFO] Precision :", round(precision_score(y_test, y_pred, average="weighted"), 10))
-        print("[INFO] Recall    :", round(recall_score(y_test, y_pred, average="weighted"), 10))
-        print("[INFO]F1-score  :", round(f1_score(y_test, y_pred, average="weighted"), 10))
+        print("[INFO] Precision :", round(precision_avg, 10))
+        print("[INFO] Recall    :", round(recall_avg, 10))
+        print("[INFO] F1-score  :", round(f_score, 10))
         # print("[INFO] F1-score/class :", f1_score(y_test, y_pred, average=None, labels=TODO)) # TODO finish this
 
         # Record feature importance for Decision Tree
@@ -204,15 +211,19 @@ def train_models(model, X_train, X_test, y_train, y_test):
     new_row = {
             columns_training_results_df[0]: model_name,
             columns_training_results_df[1]: data_num_rows,
-            columns_training_results_df[2]: training_time_ms,
-            columns_training_results_df[3]: training_disk_time_ms,
-            columns_training_results_df[4]: training_total_time_ms,
+            columns_training_results_df[2]: accuracy,
+            columns_training_results_df[3]: precision_avg,
+            columns_training_results_df[4]: recall_avg,
+            columns_training_results_df[5]: f_score,
+            columns_training_results_df[6]: training_time_ms,
+            columns_training_results_df[7]: training_disk_time_ms,
+            columns_training_results_df[8]: training_total_time_ms,
         }
     
     # Add new row to the dataframe using loc[] method
     training_results_df.loc[len(training_results_df)] = new_row
 
-    training_results_df.to_csv(f"{output_files_path_results}{timestamp}_training_time.csv", index=False)
+    training_results_df.to_csv(f"{output_files_path_results}{timestamp}_training_results.csv", index=False)
 
 # Buid the CSV files list
 csv_files = glob_get_files_list(input_files_path, "csv")
@@ -237,7 +248,8 @@ cv = RepeatedStratifiedKFold(n_splits=10, n_repeats=3, random_state=42)
 
 model_names_list = ['LR', 'DT', 'RF', 'MLP', 'SVM', 'HGB', 'LightGBM', 'XGB']
 
-columns_training_results_df = ["model_name", "data_num_rows", "training_time_ms", "training_disk_time_ms", "training_total_time_ms"]
+columns_training_results_df = ["model_name", "data_num_rows", "accuracy", "precision_avg", "recall_avg", "f1_score", 
+                            "training_time_ms", "training_disk_time_ms", "training_total_time_ms"]
 training_results_df = pd.DataFrame(columns=columns_training_results_df) # df to save the results
 
 for i in model_names_list:
