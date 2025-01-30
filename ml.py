@@ -191,7 +191,7 @@ def train_models(model, X_train, X_test, y_train, y_test):
         print("[INFO] Precision :", round(precision_avg, 10))
         print("[INFO] Recall    :", round(recall_avg, 10))
         print("[INFO] F1-score  :", round(f_score, 10))
-        # print("[INFO] F1-score/class :", f1_score(y_test, y_pred, average=None, labels=TODO)) # TODO finish this
+        print("[INFO] F1-score/class :", f1_score(y_test, y_pred, average=None, labels=[0, 1, 2]))
 
         # Record feature importance for Decision Tree
         importance_with_columns = pd.DataFrame({'feature': X_train.columns, 'importance': model.feature_importances_})
