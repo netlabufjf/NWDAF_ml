@@ -1,6 +1,8 @@
 import os
 import pandas as pd
 import pickle
+import seaborn as sns
+import matplotlib.pyplot as plt
 from numpy import mean,std
 from datetime import datetime
 from time import time_ns
@@ -20,7 +22,7 @@ from sklearn.metrics import (accuracy_score,
                             roc_auc_score,
                             confusion_matrix)
 
-from util import glob_get_files_list,read_csv,delete_files
+from util import glob_get_files_list,read_csv,delete_files,label_id_to_text
 
 # File paths
 working_folder = "./pcap/output/4-ML/"
@@ -176,8 +178,21 @@ def train_models(model, X_train, X_test, y_train, y_test):
     training_disk_time_end = time_ns()
 
     y_pred = model.predict(X_test)
-    cm = confusion_matrix(y_test, y_pred)
+    cm = confusion_matrix(y_test, y_pred, labels=[0, 1, 2])
     
+    # Plot confusion matrix as a heatmap
+    font_size = 12
+    # plt.figure(figsize=(8,6), dpi=300)
+    # sns.set(font_scale=1.4)
+    sns.heatmap(cm, annot=True, fmt="d", cmap="Blues", xticklabels=[label_id_to_text(0), label_id_to_text(1), label_id_to_text(2)], 
+                yticklabels=[label_id_to_text(0), label_id_to_text(1), label_id_to_text(2)],) #annot_kws={"size": font_size + 2})
+    plt.title(f"Confusion Matrix for {model_name}", fontsize=font_size)
+    plt.xlabel("Predicted Label", fontsize=font_size)
+    plt.ylabel("True Label", fontsize=font_size)
+
+    plt.savefig(f"{output_files_path_results}{model_name}_training_confusion_matrix.pdf", dpi=300, bbox_inches='tight')
+    # plt.show() # DEBUG
+
     # Model evaluation data
     accuracy = accuracy_score(y_test, y_pred)
     precision_avg = precision_score(y_test, y_pred, average="weighted")
