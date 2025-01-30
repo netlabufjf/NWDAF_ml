@@ -37,6 +37,7 @@ def run_inference(models_file_list, inference_data_file_list):
             results_df = pd.DataFrame(columns=["file_name", "model_name", "inference_result_label", "inference_result", "inference_result_count_0", "inference_result_count_1", "inference_result_count_2"])
             
             data = read_csv(file) # load inference data
+            data_num_rows = len(data)
 
             for path in models_file_list:
                 model = pickle.load(open(path, 'rb')) # load model from disk
@@ -55,12 +56,13 @@ def run_inference(models_file_list, inference_data_file_list):
 
                 new_row = {
                     "file_name": file_name,
+                    "file_num_rows": data_num_rows,
                     "model_name": model_name,
                     "inference_result_label": inference_result_label,
                     "inference_result": inference_result_int,
-                    "inference_result_count_0": inference_result_counts[0] if 0 in inference_result_counts else np.nan,
-                    "inference_result_count_1": inference_result_counts[1] if 1 in inference_result_counts else np.nan,
-                    "inference_result_count_2": inference_result_counts[2] if 2 in inference_result_counts else np.nan
+                    "inference_result_count_0": int(inference_result_counts[0]) if 0 in inference_result_counts else np.nan,
+                    "inference_result_count_1": int(inference_result_counts[1]) if 1 in inference_result_counts else np.nan,
+                    "inference_result_count_2": int(inference_result_counts[2]) if 2 in inference_result_counts else np.nan
                 }
                 
                 # Add new row to the dataframe using loc[] method
