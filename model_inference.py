@@ -3,6 +3,7 @@ import numpy as np
 import pickle
 
 from datetime import datetime
+from time import time_ns
 from util import glob_get_files_list,read_csv
 
 models_folder = "./pcap/output/4-ML/models/" # read the models from here
@@ -36,25 +37,33 @@ def run_inference(models_file_list, inference_data_file_list):
             # Initialize results_df with columns
             results_df = pd.DataFrame(columns=["file_name", "file_num_rows", "model_name",
                         "inference_result_label", "inference_result", 
-                        "inference_result_count_0", "inference_result_count_1", "inference_result_count_2"])
+                        "inference_result_count_0", "inference_result_count_1", "inference_result_count_2",
+                        "inf_pred_time_ms", "inf_total_time_ms"])
             
             data = read_csv(file) # load inference data
             data_num_rows = len(data)
 
             for path in models_file_list:
+                total_inference_time_begin = time_ns()
                 model = pickle.load(open(path, 'rb')) # load model from disk
                 model_name = model.__class__.__name__ 
                 print("[INFO] Using", model_name)
                 
                 inference_data = data.drop('label', axis=1)  # remove the label column
                 
+                inference_pred_time_begin = time_ns()
                 y_pred = model.predict(inference_data)
+                inference_pred_time_end = time_ns()
                 inference_result = pd.Series([model.classes_[i] for i in y_pred])
                 inference_result_counts = inference_result.value_counts()
                 inference_result_int = inference_result_counts.idxmax()
                 inference_result_label = label_id_to_text(inference_result_int)
+                total_inference_time_end = time_ns()
                 # print(f"[DEBU] Inference result: {inference_result_int} ({inference_result_label})")  # DEBUG
                 # print(f"[DEBU] Labels and their occurrences:\n{inference_result_counts}")  # DEBUG
+
+                total_inference_time = (total_inference_time_end - total_inference_time_begin) / 10**6
+                inference_pred_time = (inference_pred_time_end - inference_pred_time_begin) / 10**6
 
                 new_row = {
                     "file_name": file_name,
@@ -64,7 +73,9 @@ def run_inference(models_file_list, inference_data_file_list):
                     "inference_result": inference_result_int,
                     "inference_result_count_0": int(inference_result_counts[0]) if 0 in inference_result_counts else np.nan,
                     "inference_result_count_1": int(inference_result_counts[1]) if 1 in inference_result_counts else np.nan,
-                    "inference_result_count_2": int(inference_result_counts[2]) if 2 in inference_result_counts else np.nan
+                    "inference_result_count_2": int(inference_result_counts[2]) if 2 in inference_result_counts else np.nan,
+                    "inf_pred_time_ms": inference_pred_time,
+                    "inf_total_time_ms": total_inference_time,
                 }
                 
                 # Add new row to the dataframe using loc[] method
@@ -79,4 +90,7 @@ def run_inference(models_file_list, inference_data_file_list):
         else:
             print(f"[WARN] Skipping file {file_name}")
 
+total_run_time_begin = datetime.now()
 run_inference(pkl_files, inference_data_files)
+total_run_time_end = datetime.now()
+print("[INFO] Total run time:", (total_run_time_end - total_run_time_begin).total_seconds(), "(seconds)")
