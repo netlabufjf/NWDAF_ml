@@ -74,8 +74,8 @@ def read_and_label_data(file_path, out_dir, remove_old_files=False):
 
     
 def preprocess_data(files_path, output_dir):
-    columns_time_df = ["file_name", "file_num_rows", "preprocess_time_ms", "preprocess_disk_time_ms", "preprocess_total_time_ms"]
-    time_df = pd.DataFrame(columns=columns_time_df) # df to save the results
+    columns_preprocess_time_df = ["file_name", "file_num_rows", "preprocess_time_ms", "preprocess_disk_time_ms", "preprocess_total_time_ms"]
+    preprocess_time_df = pd.DataFrame(columns=columns_preprocess_time_df) # df to save the results
 
     for i in files_path:
         file_name = i.split('/')[-1]
@@ -125,19 +125,19 @@ def preprocess_data(files_path, output_dir):
             preprocess_total_time_ms = (preprocess_time_ms + preprocess_disk_time_ms)
 
             new_row = {
-                    columns_time_df[0]: file_name,
-                    columns_time_df[1]: data_num_rows,
-                    columns_time_df[2]: preprocess_time_ms,
-                    columns_time_df[3]: preprocess_disk_time_ms,
-                    columns_time_df[4]: preprocess_total_time_ms,
+                    columns_preprocess_time_df[0]: file_name,
+                    columns_preprocess_time_df[1]: data_num_rows,
+                    columns_preprocess_time_df[2]: preprocess_time_ms,
+                    columns_preprocess_time_df[3]: preprocess_disk_time_ms,
+                    columns_preprocess_time_df[4]: preprocess_total_time_ms,
                 }
                 
             # Add new row to the dataframe using loc[] method
-            time_df.loc[len(time_df)] = new_row
+            preprocess_time_df.loc[len(preprocess_time_df)] = new_row
         else:
             print(f"[INFO] The file {file_name} was already preprocessed")
 
-    time_df.to_csv(f"{output_files_path_results}{timestamp}_preprocess_time.csv", index=False)
+    preprocess_time_df.to_csv(f"{output_files_path_results}{timestamp}_preprocess_time.csv", index=False)
 
 def train_models(model):
     model_name = model.__class__.__name__
