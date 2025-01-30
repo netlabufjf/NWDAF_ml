@@ -17,7 +17,7 @@ from sklearn.metrics import (accuracy_score,
                             precision_score,
                             recall_score,
                             f1_score,
-                            auc,
+                            roc_auc_score,
                             confusion_matrix)
 
 from util import glob_get_files_list,read_csv,delete_files
@@ -193,6 +193,12 @@ def train_models(model, X_train, X_test, y_train, y_test):
     print("[DEBU] Recall    :", round(recall_avg, 10))
     print("[DEBU] F1-score  :", round(f_score_avg, 10))
     print("[DEBU] F1-score/class :", f1_score(y_test, y_pred, average=None, labels=[0, 1, 2]))
+    if (model_name != "LinearSVC"): # LinearSVC doesn't implement proba
+        auc_score = roc_auc_score(y_test, model.predict_proba(X_test), average='macro', multi_class='ovo', labels=[0, 1, 2])
+        print("[DEBU] ROC AUC Score :", round(auc_score, 10))
+    else:
+        print("[DEBU] ROC AUC Score : Not calculated for", model_name)
+        auc_score = None
 
     if (model_name == 'DecisionTreeClassifier'):
         # Record feature importance for Decision Tree
@@ -220,9 +226,10 @@ def train_models(model, X_train, X_test, y_train, y_test):
             columns_training_results_df[6]: f_score_class0,
             columns_training_results_df[7]: f_score_class1,
             columns_training_results_df[8]: f_score_class2,
-            columns_training_results_df[9]: training_time_ms,
-            columns_training_results_df[10]: training_disk_time_ms,
-            columns_training_results_df[11]: training_total_time_ms,
+            columns_training_results_df[9]: auc_score,
+            columns_training_results_df[10]: training_time_ms,
+            columns_training_results_df[11]: training_disk_time_ms,
+            columns_training_results_df[12]: training_total_time_ms,
         }
     
     # Add new row to the dataframe using loc[] method
@@ -256,7 +263,7 @@ model_names_list = ['LR', 'DT', 'RF', 'MLP', 'SVM', 'HGB', 'LightGBM', 'XGB']
 
 columns_training_results_df = ["model_name", "data_num_rows", "accuracy", "precision_avg", "recall_avg", 
                             "f1_score_avg", "f1_score_class0", "f1_score_class1", "f1_score_class2",
-                            "training_time_ms", "training_disk_time_ms", "training_total_time_ms"]
+                            "auc_score_avg", "training_time_ms", "training_disk_time_ms", "training_total_time_ms"]
 training_results_df = pd.DataFrame(columns=columns_training_results_df) # df to save the results
 
 for i in model_names_list:
