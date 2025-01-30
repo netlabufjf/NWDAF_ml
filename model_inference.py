@@ -82,8 +82,9 @@ for file in inference_data_files:
             
         # Save the results dataframe to a CSV file with a unique filename based on the current time
         timestamp = datetime.now().strftime("%Y%m%d-%H%M%S")
-        filename = f"results_{timestamp}.csv"
-        results_df.to_csv(f"{results_folder}{file_name}_{timestamp}_inference_results.csv", index=False)
+        # get the original input file name without format
+        output_filename = file_name.split('/')[-1].split('_inference_')[0]
+        results_df.to_csv(f"{results_folder}{output_filename}_{timestamp}_inference_results.csv", index=False)
         
     else:
         print(f"[WARN] Skipping file {file_name}")
