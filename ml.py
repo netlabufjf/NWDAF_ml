@@ -202,17 +202,17 @@ def train_models(model, X_train, X_test, y_train, y_test):
     training_total_time_ms = training_time_ms + training_disk_time_ms
 
     new_row = {
-            columns_training_time_df[0]: model_name,
-            columns_training_time_df[1]: data_num_rows,
-            columns_training_time_df[2]: training_time_ms,
-            columns_training_time_df[3]: training_disk_time_ms,
-            columns_training_time_df[4]: training_total_time_ms,
+            columns_training_results_df[0]: model_name,
+            columns_training_results_df[1]: data_num_rows,
+            columns_training_results_df[2]: training_time_ms,
+            columns_training_results_df[3]: training_disk_time_ms,
+            columns_training_results_df[4]: training_total_time_ms,
         }
     
     # Add new row to the dataframe using loc[] method
-    training_time_df.loc[len(training_time_df)] = new_row
+    training_results_df.loc[len(training_results_df)] = new_row
 
-    training_time_df.to_csv(f"{output_files_path_results}{timestamp}_training_time.csv", index=False)
+    training_results_df.to_csv(f"{output_files_path_results}{timestamp}_training_time.csv", index=False)
 
 # Buid the CSV files list
 csv_files = glob_get_files_list(input_files_path, "csv")
@@ -237,8 +237,8 @@ cv = RepeatedStratifiedKFold(n_splits=10, n_repeats=3, random_state=42)
 
 model_names_list = ['LR', 'DT', 'RF', 'MLP', 'SVM', 'HGB', 'LightGBM', 'XGB']
 
-columns_training_time_df = ["model_name", "data_num_rows", "training_time_ms", "training_disk_time_ms", "training_total_time_ms"]
-training_time_df = pd.DataFrame(columns=columns_training_time_df) # df to save the results
+columns_training_results_df = ["model_name", "data_num_rows", "training_time_ms", "training_disk_time_ms", "training_total_time_ms"]
+training_results_df = pd.DataFrame(columns=columns_training_results_df) # df to save the results
 
 for i in model_names_list:
     match i:
