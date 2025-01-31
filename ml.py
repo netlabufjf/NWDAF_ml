@@ -269,7 +269,9 @@ csv_files = glob_get_files_list(output_files_path_preprocessed_data, "csv")
 csv_files = glob_get_files_list(output_files_path_labeled_data, "csv")
 
 # Prepare data splits to train the models
+print("[INFO] Preparing training data splits ... ", end='')
 X_train, X_test, y_train, y_test = read_train_data(csv_files)
+print("[ OK ]")
 
 # Cross validation steps
 #cv = RepeatedStratifiedKFold(n_splits=10, n_repeats=3, random_state=42)
