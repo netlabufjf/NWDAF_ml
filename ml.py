@@ -1,8 +1,6 @@
 import os
 import pandas as pd
 import pickle
-import seaborn as sns
-import matplotlib.pyplot as plt
 from numpy import mean,std
 from datetime import datetime
 from time import time_ns
