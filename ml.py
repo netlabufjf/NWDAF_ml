@@ -272,7 +272,7 @@ csv_files = glob_get_files_list(output_files_path_labeled_data, "csv")
 X_train, X_test, y_train, y_test = read_train_data(csv_files)
 
 # Cross validation steps
-cv = RepeatedStratifiedKFold(n_splits=10, n_repeats=3, random_state=42)
+#cv = RepeatedStratifiedKFold(n_splits=10, n_repeats=3, random_state=42)
 
 model_names_list = ['LR', 'DT', 'RF', 'MLP', 'SVM', 'HGB', 'LightGBM', 'XGB']
 
