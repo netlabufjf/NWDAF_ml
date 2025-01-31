@@ -201,7 +201,7 @@ def train_models(model, X_train, X_test, y_train, y_test):
         # print("[DEBU] ROC AUC Score :", round(auc_score, 10))
     else:
         # print("[DEBU] ROC AUC Score : Not calculated for", model_name)
-        auc_score = None
+        auc_score = "N.A."
 
     if (model_name == 'DecisionTreeClassifier'):
         # Record feature importance for Decision Tree

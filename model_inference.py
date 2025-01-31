@@ -80,7 +80,7 @@ def run_inference(models_file_list, inference_data_file_list):
                 # #     print("[DEBU] ROC AUC Score :", round(auc_score, 10))
                 # # else:
                 # #     print("[DEBU] ROC AUC Score : Not calculated for", model_name)
-                # #     auc_score = None
+                # #     auc_score = "N.A."
                 
                 new_row = {
                     columns[0]: file_name,
