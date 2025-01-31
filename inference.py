@@ -16,6 +16,8 @@ models_folder = "./pcap/output/4-ML/models/" # read the models from here
 data_folder = "./pcap/output/4-ML/preprocess/labeled_data/" # read the inference data from here
 results_folder = "./pcap/output/4-ML/inference_results/" # save the results here
 
+timestamp = datetime.now().strftime("%Y%m%d-%H%M%S")
+
 # Buid the PKL and CSV files lists
 pkl_files = glob_get_files_list(models_folder, "pkl")
 inference_data_files = glob_get_files_list(data_folder, "csv")
@@ -103,10 +105,9 @@ def run_inference(models_file_list, inference_data_file_list):
                 # Add new row to the dataframe using loc[] method
                 results_df.loc[len(results_df)] = new_row
                 
-            # Save the results dataframe to a CSV file with a unique filename based on the current time
-            timestamp = datetime.now().strftime("%Y%m%d-%H%M%S")
-            # get the original input file name without format
+            # Get the original input file name without format
             output_filename = file_name.split('/')[-1].split('_inference_')[0]
+            # Save the results dataframe to a CSV file with a unique filename based on the current time
             results_df.to_csv(f"{results_folder}{output_filename}_{timestamp}_inference_results.csv", index=False)
 
         else:
