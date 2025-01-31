@@ -1,10 +1,16 @@
 import pandas as pd
 import numpy as np
 import pickle
-
 from datetime import datetime
 from time import time_ns
-from util import glob_get_files_list,read_csv
+from sklearn.metrics import (accuracy_score,
+                            precision_score,
+                            recall_score,
+                            f1_score,
+                            roc_auc_score,
+                            confusion_matrix)
+
+from util import glob_get_files_list,read_csv,label_id_to_text
 
 models_folder = "./pcap/output/4-ML/models/" # read the models from here
 data_folder = "./pcap/output/4-ML/preprocess/labeled_data/" # read the inference data from here
@@ -22,7 +28,8 @@ def run_inference(models_file_list, inference_data_file_list):
             print("[INFO] Running inference on", file_name)
             
             columns = ["file_name", "file_num_rows", "model_name",
-                        "inference_result_label", "inference_result", 
+                        "inference_result_label", "inference_result",
+                        "accuracy", "precision", "recall", "f_score_class",
                         "inference_result_count_0", "inference_result_count_1", "inference_result_count_2",
                         "inf_pred_time_ms", "inf_total_time_ms"]
             # Initialize results_df with columns
@@ -37,6 +44,8 @@ def run_inference(models_file_list, inference_data_file_list):
                 model_name = model.__class__.__name__ 
                 print("[INFO] Using", model_name)
                 
+                y_true = data['label'] # save the labels for evaluation
+                true_label = y_true.iloc[0] # save true label sample for evaluation
                 inference_data = data.drop('label', axis=1)  # remove the label column
                 
                 inference_pred_time_begin = time_ns()
@@ -53,17 +62,41 @@ def run_inference(models_file_list, inference_data_file_list):
                 total_inference_time = (total_inference_time_end - total_inference_time_begin) / 10**6
                 inference_pred_time = (inference_pred_time_end - inference_pred_time_begin) / 10**6
 
+                # Model evaluation data
+                accuracy = accuracy_score(y_true, y_pred)
+                cm = confusion_matrix(y_true, y_pred) #labels=[0, 1, 2])
+                precision = precision_score(y_true, y_pred, average="weighted", labels=[true_label])
+                recall = recall_score(y_true, y_pred, average="weighted", zero_division=np.nan)
+                f_score_class = f1_score(y_true, y_pred, average="weighted", labels=[true_label])
+
+                # print("[DEBU] Accuracy:", round(accuracy, 10))
+                # print(f"[DEBU] Confusion Matrix:\n{cm}")
+                # print("[DEBU] Precision :", round(precision, 10))
+                # print("[DEBU] Recall    :", round(recall, 10))
+                # print("[DEBU] F1-score of class :", round(f_score_class, 10))
+                # # TODO fix ROC AUC score
+                # # if (model_name != "LinearSVC"): # LinearSVC doesn't implement proba
+                # #     auc_score = roc_auc_score(y_true, model.predict_proba(inference_data), average='macro', multi_class='ovo', labels=[0, 1, 2])
+                # #     print("[DEBU] ROC AUC Score :", round(auc_score, 10))
+                # # else:
+                # #     print("[DEBU] ROC AUC Score : Not calculated for", model_name)
+                # #     auc_score = None
+                
                 new_row = {
                     columns[0]: file_name,
                     columns[1]: data_num_rows,
                     columns[2]: model_name,
                     columns[3]: inference_result_label,
                     columns[4]: inference_result_int,
-                    columns[5]: int(inference_result_counts[0]) if 0 in inference_result_counts else np.nan,
-                    columns[6]: int(inference_result_counts[1]) if 1 in inference_result_counts else np.nan,
-                    columns[7]: int(inference_result_counts[2]) if 2 in inference_result_counts else np.nan,
-                    columns[8]: inference_pred_time,
-                    columns[9]: total_inference_time,
+                    columns[5]: accuracy,
+                    columns[6]: precision,
+                    columns[7]: recall,
+                    columns[8]: f_score_class,
+                    columns[9]: int(inference_result_counts[0]) if 0 in inference_result_counts else np.nan,
+                    columns[10]: int(inference_result_counts[1]) if 1 in inference_result_counts else np.nan,
+                    columns[11]: int(inference_result_counts[2]) if 2 in inference_result_counts else np.nan,
+                    columns[12]: inference_pred_time,
+                    columns[13]: total_inference_time,
                 }
                 
                 # Add new row to the dataframe using loc[] method
@@ -74,7 +107,7 @@ def run_inference(models_file_list, inference_data_file_list):
             # get the original input file name without format
             output_filename = file_name.split('/')[-1].split('_inference_')[0]
             results_df.to_csv(f"{results_folder}{output_filename}_{timestamp}_inference_results.csv", index=False)
-            
+
         else:
             print(f"[WARN] Skipping file {file_name}")
 
