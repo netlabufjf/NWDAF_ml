@@ -10,7 +10,7 @@ from sklearn.metrics import (accuracy_score,
                             roc_auc_score,
                             confusion_matrix)
 
-from util import glob_get_files_list,read_csv,label_id_to_text
+from util import glob_get_files_list,read_csv,label_id_to_text,plot_confusion_matrix
 
 models_folder = "./pcap/output/4-ML/models/" # read the models from here
 data_folder = "./pcap/output/4-ML/preprocess/labeled_data/" # read the inference data from here
@@ -68,6 +68,7 @@ def run_inference(models_file_list, inference_data_file_list):
                 precision = precision_score(y_true, y_pred, average="weighted", labels=[true_label])
                 recall = recall_score(y_true, y_pred, average="weighted", zero_division=np.nan)
                 f_score_class = f1_score(y_true, y_pred, average="weighted", labels=[true_label])
+                plot_confusion_matrix(cm, results_folder, model_name, "inference", timestamp, True, False)
 
                 # print("[DEBU] Accuracy:", round(accuracy, 10))
                 # print(f"[DEBU] Confusion Matrix:\n{cm}")
