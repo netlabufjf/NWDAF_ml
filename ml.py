@@ -190,7 +190,7 @@ def train_models(model, X_train, X_test, y_train, y_test):
     plt.xlabel("Predicted Label", fontsize=font_size)
     plt.ylabel("True Label", fontsize=font_size)
 
-    plt.savefig(f"{output_files_path_results}{model_name}_training_confusion_matrix.pdf", dpi=300, bbox_inches='tight')
+    plt.savefig(f"{output_files_path_results}{timestamp}_{model_name}_training_confusion_matrix.pdf", dpi=300, bbox_inches='tight')
     # plt.show() # DEBUG
 
     # Model evaluation data
