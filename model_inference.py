@@ -64,7 +64,7 @@ def run_inference(models_file_list, inference_data_file_list):
 
                 # Model evaluation data
                 accuracy = accuracy_score(y_true, y_pred)
-                cm = confusion_matrix(y_true, y_pred) #labels=[0, 1, 2])
+                cm = confusion_matrix(y_true, y_pred, labels=[0, 1, 2])
                 precision = precision_score(y_true, y_pred, average="weighted", labels=[true_label])
                 recall = recall_score(y_true, y_pred, average="weighted", zero_division=np.nan)
                 f_score_class = f1_score(y_true, y_pred, average="weighted", labels=[true_label])
