@@ -22,7 +22,7 @@ from sklearn.metrics import (accuracy_score,
                             roc_auc_score,
                             confusion_matrix)
 
-from util import glob_get_files_list,read_csv,delete_files,label_id_to_text
+from util import glob_get_files_list,read_csv,delete_files,plot_confusion_matrix
 
 # File paths
 working_folder = "./pcap/output/4-ML/"
@@ -179,20 +179,7 @@ def train_models(model, X_train, X_test, y_train, y_test):
 
     y_pred = model.predict(X_test)
     cm = confusion_matrix(y_test, y_pred, labels=[0, 1, 2])
-    
-    # Plot confusion matrix as a heatmap
-    font_size = 12
-    # plt.figure(figsize=(8,6), dpi=300)
-    # sns.set(font_scale=1.4)
-    sns.heatmap(cm, annot=True, fmt="d", cmap="Blues", xticklabels=[label_id_to_text(0), label_id_to_text(1), label_id_to_text(2)], 
-                yticklabels=[label_id_to_text(0), label_id_to_text(1), label_id_to_text(2)],) #annot_kws={"size": font_size + 2})
-    plt.title(f"Confusion Matrix for {model_name} Training", fontsize=font_size)
-    plt.xlabel("Predicted Label", fontsize=font_size)
-    plt.ylabel("True Label", fontsize=font_size)
-
-    plt.savefig(f"{output_files_path_results}{timestamp}_{model_name}_training_confusion_matrix.pdf", dpi=300, bbox_inches='tight')
-    # plt.show() # DEBUG
-    plt.close() # close figure to be able to plot other iterations correctly
+    plot_confusion_matrix(cm, output_files_path_results, model_name, "training", timestamp, True, False)
 
     # Model evaluation data
     accuracy = accuracy_score(y_test, y_pred)

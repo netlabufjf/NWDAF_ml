@@ -1,5 +1,7 @@
 import pandas as pd
 import glob
+import seaborn as sns
+import matplotlib.pyplot as plt
 
 def read_csv(file_path):
     """
@@ -95,3 +97,40 @@ def label_id_to_text(id):
         raise ValueError(f"Could not determine label from id {id}")
         exit()
     return label
+
+def plot_confusion_matrix(matrix, output_dir, model_name, operation_type='', timestamp='', save_plot=False, show_plot=True):
+    """
+    A function that plots a confusion matrix
+
+    Parameters
+    ----------
+        matrix : ?
+            The confusion matrix that should be plotted.
+        output_dir: string
+            The output path where the plot PDF file should be saved.
+        model_name: string
+            The name of the model to be used on the plot title and file name.
+        operation_type: string
+            A string that will be used on the plot title and file name. On our context, it should be "training" or "inference".
+        timestamp: string
+            A datetime-like formatted string that represents the time when this plot's data was created.
+        save_plot: bool
+            If the plot should be saved or not.
+        show_plot: bool
+            If the plot should be previewed or not.
+    """
+    # Plot confusion matrix as a heatmap
+    font_size = 12
+    # plt.figure(figsize=(8,6), dpi=300)
+    # sns.set(font_scale=1.4)
+    sns.heatmap(matrix, annot=True, fmt="d", cmap="Blues", xticklabels=[label_id_to_text(0), label_id_to_text(1), label_id_to_text(2)], 
+                yticklabels=[label_id_to_text(0), label_id_to_text(1), label_id_to_text(2)],) #annot_kws={"size": font_size + 2})
+    plt.title(f"Confusion Matrix for {model_name} {operation_type}", fontsize=font_size)
+    plt.xlabel("Predicted Label", fontsize=font_size)
+    plt.ylabel("True Label", fontsize=font_size)
+
+    if (save_plot):
+        plt.savefig(f"{output_dir}{timestamp}_{model_name}_{operation_type}_confusion_matrix.pdf", dpi=300, bbox_inches='tight')
+    elif (show_plot):
+        plt.show() # DEBUG
+    plt.close() # close figure to be able to plot other iterations correctly
