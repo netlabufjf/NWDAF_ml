@@ -40,7 +40,7 @@ field_remover () {
     local FILE_NAME=$1
     local OUT_FOLDER=$2
 
-    echo "[INFO] Removing dupplicated fields from $FILE_NAME"
+    echo "[INFO] Removing duplicated fields from $FILE_NAME"
 
     sed -i '/"ip.addr":/d; /"ip.host":/d ; /"udp.port":/d' $OUT_FOLDER$FILE_NAME
 }
