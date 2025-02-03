@@ -23,6 +23,8 @@ The requirements from the root README file of the repository cover only the nece
 
 **NOTE:** The number of CPUs and amount of RAM will impact directly the time required to build the software.
 
+**TIP:** If playing videos with resolutions higher than 1080p (FHD), more CPU cores will be needed on UERANSIM's VM
+
 ## Prerequisites
 
 The instructions below do not cover the installation and setup of free5GC and UERANSIM. In broad terms, the environment is required to contain a working [free5GC instance](https://free5gc.org/guide/3-install-free5gc/), with the UERANSIM's device [added to it's database](https://free5gc.org/guide/5-install-ueransim/) and an instance of UERANSIM [configured to connect to free5GC](https://free5gc.org/guide/5-install-ueransim/#6-setting-ueransim).
