@@ -119,6 +119,8 @@ On UERANSIM's machine:
 
 ## Troubleshooting
 
+### Can't open the internet browser
+
 If the message below appears:
 ```
 [4198:4198:0201/211850.700810:ERROR:ozone_platform_x11.cc(245)] Missing X server or $DISPLAY
@@ -131,3 +133,28 @@ ssh USER@IP -X
 ```
 
 **TIP:** Change USER and IP according to your setup.
+
+### Can't connect the UE to the internet
+
+Verify if the command below returns ping packets:
+```
+ping -I uesimtun0 google.com
+```
+
+If yes, check your free5GC configuration (UE data must match what's displayed on free5GC's Webconsole)
+
+If no, check the firewall of free5GC's VM (e.g. try to run `reload_host_config.sh` script to reapply the required firewall rules)
+
+### Can't play any video on internet browser
+
+Check that the browser was correctly installed
+
+Also, check that the IP in `UE_IP` matches the one obtained by the `ueransimtun0` network interface
+
+### Can't play Naver TV on Mozilla Firefox browser
+
+As I used browser's default settings, it looks like a required coded is missing. Please, use Brave Browser instead.
+
+### None of traffic-gen scripts seem to work
+
+Check that the IP in `UE_IP` matches the one obtained by the `ueransimtun0` network interface and that `IP_5GC` matches the one from free5GC's network interface where it's APIs are exposed
