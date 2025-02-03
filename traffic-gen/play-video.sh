@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-UE_IP=10.60.0.1 # IP given by 5GC to point-to-point interface (a.k.a. uesimtun0)
+IP_UE=10.60.0.1 # IP given by 5GC to point-to-point interface (a.k.a. uesimtun0)
 #YT_URL="https://www.youtube.com/watch?v=LXb3EKWsInQ" # URL of the stored video
 YT_URL="https://www.youtube.com/watch?v=LXb3EKWsInQ&list=PLrN5hDSKBQCLN_p4SJwqHSNO3ToomP-il&index=1" # URL of a ~2h playlist of stored videos
 NAVER_TV_URL="https://tv.naver.com/l/164367" # URL of the live stream
@@ -79,10 +79,10 @@ run () {
     fi
 
     if [[ $USE_FIREFOX -eq 1 ]]; then
-        bash nr-binder $UE_IP firefox --new-window $URL
+        bash nr-binder $IP_UE firefox --new-window $URL
     elif [[ $USE_FIREFOX -eq 0 ]]; then
         # Use Brave browser as an alternative
-        bash nr-binder $UE_IP brave-browser --new-window --incognito $URL
+        bash nr-binder $IP_UE brave-browser --new-window --incognito $URL
         # using incognito to prevent Brave resuming a previous session
         # (i.e. 'Continue where you left off')
     fi

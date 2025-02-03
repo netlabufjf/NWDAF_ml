@@ -201,7 +201,7 @@ If no, check the firewall of free5GC's VM (e.g. try to run `reload_host_config.s
 
 Check that the browser was correctly installed
 
-Also, check that the IP in `UE_IP` matches the one obtained by the `ueransimtun0` network interface
+Also, check that the IP in `IP_UE` matches the one obtained by the `ueransimtun0` network interface
 
 ### Can't play Naver TV on Mozilla Firefox browser
 
@@ -209,4 +209,4 @@ As I used browser's default settings, it looks like a required coded is missing.
 
 ### None of traffic-gen scripts seem to work
 
-Check that the IP in `UE_IP` matches the one obtained by the `ueransimtun0` network interface and that `IP_5GC` matches the one from free5GC's network interface where it's APIs are exposed
+Check that the IP in `IP_UE` matches the one obtained by the `ueransimtun0` network interface and that `IP_5GC` matches the one from free5GC's network interface where it's APIs are exposed
