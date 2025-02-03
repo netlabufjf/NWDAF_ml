@@ -30,7 +30,7 @@ Currently, the integration between [Kim et al. 2022]'s NWDAF and our ML function
 
 1. Clone the repo
 ```
-git clone https://github.com/netlabufjf/NWDAF_ml.git
+git clone https://github.com/netlabufjf/nwdaf_ml.git
 ```
 
 2. Install Python3 and pip and configure a virtual environment
