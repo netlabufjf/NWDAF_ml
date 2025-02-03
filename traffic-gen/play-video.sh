@@ -1,7 +1,8 @@
 #!/usr/bin/env bash
 
 UE_IP=10.60.0.1 # IP given by 5GC to point-to-point interface (a.k.a. uesimtun0)
-YT_URL="https://www.youtube.com/watch?v=LXb3EKWsInQ" # URL of the stored video
+#YT_URL="https://www.youtube.com/watch?v=LXb3EKWsInQ" # URL of the stored video
+YT_URL="https://www.youtube.com/watch?v=LXb3EKWsInQ&list=PLrN5hDSKBQCLN_p4SJwqHSNO3ToomP-il&index=1" # URL of a ~2h playlist of stored videos
 NAVER_TV_URL="https://tv.naver.com/l/164367" # URL of the live stream
 PREPARE_MODE=0
 RUN_MODE=0
