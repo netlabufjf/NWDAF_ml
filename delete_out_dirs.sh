@@ -8,5 +8,5 @@ rm -rf ./pcap/output
 echo "[ OK ]"
 
 echo -n "[INFO] Reconstructing the output directory structure ... "
-mkdir -p ./pcap/output/{1-PCAP-export,2-stats/graphs/,3-JSON-export/box-plots/,4-ML/{{preprocess,inference_results}/{labeled_files,labeled_data,data_ready_to_ml},models/training_results}}
+mkdir -p ./pcap/output/{1-PCAP-export,2-stats/graphs/,3-JSON-export/box-plots/,4-ML/{preprocess/{labeled_files,labeled_data,data_ready_to_ml},models/training_results,inference_results}}
 echo "[ OK ]"
