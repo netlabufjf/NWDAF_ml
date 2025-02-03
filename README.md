@@ -6,9 +6,8 @@
 
 - python: 3.13.1
 - pip: 24.3.1
+- python packages from [requirements.txt](./requirements.txt)
 - tshark: 4.4.2
-
-**NOTE:** List updated on January, 2025
 
 ### Hardware
 
