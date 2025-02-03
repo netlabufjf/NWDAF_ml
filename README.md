@@ -53,9 +53,46 @@ cd NWDAF_ml # enter to repository's root folder
 source pyvenv/bin/activate
 ```
 
-2. TODO
+2. Move the input PCAP files to ./pcap/input or edit the path in the scripts
 
-TODO
+3. Execute the steps to extract the PCAP data and obtain some statistics
+```
+bash pcap_extract.sh
+python dataset_CSV_characterization.py
+
+```
+
+4. Prepare the dataset for model training
+```
+python export_JSON.py
+bash add_label_to_name.sh
+```
+
+5. Execute the Machine Learning script to preprocess the data and train the models
+```
+python ml.py
+```
+
+6. Execute the inference using the trained models
+```
+python inference.py
+```
+
+### Statistics
+
+1. To obtain some statistics, run steps 1-3 from [previous section](#usage) and:
+```
+python stat-plotter.py
+```
+
+2. To obtain some more statistics (box plots), run up to the first command of step 4 from the [previous section](#usage) and:
+```
+python box-plotter.py
+```
+
+### Using the traffic generator scripts
+
+Please, refer to [the traffic-gen README file](./traffic-gen/README.md)
 
 ## Citing this work
 
