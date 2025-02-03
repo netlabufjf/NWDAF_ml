@@ -106,4 +106,4 @@ This program is free software: you can redistribute it and/or modify it under th
 
 This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.
 
-For the json2csv [submodule license](./pcap_json2csv/LICENSE), check [its own notice](./pcap_json2csv/README.md#license).
+For the json2csv [submodule license](https://github.com/oliveiraleo/PCAP-dataExtractor/blob/main/LICENSE), check [its own notice](https://github.com/oliveiraleo/PCAP-dataExtractor#license).
