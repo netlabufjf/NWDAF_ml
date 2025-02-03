@@ -2,7 +2,8 @@
 
 # Basic UDP client
 
-# SLEEP_TIMER=60 # send packets in a fixed rate
+# SLEEP_TIMER=60 # send packets in a fixed rate (1 packet/sec)
+# SLEEP_TIMER=0.01 # send packets in a fixed rate (100 packets/sec)
 IP_UE=10.60.0.1
 IP_5GC=10.0.0.110
 DEST_PORT=30000 # port used to connect to server
