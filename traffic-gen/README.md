@@ -103,21 +103,71 @@ cd ~/free5gc/
 sudo tcpdump -v -i upfgtp -w mmtc.pcap
 ```
 
-3. Run UDP server
-
 **TIP:** `-v` displays the number of captured packets.
+
+3. Run UDP server
+```
+bash udp-server.sh
+```
 
 On UERANSIM's machine:
 
-1. TODO
+1. Connect an UE to free5GC
+
+Example: [Click here](https://github.com/oliveiraleo/free5gc-auto-deploy#ueransim-basic-usage)
+
+2. Run UDP client
+```
+bash udp-client.sh
+```
 
 ### Generating YouTube video traffic
 
-1. TODO
+On free5GC's machine:
+
+1. Execute free5GC's `run.sh` script to start the 5GC
+```
+cd ~/free5gc/
+./run.sh
+```
+
+2. While running the 5GC, start a capture on the upfgtp network interface:
+```
+sudo tcpdump -v -i upfgtp -w embb.pcap
+```
+
+On UERANSIM's machine:
+
+1. Connect an UE to free5GC
+
+2. Run internet browser
+```
+bash play-video.sh -play-yt
+```
 
 ### Generating Naver TV live stream traffic
 
-1. TODO
+On free5GC's machine:
+
+1. Execute free5GC's `run.sh` script to start the 5GC
+```
+cd ~/free5gc/
+./run.sh
+```
+
+2. While running the 5GC, start a capture on the upfgtp network interface:
+```
+sudo tcpdump -v -i upfgtp -w urllc.pcap
+```
+
+On UERANSIM's machine:
+
+1. Connect an UE to free5GC
+
+2. Run internet browser
+```
+bash play-video.sh -play-live -use-brave
+```
 
 ## Troubleshooting
 
