@@ -35,7 +35,7 @@ git clone https://github.com/netlabufjf/nwdaf_ml.git
 2. Install Python3 and pip and configure a virtual environment
 ```
 sudo apt install python3 python3-pip python3-venv
-cd NWDAF_ml # enter to repository's root folder
+cd nwdaf_ml # enter to repository's root folder
 python -m venv pyvenv
 source pyvenv/bin/activate
 ```
@@ -49,7 +49,7 @@ pip install -r requirements.txt
 
 1. Go to the root folder and activate the virtual environment
 ```
-cd NWDAF_ml # enter to repository's root folder
+cd nwdaf_ml # enter to repository's root folder
 source pyvenv/bin/activate
 ```
 
@@ -100,7 +100,7 @@ TBD
 
 ## License
 
-The original code from upstream did not explicitly specify any license terms. However, the [work contained in this repository](https://github.com/net-ty/mnc_NWDAF/compare/mnc_Public-5G...netlabufjf:NWDAF_ml:ml) is licensed under the GPLv3, as indicated in the [LICENSE](./LICENSE) file, which is reflected in the notice provided below:
+The original code from upstream did not explicitly specify any license terms. However, the [work contained in this repository](https://github.com/net-ty/mnc_NWDAF/compare/mnc_Public-5G...netlabufjf:nwdaf_ml:ml) is licensed under the GPLv3, as indicated in the [LICENSE](./LICENSE) file, which is reflected in the notice provided below:
 
 This program is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License version 3 as published by the Free Software Foundation.
 
