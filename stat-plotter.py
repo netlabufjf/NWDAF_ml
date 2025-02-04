@@ -48,6 +48,25 @@ def plot_graph(df_to_plot, input_file_name, column_label, x_label, y_label, plt_
         plt.clf()  # clear the figure to create a new plot
         plt.close() # close each figure after finishing to free RAM
 
+def plot_time_series(dfs_to_plot, input_file_name, x_column_label, y_column_label, x_label, y_label):
+    for i, df in enumerate(dfs_to_plot):
+        plt.figure(figsize=(15, 6)) # Set figure size
+        plt.plot(df[x_column_label], df[y_column_label], marker='.', linestyle=':')
+        file_name_without_format = os.path.splitext(input_file_name[i])[0] # remove '.csv' from old file name
+        plt.title(file_name_without_format)
+        plt.xlabel(x_label + " (seconds)")
+        plt.ylabel(y_label)
+        plt.tight_layout()
+        
+        # Save plot
+        output_file_path = os.path.join(output_files_path, f"{file_name_without_format}.pdf")
+        plt.savefig(output_file_path, dpi=120, bbox_inches="tight")
+        print(f"[INFO] Plots of {x_label} for {input_file_name[i]} have been saved") # TODO improve messages on screen
+
+        # plt.show() # DEBUG
+        plt.clf()  # clear the figure to create a new plot
+        plt.close() # close each figure after finishing to free RAM
+
 # File paths
 input_files_path = "./pcap/output/2-stats/" # read CSV files from here
 output_files_path = "./pcap/output/2-stats/graphs/" # save the output there
@@ -57,18 +76,23 @@ input_file_names_protocol = [f for f in os.listdir(input_files_path) if f.endswi
 input_file_paths_protocol = [os.path.join(input_files_path, f) for f in input_file_names_protocol]
 input_file_names_length = [f for f in os.listdir(input_files_path) if f.endswith('len.csv')]
 input_file_paths_length = [os.path.join(input_files_path, f) for f in input_file_names_length]
+input_file_names_frame_time_number = [f for f in os.listdir(input_files_path) if f.endswith('time_series.csv')]
+input_file_paths_frame_time_number = [os.path.join(input_files_path, f) for f in input_file_names_frame_time_number]
 
 # Read CSV files
 input_dfs_protocol = [read_csv(path) for path in input_file_paths_protocol]
 input_dfs_length = [read_csv(path) for path in input_file_paths_length]
+input_dfs_time_series = [read_csv(path) for path in input_file_paths_frame_time_number]
 
 # Check if at least one file was found for each type
-if not input_dfs_protocol and not input_dfs_length: # TODO improve this check to filter per type
+# TODO improve this check to filter per type
+if (not input_dfs_protocol and not input_dfs_length and not input_dfs_time_series): 
     print(f"[ERROR] No CSV files found on {input_files_path}")
     exit()
 
 # Create plots for both protocol and length data
 plot_graph(input_dfs_protocol, input_file_names_protocol, '_ws.col.protocol', 'Protocol Label', 'Frequency', 'bar')
 plot_graph(input_dfs_length, input_file_names_length, 'frame.len', 'Packet Length', 'Frequency', 'line')
+plot_time_series(input_dfs_time_series, input_file_names_frame_time_number, 'frame.time_relative', 'frame.number', 'Packet Capture Time', 'Packet Number')
 
 print("[INFO] All plots have been finished")
