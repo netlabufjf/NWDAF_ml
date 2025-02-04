@@ -3,6 +3,7 @@ import traceback
 import sys
 import pandas as pd
 import os
+import glob
 
 from util import read_csv
 
@@ -34,6 +35,14 @@ def print_and_save_frequency_data(freq_data_list):
             freq_series.to_csv(os.path.join(output_files_path, file_name_without_format + "." + column_name + ".csv"))
             # print(f"[DEBU] Frequency information for {column_name} of {file_name_without_format}:\n {freq_series}") # DEBUG
         # print("[DEBU] Finished printing data frame", counter) # DEBUG
+
+def save_time_data(df_list):
+    # Extract the two columns related to time from each DataFrame
+    for counter, time_df in enumerate(df_list):
+        extracted_cols = pd.DataFrame()
+        extracted_cols = (time_df[["frame.number", "frame.time_relative"]])
+        file_name_without_format = os.path.splitext(input_files_names[counter - 1])[0] # remove '.csv' from old file name
+        extracted_cols.to_csv(os.path.join(output_files_path, file_name_without_format + ".time_series.csv"), index=False)
 
 # File paths
 input_files_path = "./pcap/output/1-PCAP-export/" # read CSV files from here
@@ -69,4 +78,5 @@ input_freq_data_list = extract_frequency_info(input_dfs, column_names)
 
 # Print frequency information
 print_and_save_frequency_data(input_freq_data_list)
+save_time_data(input_dfs)
 print("[INFO] Creating statistical data successfully finished")
