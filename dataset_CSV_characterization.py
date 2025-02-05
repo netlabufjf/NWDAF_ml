@@ -4,6 +4,7 @@ import sys
 import pandas as pd
 import os
 import glob
+import time
 
 from util import read_csv
 
@@ -49,6 +50,7 @@ input_files_path = "./pcap/output/1-PCAP-export/" # read CSV files from here
 output_files_path = "./pcap/output/2-stats/" # save the output there
 
 print("[INFO] Creating statistical data")
+start_time = time.time() # record the start of execution
 
 # get the list of all CSV files in the input directory
 input_files_names = [f for f in os.listdir(input_files_path) if f.endswith('.csv')]
@@ -80,3 +82,5 @@ input_freq_data_list = extract_frequency_info(input_dfs, column_names)
 print_and_save_frequency_data(input_freq_data_list)
 save_time_data(input_dfs)
 print("[INFO] Creating statistical data successfully finished")
+end_time = time.time() # record the end of execution
+print(f"[DEBU] Execution time: {(end_time - start_time)} s")

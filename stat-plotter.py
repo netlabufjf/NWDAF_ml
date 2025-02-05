@@ -2,6 +2,7 @@ import csv
 import pandas as pd
 import os
 import matplotlib.pyplot as plt
+import time
 
 from util import read_csv
 
@@ -71,6 +72,7 @@ def plot_time_series(dfs_to_plot, input_file_name, x_column_label, y_column_labe
 input_files_path = "./pcap/output/2-stats/" # read CSV files from here
 output_files_path = "./pcap/output/2-stats/graphs/" # save the output there
 
+start_time = time.time() # record the start of execution
 # Get file names and paths for protocol and length data
 input_file_names_protocol = [f for f in os.listdir(input_files_path) if f.endswith('protocol.csv')]
 input_file_paths_protocol = [os.path.join(input_files_path, f) for f in input_file_names_protocol]
@@ -96,3 +98,5 @@ plot_graph(input_dfs_length, input_file_names_length, 'frame.len', 'Packet Lengt
 plot_time_series(input_dfs_time_series, input_file_names_frame_time_number, 'frame.time_relative', 'frame.number', 'Packet Capture Time', 'Packet Number')
 
 print("[INFO] All plots have been finished")
+end_time = time.time() # record the end of execution
+print(f"[DEBU] Execution time: {end_time - start_time} s")
