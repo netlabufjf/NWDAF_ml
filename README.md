@@ -8,6 +8,7 @@
 - pip: 24.3.1
 - python packages from [requirements.txt](./requirements.txt)
 - tshark: 4.4.2
+- perl: 5.40.0
 
 ### Hardware
 
@@ -43,6 +44,14 @@ source pyvenv/bin/activate
 3. Install Python required packages
 ```
 pip install -r requirements.txt
+```
+
+4. Install Perl and Perl JSON module
+
+Example:
+```
+sudo apt install perl
+cpan install JSON
 ```
 
 ## Usage
