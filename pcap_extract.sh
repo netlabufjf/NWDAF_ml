@@ -11,6 +11,17 @@ IFS='
 
 TRAINING_PCAP_LIST=("$TRAINING_PCAP_FOLDER"*.pcap)
 INFERENCE_PCAP_LIST=("$INFERENCE_PCAP_FOLDER"*.pcap)
+
+# Check if folder is empty, if yes, delete the related var to avoid "file not found" errors
+if [[ "$TRAINING_PCAP_LIST" == *"*"* ]]; then
+    # TRAINING_PCAP_LIST=""
+    unset TRAINING_PCAP_LIST
+elif [[ "$INFERENCE_PCAP_LIST" == *"*"* ]]; then
+    # INFERENCE_PCAP_LIST=""
+    unset INFERENCE_PCAP_LIST
+fi
+
+# Then calculate these sizes after that
 TRAINING_PCAP_LIST_SIZE=${#TRAINING_PCAP_LIST[@]}
 INFERENCE_PCAP_LIST_SIZE=${#INFERENCE_PCAP_LIST[@]}
 TOTAL_LIST_SIZE=$((TRAINING_PCAP_LIST_SIZE + INFERENCE_PCAP_LIST_SIZE))
