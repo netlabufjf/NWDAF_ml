@@ -90,8 +90,8 @@ wait
 unset JSON_LIST # clean up after usage
 echo "[INFO] All $TOTAL_LIST_SIZE files have been processed"
 
-echo "[DEBUG] Execution time:"
+echo "[DEBU] Execution time:"
 }
 
 # TIME_END=$(date +%s) # record end time
-# echo "[DEBUG] Execution time: $((TIME_END-TIME_START)) seconds"
+# echo "[DEBU] Execution time: $((TIME_END-TIME_START)) seconds"
