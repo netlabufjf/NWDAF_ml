@@ -51,9 +51,36 @@ field_remover () {
     local FILE_NAME=$1
     local OUT_FOLDER=$2
 
-    echo "[INFO] Removing duplicated fields from $FILE_NAME"
+    echo "[INFO] Removing unused fields from $FILE_NAME"
+    # GNU AWK (gawk) was used instead of AWK because of this regex support
+    gawk -i inplace '/\[/ || /\]/ || /\{/ || /\}/ || /"_source":/ ||
+    /"frame.number":/ || /"frame.time_delta":/ || /"frame.time_relative":/ ||
+    /"ip.src":/ || /"ip.dst":/ || /"frame.encap_type":/ || /"frame.len":/ ||
+    /"ip.hdr_len":/ || /"udp.length":/ || /"tcp.len":/ || /"udp.srcport":/ ||
+    /"tcp.srcport":/ || /"udp.dstport":/ || /"tcp.dstport":/ || 
+    /"tcp.completeness*"/ || /"tcp.flags":/ || /"tcp.str":/ || 
+    /"tcp.window_size":/ || /"tcp.window_size_scalefactor":/ ||
+    /"frame.protocols":/ || /"ip.proto":/ || /"ip.flags...":/ || /"ip.ttl":/ || 
+    /"tcp.hdr_len":/ || /"data.len":/ || /"quic.packet_length":/ || /"quic.length":/
+    ' $OUT_FOLDER$FILE_NAME
+    # Some regex pattern explanation
+    # first line of the pattern matches the JSON structure header that must be kept
+    # all the other pattern lines match lines that contain data to be used on next steps
+    # everything else that is not matched, will be deleted to free disk space
+}
 
-    sed -i '/"ip.addr":/d; /"ip.host":/d ; /"udp.port":/d' $OUT_FOLDER$FILE_NAME
+# JSON parser to reconstruct its structure
+json_parser () {
+    local FILE_NAME=$1
+    local OUT_FOLDER=$2
+    FILE_NAME_TMP=$FILE_NAME"_tmp"
+
+    echo "[INFO] Parsing fields from $FILE_NAME"
+    # Parses the JSON using the Perl module to remove illegal trailing commas and to reformat it
+    perl -MJSON -e '@text=(<>);print to_json(from_json("@text", {relaxed=>1}), {pretty=>1})' $OUT_FOLDER$FILE_NAME > $OUT_FOLDER$FILE_NAME_TMP
+    # the Perl source code above was based on this StackOverflow answer: https://unix.stackexchange.com/a/485011
+    # As I couldn't find an easy way to process the file in place, I've added a tem file to save the result then used mv to overwrite the original
+    mv $OUT_FOLDER$FILE_NAME_TMP $OUT_FOLDER$FILE_NAME
 }
 
 time { # track execution time
@@ -77,16 +104,20 @@ JSON_LIST=("$OUT_FOLDER"*.json)
 JSON_LIST_SIZE=${#JSON_LIST[@]}
 
 # Drop duplicated fields on JSON
-echo "[INFO] Removing duplicated entries from $JSON_LIST_SIZE JSON files"
+echo "[INFO] Preprocessing entries from $JSON_LIST_SIZE JSON files"
 if [ $JSON_LIST_SIZE -ne 0 ]; then
     for i in "${JSON_LIST[@]}"; do
         field_remover "${i##*/}" $OUT_FOLDER &
+    done
+    wait
+    for i in "${JSON_LIST[@]}"; do
+        # this step uses a lot of RAM, that's why it ins't run in parallel
+        json_parser "${i##*/}" $OUT_FOLDER
     done
 else
     echo "[ERRO] No JSON files found in the directory: $OUT_FOLDER"
     exit 1
 fi
-wait
 unset JSON_LIST # clean up after usage
 echo "[INFO] All $TOTAL_LIST_SIZE files have been processed"
 
