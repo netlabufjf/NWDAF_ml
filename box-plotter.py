@@ -1,5 +1,6 @@
 import pandas as pd
 import matplotlib.pyplot as plt
+import time
 
 from util import glob_get_files_list
 
@@ -29,6 +30,8 @@ def plot_box_plot(file_path):
     # plt.show() # DEBUG
     plt.close() # close each figure after finishing to enable multiple runs
 
+start_time = time.time() # record the start of execution
+
 # List of CSV files
 csv_files = glob_get_files_list(input_files_path, "csv")
 
@@ -38,3 +41,5 @@ for i in csv_files:
     except AssertionError as e:
         print("[ERRO] Could not parse", i, "due to", e)
         # TODO fix AssertionError too
+end_time = time.time() # record the end of execution
+print(f"[DEBU] Execution time: {end_time - start_time} s")
