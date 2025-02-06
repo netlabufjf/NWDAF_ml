@@ -42,4 +42,4 @@ except KeyboardInterrupt:
 #     slowdown_print=False
 #     export_json(i, slowdown_print)
 end_time = time.time() # record the end of execution
-print("Execution time:", end_time - start_time, "s") # TODO save this on disk
+print("[DEBU] Execution time:", end_time - start_time, "s") # TODO save this on disk
