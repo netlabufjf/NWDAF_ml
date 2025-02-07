@@ -98,7 +98,7 @@ def label_id_to_text(id):
         exit()
     return label
 
-def plot_confusion_matrix(matrix, output_dir, model_name, operation_type='', timestamp='', save_plot=False, show_plot=True):
+def plot_confusion_matrix(matrix, output_dir, data_input_file_name, model_name, operation_type='', timestamp='', save_plot=False, show_plot=True):
     """
     A function that plots a confusion matrix
 
@@ -108,6 +108,8 @@ def plot_confusion_matrix(matrix, output_dir, model_name, operation_type='', tim
             The confusion matrix that should be plotted.
         output_dir: string
             The output path where the plot PDF file should be saved.
+        data_input_file_name: string
+            The name of the input file from where data was read from. To be used as part of the output name so it would be possible to differentiate between matrices from different data.
         model_name: string
             The name of the model to be used on the plot title and file name.
         operation_type: string
@@ -130,7 +132,7 @@ def plot_confusion_matrix(matrix, output_dir, model_name, operation_type='', tim
     plt.ylabel("True Label", fontsize=font_size)
 
     if (save_plot):
-        plt.savefig(f"{output_dir}{timestamp}_{model_name}_{operation_type}_confusion_matrix.pdf", dpi=300, bbox_inches='tight')
+        plt.savefig(f"{output_dir}{timestamp}_{data_input_file_name}_{model_name}_{operation_type}_confusion_matrix.pdf", dpi=300, bbox_inches='tight')
     elif (show_plot):
         plt.show() # DEBUG
     plt.close() # close figure to be able to plot other iterations correctly
