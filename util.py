@@ -107,7 +107,7 @@ def plot_confusion_matrix(matrix, output_dir, data_input_file_name, model_name, 
 
     Parameters
     ----------
-        matrix : ?
+        matrix : numpy.ndarray
             The confusion matrix that should be plotted.
         output_dir: string
             The output path where the plot PDF file should be saved.
@@ -130,7 +130,7 @@ def plot_confusion_matrix(matrix, output_dir, data_input_file_name, model_name, 
     # sns.set(font_scale=1.4)
     sns.heatmap(matrix, annot=True, fmt="d", cmap="Blues", xticklabels=[label_id_to_text(0), label_id_to_text(1), label_id_to_text(2)], 
                 yticklabels=[label_id_to_text(0), label_id_to_text(1), label_id_to_text(2)],) #annot_kws={"size": font_size + 2})
-    plt.title(f"Confusion Matrix for {model_name} {operation_type}", fontsize=font_size)
+    plt.title(f"{data_input_file_name}\nConfusion Matrix for {model_name} {operation_type}", fontsize=font_size)
     plt.xlabel("Predicted Label", fontsize=font_size)
     plt.ylabel("True Label", fontsize=font_size)
 
