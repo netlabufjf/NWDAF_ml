@@ -177,7 +177,7 @@ def train_models(model, X_train, X_test, y_train, y_test):
 
     y_pred = model.predict(X_test)
     cm = confusion_matrix(y_test, y_pred, labels=[0, 1, 2])
-    plot_confusion_matrix(cm, output_files_path_results, model_name, "training", timestamp, True, False)
+    plot_confusion_matrix(cm, output_files_path_results, "", model_name, "training", timestamp, True, False)
 
     # Model evaluation data
     accuracy = accuracy_score(y_test, y_pred)
