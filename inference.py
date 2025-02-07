@@ -70,7 +70,7 @@ def run_inference(models_file_list, inference_data_file_list):
                 precision = precision_score(y_true, y_pred, average="weighted", zero_division=np.nan, labels=[true_label])
                 recall = recall_score(y_true, y_pred, average="weighted", zero_division=np.nan)
                 f_score_class = f1_score(y_true, y_pred, average="weighted", zero_division=np.nan, labels=[true_label])
-                plot_confusion_matrix(cm, results_folder, model_name, "inference", timestamp, True, False)
+                plot_confusion_matrix(cm, results_folder, file_name, model_name, "inference", timestamp, True, False)
 
                 # print("[DEBU] Accuracy:", round(accuracy, 10))
                 # print(f"[DEBU] Confusion Matrix:\n{cm}")
