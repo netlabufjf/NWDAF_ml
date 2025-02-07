@@ -10,17 +10,17 @@ from sklearn.metrics import (accuracy_score,
                             roc_auc_score,
                             confusion_matrix)
 
-from util import glob_get_files_list,read_csv,label_id_to_text,plot_confusion_matrix
+from util import glob_get_files_list,read_csv,label_id_to_text,plot_confusion_matrix,read_and_label_data,preprocess_data
 
+# File paths
+working_folder = "./pcap/output/4-ML/"
+input_files_path = working_folder + "preprocess/labeled_files/" # read labeled data CSV files from here
+output_files_path_preprocessed_data = working_folder + "preprocess/data_ready_to_ml/" # save preprocessed data there
 models_folder = "./pcap/output/4-ML/models/" # read the models from here
-data_folder = "./pcap/output/4-ML/preprocess/labeled_data/" # read the inference data from here
+data_folder = "./pcap/output/4-ML/preprocess/labeled_data/" # save or read the inference data from here
 results_folder = "./pcap/output/4-ML/inference_results/" # save the results here
 
 timestamp = datetime.now().strftime("%Y%m%d-%H%M%S")
-
-# Buid the PKL and CSV files lists
-pkl_files = glob_get_files_list(models_folder, "pkl")
-inference_data_files = glob_get_files_list(data_folder, "csv")
 
 def run_inference(models_file_list, inference_data_file_list):
     for file in inference_data_file_list:
@@ -113,7 +113,29 @@ def run_inference(models_file_list, inference_data_file_list):
         else:
             print(f"[WARN] Skipping file {file_name}")
 
+print("[INFO] Running inference preprocess")
+# Run preprocess in case the inference data wasn't already preprocessed
+total_preprocess_time_begin = datetime.now()
+# Get the list of CSV files
+csv_files = glob_get_files_list(input_files_path, "csv")
+
+# Preprocess the data
+preprocess_data(csv_files, output_files_path_preprocessed_data, results_folder, timestamp)
+
+# Update the list of CSV files
+csv_files = glob_get_files_list(output_files_path_preprocessed_data, "csv")
+
+# Label all data inside CSV files
+[read_and_label_data(file, data_folder, False) for file in csv_files]
+total_preprocess_time_end = datetime.now()
+
+print("[INFO] Running inference")
+# Buid the PKL and CSV files lists
+pkl_files = glob_get_files_list(models_folder, "pkl")
+inference_data_files = glob_get_files_list(data_folder, "csv")
+
 total_run_time_begin = datetime.now()
 run_inference(pkl_files, inference_data_files)
 total_run_time_end = datetime.now()
-print("[INFO] Total run time:", (total_run_time_end - total_run_time_begin).total_seconds(), "(seconds)")
+print("[INFO] Total preprocess run time:", (total_preprocess_time_end - total_preprocess_time_begin).total_seconds(), "(seconds)")
+print("[INFO] Total inference run time:", (total_run_time_end - total_run_time_begin).total_seconds(), "(seconds)")
