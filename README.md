@@ -12,7 +12,32 @@
 
 ### Hardware
 
-TODO
+The hardware specifications below concern the Machine Learning (ML) experiment pipeline (e.g. processing the dataset, training models and running inference). For the hardware and software requirements for generating a new 5G simulated traffic dataset, please, refer to [the traffic-gen README file](./traffic-gen/README.md).
+
+#### Minimum
+
+- 4x 3.0GHz CPU cores
+- 16GB of RAM
+- `A`GB HDD to store the input dataset
+- ~11.3x`A` HDD available to store the temporary files of preprocessed data
+- ~2x`A` HDD to store the preprocessed data
+
+**TIP:** The dataset we tested had 19.6GB training + 2.4GB inference data (i.e. `A = 22GB`), see the values on the list [below](./README.md#recommended)
+
+#### Recommended
+
+The specifications below were taken from the machine used during the experiments. If you don't have this amount of resources, consider downloading the preprocessed files or splitting the data to be processed in blocks (specially on `pcap_extract.sh` and `export_JSON.py` steps, that require the largest amount of HDD and RAM).
+
+- 16x 3.8GHz CPU cores
+- 4x 32GB of RAM 3200MT/s CL16
+- 128GB SWAP (not needed if 256GB of RAM is available)
+- 25GB SSD 5000MB/s write / 3200MB/s read* to store the input dataset
+- 400GB SSD available to store the temporary files of preprocessed data
+- 50GB SSD to store the preprocessed data
+
+\* A 450MB/s SATA interface might be enough
+
+**NOTE:** These specifications are tailored to the datasets we tested on our implementation. The amount of RAM required increases linearly with the size of the dataset as the dataset will be loaded into RAM during training. The amount of CPU cores available will directly influence the parallel tasks (such as in `pcap_extract.sh` and `export_JSON.py`), the more input files, the more CPUs are required.
 
 ### Quick comparison between [Kim et al. 2022], our previous work and current work
 
