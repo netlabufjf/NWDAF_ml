@@ -41,13 +41,44 @@ The specifications below were taken from the machine used during the experiments
 
 ### Quick comparison between [Kim et al. 2022], our previous work and current work
 
-TODO Update this section
-
 The authors of [[Kim et al. 2022]](https://doi.org/10.1109/ICCE53296.2022.9730290) implemented the NWDAF module and its submodules (MTLF and AnLF) integrated to free5GC, however, they used an image dataset as their ML functionality.
 
-First, a reprodction of [Kim et al. 2022]'s work was made (this README details the environment used in this process). After that, [another ML functionality](./ML_test_code/) closely related to Computer Networks field was implemented. Instead of using an image dataset, a [packet capture dataset](https://github.com/oliveiraleo/mnc_NWDAF/tree/mnc_Public-5G/ML_test_code/dataset) containing 6 captures of 1000 packets each was created. This dataset was used to test the new ML functionality and the instructions to reproduce the environment used for this second phase are located on [this other file here](./VMs-setup.md). 
+Previously, a reprodction of [Kim et al. 2022]'s work was made on [[de Oliveira et al. 2024]](https://doi.org/10.1109/ISCC61673.2024.10733717) ([that README](https://github.com/oliveiraleo/mnc_NWDAF/blob/mnc_Public-5G/README.md) details the environment used in this process). After that, [another ML functionality](https://github.com/oliveiraleo/mnc_NWDAF/tree/mnc_Public-5G/ML_test_code) closely related to Computer Networks field was implemented. Instead of using an image dataset, a [packet capture dataset](https://github.com/oliveiraleo/mnc_NWDAF/tree/mnc_Public-5G/ML_test_code/dataset) containing 6 captures of 1000 packets each was created. This dataset was used to test the new ML functionality and the instructions to reproduce the environment used for this second phase are located on [that other file](https://github.com/oliveiraleo/mnc_NWDAF/blob/mnc_Public-5G/VMs-setup.md). The integration between [Kim et al. 2022]'s NWDAF and [de Oliveira et al. 2024]'s ML functionality wasn't finished.
 
-Currently, the integration between [Kim et al. 2022]'s NWDAF and our ML functionality isn't finished yet, so Keras and TesorFlow are not being used on our experiment.
+Our current work focused on two main points: (i) creating a larger 5G simulated open PCAP dataset; and (ii) enhancing the classification results obtained on [de Oliveira et al. 2024]. 
+
+TODO: finish detailing our current work
+
+## Dataset description
+
+The used dataset was divided in two parts: training data and inference data.
+
+In general, classification ML models require a large amount of data to work well. Our previous work contained only 3000 packets for training the models and another 3000 to run inferences. To improve that, we focused on having around 10 million packets for each class on the training phase. 
+
+Considering an application of our work (5G user equipment traffic classification), we expect that real world systems that work the same way our implementation was design would have some data to be trained on then would have the models used for inference in another dataset. For example: a mobile network operator might train a classification model in a test environment, then deploy this model in a production environment and use its output to have some insight or make a decision. Because of that, it was decided that the training and inference datasets would not overlap.
+
+With those onjectives in mind, it was possible to find two public 5G datasets ("[5G Traffic Datasets](https://dx.doi.org/10.21227/ewhk-n061)" and "[5G Campus Networks: Measurement Traces](https://dx.doi.org/10.21227/xe3c-e968)") that contained data that we could use to train models. For the inference set, the description of the steps taken to create the datasets we've used in training were taken into account and, as close as possible, implemented on our 5G simulated testing environment.
+
+### Training set
+
+- file_name.pcap: disk_size; number_of_packets; class**; comments
+- `Youtube_cellular.pcap`: 12.4GB; 10,774,692; eMBB; obtained from "5G Traffic Datasets"
+- `naver5g3-10M.pcap`: 11.8GB; 10,248,958; URLLC; a 10M packet cut from the file naver5g3.pcap obtained from "5G Traffic Datasets"
+- `*.100.pcap` (10 files in total): 169.6MB; 1,000,000***; mMTC; obtained from "5G Campus Networks: Measurement Traces"
+
+### Inference set
+
+- file_name.pcap: disk_size; number_of_packets; class**; comments
+- `youtube-1M-1080p.pcap`: 1.3GB; 1,004,464; eMBB; captured during the playback of [this playlist](https://www.youtube.com/watch?v=LXb3EKWsInQ&list=PLrN5hDSKBQCLN_p4SJwqHSNO3ToomP-il&index=1)
+- `naver-tv-1M.pcap`: 1.1GB; 1,042,918; URLLC; captured during the video live streaming of [this channel](https://tv.naver.com/ytnnews24)
+- `udp-100pps.pcap`: 97.4MB; 1,069,973; mMTC; captured using the UDP client with 100 packets/sec (as described on [Rischke et al. 2021](https://doi.org/10.1109/ACCESS.2021.3108423))
+- `udp-nc-traffic-1k.pcap`: 88kB; 1,007; mMTC; captured using the UDP client with the probabilistic approach described on [Sivanathan et al. 2017](https://doi.org/10.1109/INFCOMW.2017.8116438)
+
+** Classes based on [ITU's M.2083-0 recommendation](https://www.itu.int/rec/R-REC-M.2083-0-201509-I/en)
+
+*** To the best of our knowledge, there isn't any real world PCAP dataset containing 10 million mMTC packets on a single capture, the closest it was possible to find at this time were the captures from "5G Campus Networks: Measurement Traces" dataset that account for 1 million packets in total
+
+**NOTE:** The scripts used to create this data and details of the environment are available on `traffic-gen` [folder](./traffic-gen/).
 
 ## Install the prerequisites
 
