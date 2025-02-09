@@ -1,6 +1,7 @@
 import pandas as pd
 import matplotlib.pyplot as plt
 import time
+import os
 
 from util import glob_get_files_list
 
@@ -11,7 +12,7 @@ output_files_path = "./pcap/output/3-JSON-export/box-plots/" # save the output t
 def plot_box_plot(file_path):
     # Read the CSV file
     df = pd.read_csv(file_path)
-    input_file_name = file_path.split('/')[-1].split('.')[0]
+    input_file_name = os.path.splitext(file_path.split('/')[-1])[0]
     
     # If needed, drop some columns
     # df.drop(columns=["TCP_window_size"], axis=1, inplace=True) # drop TCP window size because of its size
