@@ -69,7 +69,7 @@ def save_model_locally(model, file_name, out_dir):
     print(f"[INFO] Model {model_name} sucessfully saved on {file_path}")
 
 # Load and prepare splits from labeled training data
-def read_train_data(csv_file_list):
+def read_and_split_train_data(csv_file_list, split):
     training_data = pd.DataFrame()
     for file in csv_file_list:
         if 'training' in file:
@@ -86,10 +86,13 @@ def read_train_data(csv_file_list):
     X = training_data.drop('label', axis=1)  # Features
     y = training_data['label']  # Target variable
 
-    # Now X and y are ready for supervised learning
-    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.3, random_state=42)
+    if (split):
+        # Now X and y are ready for supervised learning
+        X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.3, random_state=42)
 
-    return X_train, X_test, y_train, y_test
+        return X_train, X_test, y_train, y_test
+    else:
+        return X, y
     
 def train_models(model, X_train, X_test, y_train, y_test):
     model_name = model.__class__.__name__
@@ -185,7 +188,7 @@ csv_files = glob_get_files_list(output_files_path_labeled_data, "csv")
 
 # Prepare data splits to train the models
 print("[INFO] Preparing training data splits ... ", end='')
-X_train, X_test, y_train, y_test = read_train_data(csv_files)
+X_train, X_test, y_train, y_test = read_and_split_train_data(csv_files, split=True)
 print("[ OK ]")
 
 # Apply some data augmentation
