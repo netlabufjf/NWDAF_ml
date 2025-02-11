@@ -38,6 +38,30 @@ output_files_path_results = output_files_path_models + "training_results/" # sav
 
 timestamp = datetime.now().strftime("%Y%m%d-%H%M%S")
 
+def classifier_select(classifier_acronym):
+    match classifier_acronym:
+        case 'LR':
+            clf = LogisticRegression()
+        case 'DT':
+            clf = DecisionTreeClassifier()
+        case 'RF':
+            clf = RandomForestClassifier()
+        case 'MLP':
+            clf = MLPClassifier()
+        case 'SVM':
+            clf = LinearSVC()
+        case 'HGB':
+            clf = HistGradientBoostingClassifier()
+        case 'LightGBM':
+            clf = LGBMClassifier(verbose=-1)
+        case 'XGB':
+            clf = XGBClassifier()
+        case _:
+            print("[ERRO] Failed to load the model")
+            exit()
+
+    return clf
+
 def save_model_locally(model, file_name, out_dir):
     file_path = out_dir + file_name + ".pkl"
     pickle.dump(model, open(file_path, 'wb'))
@@ -185,26 +209,8 @@ columns_training_results_df = ["model_name", "data_num_rows", "accuracy", "preci
                             "auc_score_avg", "training_time_ms", "training_disk_time_ms", "training_total_time_ms"]
 training_results_df = pd.DataFrame(columns=columns_training_results_df) # df to save the results
 
+# Execute the actual model training
 for i in model_names_list:
-    match i:
-        case 'LR':
-            clf = LogisticRegression()
-        case 'DT':
-            clf = DecisionTreeClassifier()
-        case 'RF':
-            clf = RandomForestClassifier()
-        case 'MLP':
-            clf = MLPClassifier()
-        case 'SVM':
-            clf = LinearSVC()
-        case 'HGB':
-            clf = HistGradientBoostingClassifier()
-        case 'LightGBM':
-            clf = LGBMClassifier(verbose=-1)
-        case 'XGB':
-            clf = XGBClassifier()
-        case _:
-            print("[ERRO] Failed to load the model")
-            exit()
+    clf = classifier_select(i)
 
     train_models(clf, X_train, X_test, y_train, y_test)
