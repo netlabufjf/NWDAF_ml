@@ -210,7 +210,7 @@ model_names_list = ['LR', 'DT', 'RF', 'MLP', 'SVM', 'HGB', 'LightGBM', 'XGB']
 columns_training_results_df = ["model_name", "data_num_rows", "accuracy", "precision_avg", "recall_avg", 
                             "f1_score_avg", "f1_score_class0", "f1_score_class1", "f1_score_class2",
                             "auc_score_avg", "training_time_ms", "training_disk_time_ms", "training_total_time_ms"]
-training_results_df = pd.DataFrame(columns=columns_training_results_df) # df to save the results
+training_results_df = pd.DataFrame(columns=columns_training_results_df) # df to save the training results
 
 # Execute the actual model training
 for i in model_names_list:
