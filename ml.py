@@ -1,11 +1,11 @@
 import os
 import pandas as pd
 import pickle
-from numpy import mean,std
+from numpy import mean,std,linspace
 from datetime import datetime
 from time import time_ns
 from sklearn.preprocessing import MinMaxScaler,OrdinalEncoder
-from sklearn.model_selection import train_test_split,cross_val_score,RepeatedStratifiedKFold
+from sklearn.model_selection import train_test_split,cross_val_score,RepeatedStratifiedKFold,cross_validate,GridSearchCV
 from sklearn.linear_model import LogisticRegression
 from sklearn.ensemble import HistGradientBoostingClassifier,RandomForestClassifier
 from sklearn.tree import DecisionTreeClassifier
@@ -18,7 +18,8 @@ from sklearn.metrics import (accuracy_score,
                             recall_score,
                             f1_score,
                             roc_auc_score,
-                            confusion_matrix)
+                            confusion_matrix,
+                            make_scorer)
 
 from util import (glob_get_files_list,
                   read_csv,
@@ -35,6 +36,8 @@ output_files_path_preprocessed_data = working_folder + "preprocess/data_ready_to
 output_files_path_labeled_data = working_folder + "preprocess/labeled_data/" # save the labeled output files there
 output_files_path_models = working_folder + "models/" # save the model files there
 output_files_path_results = output_files_path_models + "training_results/" # save the model files there
+
+run_cross_val = True
 
 timestamp = datetime.now().strftime("%Y%m%d-%H%M%S")
 
@@ -171,6 +174,41 @@ def train_models(model, X_train, X_test, y_train, y_test):
     training_results_df.to_csv(f"{output_files_path_results}{timestamp}_training_results.csv", index=False)
     print(f"[INFO] {model_name} training finished")
 
+def cross_val(clf):
+    model_name = clf.__class__.__name__
+    print("[INFO] Running Cross Validation on", model_name)
+    X, y = read_and_split_train_data(csv_files, split=False)
+    scoring = {'prec_macro': 'precision_macro',
+            'rec_macro': make_scorer(recall_score, average='macro'),
+            'f1-score_avg': make_scorer(f1_score, average='weighted'),
+            # 'f1-score_class0': make_scorer(f1_score, average=None, labels=[0])[0]
+            }
+    # Run StratifiedKFold
+    scores = cross_validate(clf, X, y, scoring=scoring,
+                    cv=10, return_train_score=True)
+
+    s_fit_time = scores['fit_time']
+    s_score_time = scores['score_time']
+    s_train_precision = scores['train_prec_macro']
+    s_train_recall = scores['train_rec_macro']
+    s_train_f_score = scores['train_f1-score_avg']
+    s_test_precision = scores['test_prec_macro']
+    s_test_recall = scores['test_rec_macro']
+    s_test_f_score = scores['test_f1-score_avg']
+
+    print("[DEBU] Fit time:", s_fit_time)
+    print("[DEBU] Score time:", s_score_time)
+    print("[DEBU] -Train-")
+    print("[DEBU] Precision:", s_train_precision)
+    print("[DEBU] Recall:", s_train_recall)
+    print("[DEBU] Average F1-Score:", s_train_f_score)
+    print("[DEBU] -Test-")
+    print("[DEBU] Precision:", s_test_precision)
+    print("[DEBU] Recall:", s_test_recall)
+    print("[DEBU] Average F1-Score:", s_test_f_score)
+    # TODO save these results on disk
+    print("[INFO] Cross Validation done")
+
 # Buid the CSV files list
 csv_files = glob_get_files_list(input_files_path, "csv")
 
@@ -202,10 +240,13 @@ print("[ OK ]")
 # print("[DEBU]", len(y_train_smote))
 # del X_train, y_train
 
-# Cross validation steps
-#cv = RepeatedStratifiedKFold(n_splits=10, n_repeats=3, random_state=42)
-
 model_names_list = ['LR', 'DT', 'RF', 'MLP', 'SVM', 'HGB', 'LightGBM', 'XGB']
+
+# Cross validation steps
+if (run_cross_val):
+    for i in model_names_list:
+        clf = classifier_select(i)
+        cross_val(clf)
 
 columns_training_results_df = ["model_name", "data_num_rows", "accuracy", "precision_avg", "recall_avg", 
                             "f1_score_avg", "f1_score_class0", "f1_score_class1", "f1_score_class2",
