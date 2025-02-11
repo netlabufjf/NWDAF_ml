@@ -5,6 +5,7 @@ import matplotlib.pyplot as plt
 import os
 from time import time_ns
 from sklearn.preprocessing import MinMaxScaler,OrdinalEncoder
+from imblearn.over_sampling import SMOTE
 
 def read_csv(file_path):
     """
@@ -266,3 +267,25 @@ def read_and_label_data(file_path, out_dir, remove_old_files=False):
         print("[DEBU] Labeled data successfully saved to", new_file_name_and_path) # DEBUG
     else:
         print(f"[INFO] The file {file_name_without_path} was already labeled")
+
+# Augment data using SMOTE
+def data_augmentation(X_train, y_train):
+    """
+    A function that applies SMOTE to training data.
+
+    Parameters
+    ----------
+        X_train: pandas.DataFrame
+            Dataframe containing the training data split.
+        y_train: pandas.Series
+            Series containing the class labels from the training data split.
+    
+    Returns
+    ----------
+        pandas.DataFrame, pandas.Series
+            The training data after applying the SMOTE resampling.
+    """
+    smote = SMOTE(sampling_strategy='not majority', random_state=42, k_neighbors=5)
+    X_train_smote, y_train_smote = smote.fit_resample(X_train, y_train)
+
+    return X_train_smote, y_train_smote

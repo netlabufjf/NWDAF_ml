@@ -20,7 +20,13 @@ from sklearn.metrics import (accuracy_score,
                             roc_auc_score,
                             confusion_matrix)
 
-from util import glob_get_files_list,read_csv,delete_files,plot_confusion_matrix,preprocess_data,read_and_label_data
+from util import (glob_get_files_list,
+                  read_csv,
+                  delete_files,
+                  plot_confusion_matrix,
+                  preprocess_data,
+                  read_and_label_data,
+                  data_augmentation)
 
 # File paths
 working_folder = "./pcap/output/4-ML/"
@@ -157,6 +163,17 @@ csv_files = glob_get_files_list(output_files_path_labeled_data, "csv")
 print("[INFO] Preparing training data splits ... ", end='')
 X_train, X_test, y_train, y_test = read_train_data(csv_files)
 print("[ OK ]")
+
+# Apply some data augmentation
+# print("[INFO] Applying SMOTE to training data ... ", end='')
+# Disabled due to the extra processing time it adds to the whole process
+# X_train_smote, y_train_smote = data_augmentation(X_train, y_train)
+# print("[ OK ]")
+# print("[DEBU] Data before SMOTE")
+# print("[DEBU]", len(y_train))
+# print("[DEBU] Data after SMOTE")
+# print("[DEBU]", len(y_train_smote))
+# del X_train, y_train
 
 # Cross validation steps
 #cv = RepeatedStratifiedKFold(n_splits=10, n_repeats=3, random_state=42)
