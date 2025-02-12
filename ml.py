@@ -183,9 +183,11 @@ def cross_val(clf, X, y):
             'f1-score_avg': make_scorer(f1_score, average='weighted'),
             # 'f1-score_class0': make_scorer(f1_score, average=None, labels=[0])[0]
             }
+    cv_folds = 10 # reduce this number to reduce RAM usage during CV
+    # 3 uses up to around 50GB, 10 uses up to around 128GB (except for LinearSVC that requires more)
+    
     # Run StratifiedKFold
-    scores = cross_validate(clf, X, y, scoring=scoring,
-                    cv=10, return_train_score=True)
+    scores = cross_validate(clf, X, y, scoring=scoring, cv=cv_folds, return_train_score=True, n_jobs=8)
 
     s_fit_time = scores['fit_time']
     s_score_time = scores['score_time']
