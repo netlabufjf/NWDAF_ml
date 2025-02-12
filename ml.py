@@ -1,6 +1,7 @@
 import os
 import pandas as pd
 import pickle
+import csv
 from numpy import mean,std,linspace
 from datetime import datetime
 from time import time_ns
@@ -37,7 +38,10 @@ output_files_path_labeled_data = working_folder + "preprocess/labeled_data/" # s
 output_files_path_models = working_folder + "models/" # save the model files there
 output_files_path_results = output_files_path_models + "training_results/" # save the model files there
 
+# Control the execution of each function
+run_model_training = True
 run_cross_val = True
+run_SMOTE = False
 
 timestamp = datetime.now().strftime("%Y%m%d-%H%M%S")
 
@@ -255,20 +259,21 @@ csv_files = glob_get_files_list(output_files_path_preprocessed_data, "csv")
 csv_files = glob_get_files_list(output_files_path_labeled_data, "csv")
 
 # Prepare data splits to train the models
-print("[INFO] Preparing training data splits ... ", end='')
-X_train, X_test, y_train, y_test = read_and_split_train_data(csv_files, split=True)
-print("[ OK ]")
+if (run_model_training or run_SMOTE):
+    print("[INFO] Preparing training data splits ... ", end='')
+    X_train, X_test, y_train, y_test = read_and_split_train_data(csv_files, split=True)
+    print("[ OK ]")
 
 # Apply some data augmentation
-# print("[INFO] Applying SMOTE to training data ... ", end='')
-# Disabled due to the extra processing time it adds to the whole process
-# X_train_smote, y_train_smote = data_augmentation(X_train, y_train)
-# print("[ OK ]")
-# print("[DEBU] Data before SMOTE")
-# print("[DEBU]", len(y_train))
-# print("[DEBU] Data after SMOTE")
-# print("[DEBU]", len(y_train_smote))
-# del X_train, y_train
+if (run_SMOTE):
+    print("[INFO] Applying SMOTE to training data ... ", end='')
+    X_train_smote, y_train_smote = data_augmentation(X_train, y_train)
+    print("[ OK ]")
+    print("[DEBU] Data before SMOTE")
+    print("[DEBU]", len(y_train))
+    print("[DEBU] Data after SMOTE")
+    print("[DEBU]", len(y_train_smote))
+    del X_train, y_train
 
 model_names_list = ['LR', 'DT', 'RF', 'MLP', 'SVM', 'HGB', 'LightGBM', 'XGB']
 
@@ -285,13 +290,13 @@ if (run_cross_val):
         clf = classifier_select(i)
         cross_val(clf, X, y)
 
-columns_training_results_df = ["model_name", "data_num_rows", "accuracy", "precision_avg", "recall_avg", 
-                            "f1_score_avg", "f1_score_class0", "f1_score_class1", "f1_score_class2",
-                            "auc_score_avg", "training_time_ms", "training_disk_time_ms", "training_total_time_ms"]
-training_results_df = pd.DataFrame(columns=columns_training_results_df) # df to save the training results
+if (run_model_training):
+    columns_training_results_df = ["model_name", "data_num_rows", "accuracy", "precision_avg", "recall_avg", 
+                                "f1_score_avg", "f1_score_class0", "f1_score_class1", "f1_score_class2",
+                                "auc_score_avg", "training_time_ms", "training_disk_time_ms", "training_total_time_ms"]
+    training_results_df = pd.DataFrame(columns=columns_training_results_df) # df to save the training results
+    # Execute the actual model training
+    for i in model_names_list:
+        clf = classifier_select(i)
 
-# Execute the actual model training
-for i in model_names_list:
-    clf = classifier_select(i)
-
-    train_models(clf, X_train, X_test, y_train, y_test)
+        train_models(clf, X_train, X_test, y_train, y_test)
