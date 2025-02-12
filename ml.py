@@ -176,6 +176,7 @@ def train_models(model, X_train, X_test, y_train, y_test):
 
 def cross_val(clf):
     model_name = clf.__class__.__name__
+    data_num_rows = len(X)
     print("[INFO] Running Cross Validation on", model_name)
     X, y = read_and_split_train_data(csv_files, split=False)
     scoring = {'prec_macro': 'precision_macro',
@@ -206,8 +207,36 @@ def cross_val(clf):
     print("[DEBU] Precision:", s_test_precision)
     print("[DEBU] Recall:", s_test_recall)
     print("[DEBU] Average F1-Score:", s_test_f_score)
-    # TODO save these results on disk
-    print("[INFO] Cross Validation done")
+
+    cv_delta_precision = s_test_precision - s_train_precision
+    cv_delta_recall = s_test_recall - s_train_recall
+    cv_delta_f_score = s_test_f_score - s_train_f_score
+    cv_total_time = s_fit_time + s_score_time
+
+    new_row = {
+            columns_cross_val_results_df[0]: model_name,
+            columns_cross_val_results_df[1]: data_num_rows,
+            columns_cross_val_results_df[2]: s_train_precision,
+            columns_cross_val_results_df[3]: s_train_recall,
+            columns_cross_val_results_df[4]: s_train_f_score,
+            columns_cross_val_results_df[5]: s_test_precision,
+            columns_cross_val_results_df[6]: s_test_recall,
+            columns_cross_val_results_df[7]: s_test_f_score,
+            columns_cross_val_results_df[8]: cv_delta_precision,
+            columns_cross_val_results_df[9]: cv_delta_recall,
+            columns_cross_val_results_df[10]: cv_delta_f_score,
+            columns_cross_val_results_df[11]: s_fit_time,
+            columns_cross_val_results_df[12]: s_score_time,
+            columns_cross_val_results_df[13]: cv_total_time,
+        }
+    # TODO save each list on a separate column (e.g. use cv_folds to control the number of columns)
+
+    # Add new row to the dataframe using loc[] method
+    cross_val_results_df.loc[len(cross_val_results_df)] = new_row
+
+    cross_val_results_df.to_csv(f"{output_files_path_results}{timestamp}_cross_val_results.csv", index=False)
+
+    print(f"[INFO] {model_name} Cross Validation done")
 
 # Buid the CSV files list
 csv_files = glob_get_files_list(input_files_path, "csv")
