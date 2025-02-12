@@ -22,7 +22,7 @@ The hardware specifications below concern the Machine Learning (ML) experiment p
 - ~11.3x`A` HDD available to store the temporary files of preprocessed data
 - ~2x`A` HDD to store the preprocessed data
 
-**TIP:** The dataset tested to obtain these specifications had 19.6GB training + 2.4GB inference data (i.e. `A = 22GB`), see the values on the list [below](./README.md#recommended) for a concrete example.
+**TIP:** The dataset used to obtain these specifications was a subset of the [full dataset](./README.md#dataset-description) and had 19.6GB training + 2.4GB inference data (i.e. `A = 22GB`), see the values on the list [below](./README.md#recommended) for a concrete example.
 
 #### Recommended
 
