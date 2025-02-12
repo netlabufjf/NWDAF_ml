@@ -272,6 +272,13 @@ model_names_list = ['LR', 'DT', 'RF', 'MLP', 'SVM', 'HGB', 'LightGBM', 'XGB']
 
 # Cross validation steps
 if (run_cross_val):
+    columns_cross_val_results_df = ["model_name", "data_num_rows", "train_precision_avg", "train_recall_avg",
+                                "train_f1_score_avg", "test_precision_avg", "test_recall_avg",
+                                "test_f1_score_avg", "delta_prec", "delta_rec", "delta_f_score",
+                                "fit_time", "score_time", "total_cross_val_time"]
+    cross_val_results_df = pd.DataFrame(columns=columns_cross_val_results_df) # df to save the CV results
+
+    X, y = read_and_split_train_data(csv_files, split=False) # prepare data splits to cross val
     for i in model_names_list:
         clf = classifier_select(i)
         cross_val(clf, X, y)
