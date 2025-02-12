@@ -239,7 +239,7 @@ def cross_val(clf, X, y):
     # Add new row to the dataframe using loc[] method
     cross_val_results_df.loc[len(cross_val_results_df)] = new_row
 
-    cross_val_results_df.to_csv(f"{output_files_path_results}{timestamp}_cross_val_results.csv", index=False)
+    cross_val_results_df.to_csv(f"{output_files_path_results}{timestamp}_cross_val_{cv_folds}_folds_results.csv", index=False)
 
     print(f"[INFO] {model_name} Cross Validation done")
 
