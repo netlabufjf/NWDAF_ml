@@ -174,11 +174,10 @@ def train_models(model, X_train, X_test, y_train, y_test):
     training_results_df.to_csv(f"{output_files_path_results}{timestamp}_training_results.csv", index=False)
     print(f"[INFO] {model_name} training finished")
 
-def cross_val(clf):
+def cross_val(clf, X, y):
     model_name = clf.__class__.__name__
     data_num_rows = len(X)
     print("[INFO] Running Cross Validation on", model_name)
-    X, y = read_and_split_train_data(csv_files, split=False)
     scoring = {'prec_macro': 'precision_macro',
             'rec_macro': make_scorer(recall_score, average='macro'),
             'f1-score_avg': make_scorer(f1_score, average='weighted'),
@@ -275,7 +274,7 @@ model_names_list = ['LR', 'DT', 'RF', 'MLP', 'SVM', 'HGB', 'LightGBM', 'XGB']
 if (run_cross_val):
     for i in model_names_list:
         clf = classifier_select(i)
-        cross_val(clf)
+        cross_val(clf, X, y)
 
 columns_training_results_df = ["model_name", "data_num_rows", "accuracy", "precision_avg", "recall_avg", 
                             "f1_score_avg", "f1_score_class0", "f1_score_class1", "f1_score_class2",
