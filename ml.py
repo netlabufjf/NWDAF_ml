@@ -202,16 +202,16 @@ def cross_val(clf, X, y):
     s_test_recall = scores['test_rec_macro']
     s_test_f_score = scores['test_f1-score_avg']
 
-    print("[DEBU] Fit time:", s_fit_time)
-    print("[DEBU] Score time:", s_score_time)
-    print("[DEBU] -Train-")
-    print("[DEBU] Precision:", s_train_precision)
-    print("[DEBU] Recall:", s_train_recall)
-    print("[DEBU] Average F1-Score:", s_train_f_score)
-    print("[DEBU] -Test-")
-    print("[DEBU] Precision:", s_test_precision)
-    print("[DEBU] Recall:", s_test_recall)
-    print("[DEBU] Average F1-Score:", s_test_f_score)
+    # print("[DEBU] Fit time:", s_fit_time)
+    # print("[DEBU] Score time:", s_score_time)
+    # print("[DEBU] -Train-")
+    # print("[DEBU] Precision:", s_train_precision)
+    # print("[DEBU] Recall:", s_train_recall)
+    # print("[DEBU] Average F1-Score:", s_train_f_score)
+    # print("[DEBU] -Test-")
+    # print("[DEBU] Precision:", s_test_precision)
+    # print("[DEBU] Recall:", s_test_recall)
+    # print("[DEBU] Average F1-Score:", s_test_f_score)
 
     cv_delta_precision = s_test_precision - s_train_precision
     cv_delta_recall = s_test_recall - s_train_recall
@@ -269,10 +269,10 @@ if (run_SMOTE):
     print("[INFO] Applying SMOTE to training data ... ", end='')
     X_train_smote, y_train_smote = data_augmentation(X_train, y_train)
     print("[ OK ]")
-    print("[DEBU] Data before SMOTE")
-    print("[DEBU]", len(y_train))
-    print("[DEBU] Data after SMOTE")
-    print("[DEBU]", len(y_train_smote))
+    # print("[DEBU] Data before SMOTE")
+    # print("[DEBU]", len(y_train))
+    # print("[DEBU] Data after SMOTE")
+    # print("[DEBU]", len(y_train_smote))
     del X_train, y_train
 
 model_names_list = ['LR', 'DT', 'RF', 'MLP', 'SVM', 'HGB', 'LightGBM', 'XGB']
