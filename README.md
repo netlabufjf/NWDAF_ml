@@ -124,7 +124,6 @@ source pyvenv/bin/activate
 ```
 bash pcap_extract.sh
 python dataset_CSV_characterization.py
-
 ```
 
 4. Prepare the dataset for model training
@@ -164,6 +163,10 @@ Please, refer to [the traffic-gen README file](./traffic-gen/README.md)
 ## Citing this work
 
 TBD
+
+## Acknowledgements
+
+I'd like to acknowledge Mr [Rodrigo Oliveira](https://github.com/rsilvoliveira) for all comments and tips he gave during the coding phase of this work. I'd like to also thank the anonymous reviewers and conference participants who provided valuable feedback on our previous work, contributing to the development of this research.
 
 ## License
 
