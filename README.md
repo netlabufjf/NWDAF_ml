@@ -57,7 +57,7 @@ In general, classification ML models require a large amount of data to work well
 
 Considering an application of our work (5G user equipment traffic classification), we expect that real world systems that work the same way our implementation was design would have some data to be trained on then would have the models used for inference in another dataset. For example: a mobile network operator might train a classification model in a test environment, then deploy this model in a production environment and use its output to have some insight or make a decision. Because of that, it was decided that the training and inference datasets would not overlap.
 
-With those onjectives in mind, it was possible to find two public 5G datasets ("[5G Traffic Datasets](https://dx.doi.org/10.21227/ewhk-n061)" and "[5G Campus Networks: Measurement Traces](https://dx.doi.org/10.21227/xe3c-e968)") that contained data that we could use to train models. For the inference set, the description of the steps taken to create the datasets we've used in training were taken into account and, as close as possible, implemented on our 5G simulated testing environment.
+With those objectives in mind, it was possible to find two public 5G datasets ("[5G Traffic Datasets](https://dx.doi.org/10.21227/ewhk-n061)" and "[5G Campus Networks: Measurement Traces](https://dx.doi.org/10.21227/xe3c-e968)") that contained data that we could use to train models. For the inference set, the description of the steps taken to create the datasets we've used in training were taken into account and, as close as possible, implemented on our 5G simulated testing environment.
 
 ### Training set
 
@@ -71,8 +71,8 @@ With those onjectives in mind, it was possible to find two public 5G datasets ("
 - file_name.pcap: disk_size; number_of_packets; class**; comments
 - `youtube-1M-1080p.pcap`: 1.3GB; 1,004,464; eMBB; captured during the playback of [this playlist](https://www.youtube.com/watch?v=LXb3EKWsInQ&list=PLrN5hDSKBQCLN_p4SJwqHSNO3ToomP-il&index=1)
 - `naver-tv-1M.pcap`: 1.1GB; 1,042,918; URLLC; captured during the video live streaming of [this channel](https://tv.naver.com/ytnnews24)
-- `udp-100pps.pcap`: 97.4MB; 1,069,973; mMTC; captured using the UDP client with 100 packets/sec (as described on [Rischke et al. 2021](https://doi.org/10.1109/ACCESS.2021.3108423))
-- `udp-nc-traffic-1k.pcap`: 88kB; 1,007; mMTC; captured using the UDP client with the probabilistic approach described on [Sivanathan et al. 2017](https://doi.org/10.1109/INFCOMW.2017.8116438)
+- `udp-100pps.pcap`: 97.4MB; 1,069,973; mMTC; captured using the UDP client with 100 packets/sec (as described on [[Rischke et al. 2021]](https://doi.org/10.1109/ACCESS.2021.3108423), the same authors of the "[5G Campus Networks: Measurement Traces](https://dx.doi.org/10.21227/xe3c-e968)" dataset)
+- `udp-nc-traffic-1k.pcap`: 88kB; 1,007; mMTC; captured using the UDP client with the probabilistic approach described on [[Sivanathan et al. 2017]](https://doi.org/10.1109/INFCOMW.2017.8116438)
 
 ** Classes based on [ITU's M.2083-0 recommendation](https://www.itu.int/rec/R-REC-M.2083-0-201509-I/en)
 
