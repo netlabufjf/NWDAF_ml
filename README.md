@@ -5,10 +5,10 @@
 ### Software
 
 - python: 3.13.1
-- pip: 24.3.1
+- pip: 25.0.1
 - python packages from [requirements.txt](./requirements.txt)
-- tshark: 4.4.2
-- perl: 5.40.0
+- tshark: 4.4.3
+- perl: 5.40.1
 
 ### Hardware
 
