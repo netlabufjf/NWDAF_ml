@@ -16,9 +16,9 @@ from util import glob_get_files_list,read_csv,label_id_to_text,plot_confusion_ma
 working_folder = "./pcap/output/4-ML/"
 input_files_path = working_folder + "preprocess/labeled_files/" # read labeled data CSV files from here
 output_files_path_preprocessed_data = working_folder + "preprocess/data_ready_to_ml/" # save preprocessed data there
-models_folder = "./pcap/output/4-ML/models/" # read the models from here
-data_folder = "./pcap/output/4-ML/preprocess/labeled_data/" # save or read the inference data from here
-results_folder = "./pcap/output/4-ML/inference_results/" # save the results here
+models_folder = working_folder + "models/" # read the models from here
+data_folder = working_folder + "preprocess/labeled_data/" # save or read the inference data from here
+results_folder = working_folder + "inference_results/" # save the results here
 
 timestamp = datetime.now().strftime("%Y%m%d-%H%M%S")
 
