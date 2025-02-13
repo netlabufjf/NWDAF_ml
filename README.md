@@ -143,6 +143,8 @@ python ml.py
 python inference.py
 ```
 
+**NOTE:** On its current implementation, the inference script will check for data that still needs to be preprocessed before running inference. This was designed to handle the use case where the inference data is added to the input folder only after running the training pipeline with the training data.
+
 ### Statistics
 
 1. To obtain some statistics, run steps 1-3 from [previous section](#usage) and:
