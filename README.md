@@ -39,15 +39,17 @@ The specifications below were taken from the machine used during the experiments
 
 **NOTE:** These specifications are tailored to the datasets we tested on our implementation. The amount of RAM required increases linearly with the size of the dataset as the dataset will be loaded into RAM during training. The amount of CPU cores available will directly influence the parallel tasks (such as in `pcap_extract.sh` and `export_JSON.py`), the more input files, the more CPUs are required.
 
-### Quick comparison between [Kim et al. 2022], our previous work and current work
+## Quick comparison between [Kim et al. 2022], our previous work and current work
 
 The authors of [[Kim et al. 2022]](https://doi.org/10.1109/ICCE53296.2022.9730290) implemented the NWDAF module and its submodules (MTLF and AnLF) integrated to free5GC, however, they used an image dataset as their ML functionality.
 
 Previously, a reprodction of [Kim et al. 2022]'s work was made on [[de Oliveira et al. 2024]](https://doi.org/10.1109/ISCC61673.2024.10733717) ([that README](https://github.com/oliveiraleo/mnc_NWDAF/blob/mnc_Public-5G/README.md) details the environment used in this process). After that, [another ML functionality](https://github.com/oliveiraleo/mnc_NWDAF/tree/mnc_Public-5G/ML_test_code) closely related to Computer Networks field was implemented. Instead of using an image dataset, a [packet capture dataset](https://github.com/oliveiraleo/mnc_NWDAF/tree/mnc_Public-5G/ML_test_code/dataset) containing 6 captures of 1000 packets each was created. This dataset was used to test the new ML functionality and the instructions to reproduce the environment used for this second phase are located on [that other file](https://github.com/oliveiraleo/mnc_NWDAF/blob/mnc_Public-5G/VMs-setup.md). The integration between [Kim et al. 2022]'s NWDAF and [de Oliveira et al. 2024]'s ML functionality wasn't finished.
 
-Our current work focused on two main points: (i) creating a larger 5G simulated open PCAP dataset; and (ii) enhancing the classification results obtained on [de Oliveira et al. 2024]. 
+Our current work focused on two main points: (i) creating a larger 5G simulated public PCAP dataset; and (ii) enhancing the classification results obtained on [de Oliveira et al. 2024].
 
-TODO: finish detailing our current work
+The dataset was created with 1 million packets for each capture. Builing upon the implementation done by [de Oliveira et al. 2024], the current work reimplemented the complete machine learning pipeline to include 8 models and 33 features (previously there was only 3 models and 7 features) extracted from the PCAP files. The data used for training and testing the models didn't overlap with the data used for inference (more details in the [section below](./README.md#dataset-description)).
+
+TODO: detail our results
 
 ## Dataset description
 
