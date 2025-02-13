@@ -121,6 +121,8 @@ Example: [Click here](https://github.com/oliveiraleo/free5gc-auto-deploy#ueransi
 bash udp-client.sh
 ```
 
+**NOTE:** Configure the SLEEP_TIMER var as required. If a fixed packet length is required, update the `"System Load: $LOAD_ONE_MIN Next update in $SLEEP_TIMER seconds"` message with a static text.
+
 ### Generating YouTube video traffic
 
 On free5GC's machine:
@@ -205,7 +207,7 @@ Also, check that the IP in `IP_UE` matches the one obtained by the `ueransimtun0
 
 ### Can't play Naver TV on Mozilla Firefox browser
 
-As I used browser's default settings, it looks like a required coded is missing. Please, use Brave Browser instead.
+As I used browser's default settings, it looks like a required codec is missing. Please, use Brave Browser instead.
 
 ### None of traffic-gen scripts seem to work
 
