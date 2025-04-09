@@ -27,7 +27,7 @@ def plot_graph(df_to_plot, input_file_name, column_label, x_label, y_label, plt_
             # Add the counts and percentages as labels above each bar
             for j in range(len(y)):
                 percentage = round((y[j]/total_count)*100, 1)
-                label_text = f"{y[j]} ({percentage}%)" # format the label text with both count and percentage
+                label_text = f"{y[j]}\n({percentage}%)" # format the label text with both count and percentage
                 plt.text(j, y[j], label_text, ha='center', va='bottom')
         else:
             print("[ERROR] Could not set plt_type correctly, currently it is:", plt_type)
