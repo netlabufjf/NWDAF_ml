@@ -28,8 +28,34 @@ def plot_graph(df_to_plot, input_file_name, column_label, x_label, y_label, plt_
             y = df['count'] # get the count column data
             labels = [str(x) for x in df[column_label]] # convert all labels to strings (required by plt.barh())
             total_count = y.sum()
+
+            # Map each xlabel to a specific color
+            protocol_labels_list = ["UDP", 
+                                    "ICMPv6",
+                                    "TCP", "TCP, HiPerConTracer",
+                                    "TLSv1.3", "TLSv1.2", "TLSv1", 
+                                    "SSLv2", "SSL",
+                                    "H1",
+                                    "HTTP", "HTTP/JSON",
+                                    "DNS",
+                                    "QUIC",
+                                    "PNIO",
+                                    "OCSP"]
+            color_labels = ['blue',
+                            'purple', 
+                            'green', 'green',
+                            'orange', 'orange', 'orange',
+                            'black', 'black',
+                            'magenta',
+                            'brown', 'brown',
+                            'pink',
+                            'grey',
+                            'teal',
+                            'cyan']
+            label_to_color = {label: color for label, color in zip(protocol_labels_list, color_labels)}
+            bar_colors = [label_to_color[label] for label in labels]
             
-            plt.bar(x, y, align='center')
+            plt.bar(x, y, align='center', color=bar_colors, label=labels)
             plt.xticks(x, labels, rotation=15)
             
             # Offsets tailored for the used dataset
