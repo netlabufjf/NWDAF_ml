@@ -6,6 +6,13 @@ import time
 
 from util import read_csv
 
+font_size = 12 # base font size
+# Update rcParams to make fonts larger
+plt.rcParams['font.size'] = font_size
+plt.rcParams['axes.labelsize'] = font_size + 2
+plt.rcParams['xtick.labelsize'] = font_size
+plt.rcParams['ytick.labelsize'] = font_size
+
 # Create chart for each DataFrame
 def plot_graph(df_to_plot, input_file_name, column_label, x_label, y_label, plt_type):
     for i, df in enumerate(df_to_plot):
@@ -24,6 +31,7 @@ def plot_graph(df_to_plot, input_file_name, column_label, x_label, y_label, plt_
             
             plt.bar(x, y, align='center')
             plt.xticks(x, labels, rotation=15)
+            plt.ylim(y.min()/1.4, 1.6 * max(y)) # adjust the bars to avoid plotting text out of bounds
             # Add the counts and percentages as labels above each bar
             for j in range(len(y)):
                 percentage = round((y[j]/total_count)*100, 1)
@@ -35,7 +43,7 @@ def plot_graph(df_to_plot, input_file_name, column_label, x_label, y_label, plt_
                 
         plt.yscale('log')
         file_name_without_format = os.path.splitext(input_file_name[i])[0] # remove '.csv' from old file name
-        plt.title(file_name_without_format)
+        plt.title(file_name_without_format, fontsize=(font_size + 4))
         plt.xlabel(x_label)
         plt.ylabel(y_label + " (Logarithmic Scale)")
         plt.tight_layout()
