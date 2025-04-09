@@ -31,7 +31,16 @@ def plot_graph(df_to_plot, input_file_name, column_label, x_label, y_label, plt_
             
             plt.bar(x, y, align='center')
             plt.xticks(x, labels, rotation=15)
-            plt.ylim(y.min()/1.4, 1.6 * max(y)) # adjust the bars to avoid plotting text out of bounds
+            
+            # Offsets tailored for the used dataset
+            # they were obtained via trial and error
+            if (y.max() > 1000):
+                lim_upper_offset = 4.0
+            else:
+                lim_upper_offset = 1.5
+            lim_bottom_offset = 1.4
+
+            plt.ylim(y.min() / lim_bottom_offset, lim_upper_offset * y.max()) # adjust the bars to avoid plotting text out of bounds
             # Add the counts and percentages as labels above each bar
             for j in range(len(y)):
                 percentage = round((y[j]/total_count)*100, 1)
