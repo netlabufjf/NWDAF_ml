@@ -1,5 +1,6 @@
 import csv
 import pandas as pd
+import numpy as np
 import os
 import matplotlib.pyplot as plt
 import time
@@ -19,11 +20,15 @@ def plot_graph(df_to_plot, input_file_name, column_label, x_label, y_label, plt_
         plt.figure(figsize=(10, 6)) # Set figure size
         
         # Adjust plot parameters according to each plot type
-        if (plt_type == 'line'):
+        if (plt_type == 'dozens-of-bars'):
             plt.figure(figsize=(15, 6)) # Set figure size
             sorted_df = df.sort_values(by=column_label) # sort data before plotting
-            plt.plot(sorted_df[column_label], sorted_df['count'], marker='.', linestyle=':')
-        elif (plt_type == 'bar'):
+            # plt.plot(sorted_df[column_label], sorted_df['count'], marker='.', linestyle=':') # line plot
+            plt.bar(sorted_df[column_label], sorted_df['count']) # bar plot
+            plt.xticks(np.arange(0, 1505, 50), rotation=30)
+            plt.grid(visible=True, axis='y', linestyle = '--', zorder=0)
+
+        elif (plt_type == 'a-few-bars'):
             x = df[column_label]
             y = df['count'] # get the count column data
             labels = [str(x) for x in df[column_label]] # convert all labels to strings (required by plt.barh())
@@ -136,8 +141,8 @@ if (not input_dfs_protocol and not input_dfs_length and not input_dfs_time_serie
     exit()
 
 # Create plots for both protocol and length data
-plot_graph(input_dfs_protocol, input_file_names_protocol, '_ws.col.protocol', 'Protocol Label', 'Frequency', 'bar')
-plot_graph(input_dfs_length, input_file_names_length, 'frame.len', 'Packet Length', 'Frequency', 'line')
+plot_graph(input_dfs_protocol, input_file_names_protocol, '_ws.col.protocol', 'Protocol Label', 'Frequency', 'a-few-bars')
+plot_graph(input_dfs_length, input_file_names_length, 'frame.len', 'Packet Length', 'Frequency', 'dozens-of-bars')
 plot_time_series(input_dfs_time_series, input_file_names_frame_time_number, 'frame.time_relative', 'frame.number', 'Packet Capture Time', 'Packet Number')
 
 print("[INFO] All plots have been finished")
