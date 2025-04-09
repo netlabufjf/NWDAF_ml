@@ -1,5 +1,7 @@
 # NWDAF ML
 
+This repository presents a proof-of-concept (PoC) demonstrating the application of Machine Learning (ML) functionality based on the specifications of the Network Data Analytics Function (NWDAF) implementation for the classification of 5G devices solely based on their observed traffic.
+
 ## Tested Environment Configuration
 
 ### Software
@@ -12,7 +14,7 @@
 
 ### Hardware
 
-The hardware specifications below concern the Machine Learning (ML) experiment pipeline (e.g. processing the dataset, training models and running inference). For the hardware and software requirements for generating a new 5G simulated traffic dataset, please, refer to [the traffic-gen README file](./traffic-gen/README.md).
+The hardware specifications below concern the ML experiment pipeline (e.g. processing the dataset, training models and running inference). For the hardware and software requirements for generating a new 5G simulated traffic dataset, please, refer to [the traffic-gen README file](./traffic-gen/README.md).
 
 #### Minimum
 
