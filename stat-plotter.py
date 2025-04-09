@@ -7,21 +7,23 @@ import time
 
 from util import read_csv
 
-font_size = 12 # base font size
-# Update rcParams to make fonts larger
-plt.rcParams['font.size'] = font_size
-plt.rcParams['axes.labelsize'] = font_size + 2
-plt.rcParams['xtick.labelsize'] = font_size
-plt.rcParams['ytick.labelsize'] = font_size
+def update_font_size(f_size):
+    font_size = f_size # base font size
+    # Update rcParams to make fonts larger
+    plt.rcParams['font.size'] = font_size
+    plt.rcParams['axes.labelsize'] = font_size + 2
+    plt.rcParams['axes.titlesize'] = font_size + 4
+    plt.rcParams['xtick.labelsize'] = font_size
+    plt.rcParams['ytick.labelsize'] = font_size
 
 # Create chart for each DataFrame
 def plot_graph(df_to_plot, input_file_name, column_label, x_label, y_label, plt_type):
     for i, df in enumerate(df_to_plot):
-        plt.figure(figsize=(10, 6)) # Set figure size
         
         # Adjust plot parameters according to each plot type
         if (plt_type == 'dozens-of-bars'):
             plt.figure(figsize=(15, 6)) # Set figure size
+            update_font_size(15)
             sorted_df = df.sort_values(by=column_label) # sort data before plotting
             # plt.plot(sorted_df[column_label], sorted_df['count'], marker='.', linestyle=':') # line plot
             plt.bar(sorted_df[column_label], sorted_df['count']) # bar plot
@@ -29,6 +31,8 @@ def plot_graph(df_to_plot, input_file_name, column_label, x_label, y_label, plt_
             plt.grid(visible=True, axis='y', linestyle = '--', zorder=0)
 
         elif (plt_type == 'a-few-bars'):
+            plt.figure(figsize=(10, 6)) # Set figure size
+            update_font_size(12)
             x = df[column_label]
             y = df['count'] # get the count column data
             labels = [str(x) for x in df[column_label]] # convert all labels to strings (required by plt.barh())
@@ -83,7 +87,7 @@ def plot_graph(df_to_plot, input_file_name, column_label, x_label, y_label, plt_
                 
         plt.yscale('log')
         file_name_without_format = os.path.splitext(input_file_name[i])[0] # remove '.csv' from old file name
-        plt.title(file_name_without_format, fontsize=(font_size + 4))
+        plt.title(file_name_without_format)
         plt.xlabel(x_label)
         plt.ylabel(y_label + " (Logarithmic Scale)")
         plt.tight_layout()
