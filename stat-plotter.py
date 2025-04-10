@@ -146,7 +146,7 @@ if (not input_dfs_protocol and not input_dfs_length and not input_dfs_time_serie
 
 # Create plots for both protocol and length data
 plot_graph(input_dfs_protocol, input_file_names_protocol, '_ws.col.protocol', 'Protocol Label', 'Frequency', 'a-few-bars')
-plot_graph(input_dfs_length, input_file_names_length, 'frame.len', 'Packet Length', 'Frequency', 'dozens-of-bars')
+plot_graph(input_dfs_length, input_file_names_length, 'frame.len', 'Packet Length (bytes)', 'Frequency', 'dozens-of-bars')
 plot_time_series(input_dfs_time_series, input_file_names_frame_time_number, 'frame.time_relative', 'frame.number', 'Packet Capture Time', 'Packet Number')
 
 print("[INFO] All plots have been finished")
