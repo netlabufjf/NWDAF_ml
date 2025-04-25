@@ -27,6 +27,32 @@ def plot_graph(df_to_plot, input_file_name, column_label, x_label, y_label, plt_
             sorted_df = df.sort_values(by=column_label) # sort data before plotting
             # plt.plot(sorted_df[column_label], sorted_df['count'], marker='.', linestyle=':') # line plot
             plt.bar(sorted_df[column_label], sorted_df['count']) # bar plot
+            
+            # Calculate mean, median and mode
+            mean_value = df['frame.len'].mean()
+            median_value = df['frame.len'].median()
+            mode_value = df['frame.len'][0]
+
+            # Statistical bars configuration
+            bar_max_height = sorted_df['count'].max() # get the highest height value on the plot 
+            text_x_pos = 0.05 # x axis text anchor
+            text_y_pos = 0.95 # y axis text anchor
+            # set the colors
+            mean_color = 'red'
+            median_color = 'green'
+            mode_color = 'purple'
+
+            # Plot mean, median and mode as colored bars
+            plt.bar(mean_value, bar_max_height, color=mean_color, alpha=0.5, width=3)
+            plt.bar(median_value, bar_max_height, color=median_color, alpha=0.5, width=3)
+            plt.bar(mode_value, bar_max_height, color=mode_color, alpha=0.5, width=3)
+
+            # Annotate the plot with mean, median and mode values
+            plt.text(text_x_pos, text_y_pos, f'Mean: {mean_value:.2f}', transform=plt.gca().transAxes, ha='left', va='top', color=mean_color)
+            plt.text(text_x_pos, (text_y_pos - 0.05), f'Median: {median_value:.2f}', transform=plt.gca().transAxes, ha='left', va='top', color=median_color)
+            plt.text(text_x_pos, (text_y_pos - 0.10), f'Mode: {mode_value}', transform=plt.gca().transAxes, ha='left', va='top', color=mode_color)
+
+            # Adjust the grid and x axis labels
             plt.xticks(np.arange(0, 1505, 50), rotation=30)
             plt.grid(visible=True, axis='y', linestyle = '--', zorder=0)
 
