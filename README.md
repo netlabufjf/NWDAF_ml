@@ -122,7 +122,9 @@ cd nwdaf_ml # enter to repository's root folder
 source pyvenv/bin/activate
 ```
 
-2. Move the input PCAP files to ./pcap/input or edit the path in the scripts
+2. Move the input PCAP files to ./pcap/input or edit the path in the scripts 
+
+**NOTE:** For more information on the directory structure, check the `pcap-folder-dir-tree` files on [this page](https://doi.org/10.5281/zenodo.15473394)
 
 3. Execute the steps to extract the PCAP data and obtain some statistics
 ```
