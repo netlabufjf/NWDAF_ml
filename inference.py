@@ -124,7 +124,7 @@ total_preprocess_time_begin = datetime.now()
 csv_files = glob_get_files_list(input_files_path, "csv")
 
 # Preprocess the data
-preprocess_data(csv_files, output_files_path_preprocessed_data, results_folder, timestamp)
+preprocess_data(csv_files, output_files_path_preprocessed_data, results_folder, timestamp, drop_protocols_and_ports=True)
 
 # Update the list of CSV files
 csv_files = glob_get_files_list(output_files_path_preprocessed_data, "csv")
