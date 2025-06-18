@@ -49,7 +49,7 @@ Previously, a reprodction of [Kim et al. 2022]'s work was made on [[de Oliveira 
 
 Our current work focused on two main points: (i) creating a larger 5G simulated public PCAP dataset; and (ii) enhancing the classification results obtained on [de Oliveira et al. 2024].
 
-The dataset was created with 1 million packets for each capture. Builing upon the implementation done by [de Oliveira et al. 2024], the current work reimplemented the complete machine learning pipeline to include 8 models and 33 features (previously there was only 3 models and 7 features) extracted from the PCAP files. The data used for training and testing the models didn't overlap with the data used for inference (more details in the [section below](./README.md#dataset-description)).
+The dataset was created with 1 million packets for each capture. Builing upon the implementation done by [de Oliveira et al. 2024], the current work reimplemented the complete ML pipeline to include 8 models and 33 features (previously there was only 3 models and 7 features) extracted from the PCAP files. The data used for training and testing the models didn't overlap with the data used for inference (more details in the [section below](./README.md#dataset-description)).
 
 TODO: detail our results
 
@@ -161,6 +161,12 @@ python stat-plotter.py
 ```
 python box-plotter.py
 ```
+
+### Execution order
+
+The diagram depicted below outlines the execution order of the scripts after the data is loaded in the input folder
+
+![Workflow](/img/nwdaf-ml-exec-seq.png?raw=true "Implemented functionality workflow")
 
 ### Using the traffic generator scripts
 
