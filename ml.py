@@ -193,8 +193,10 @@ def cross_val(clf, X, y):
     # Run StratifiedKFold
     scores = cross_validate(clf, X, y, scoring=scoring, cv=cv_folds, return_train_score=True, n_jobs=8)
 
-    s_fit_time = scores['fit_time']
-    s_score_time = scores['score_time']
+    s_fit_time_sec = scores['fit_time'] # time is in seconds for more information, see the URLs below
+    s_score_time_sec = scores['score_time'] # time is in seconds for more information, see the URLs below
+    # https://stackoverflow.com/questions/73548091/unit-for-fit-time-and-score-time-in-sklearn-cross-validate
+    # https://github.com/scikit-learn/scikit-learn/blob/55a65a2fa5653257225d7e184da3d0c00ff852b1/sklearn/model_selection/_validation.py#L673
     s_train_precision = scores['train_prec_macro']
     s_train_recall = scores['train_rec_macro']
     s_train_f_score = scores['train_f1-score_avg']
@@ -216,7 +218,7 @@ def cross_val(clf, X, y):
     cv_delta_precision = s_test_precision - s_train_precision
     cv_delta_recall = s_test_recall - s_train_recall
     cv_delta_f_score = s_test_f_score - s_train_f_score
-    cv_total_time = s_fit_time + s_score_time
+    cv_total_time_sec = s_fit_time_sec + s_score_time_sec
 
     new_row = {
             columns_cross_val_results_df[0]: model_name,
@@ -230,9 +232,9 @@ def cross_val(clf, X, y):
             columns_cross_val_results_df[8]: cv_delta_precision,
             columns_cross_val_results_df[9]: cv_delta_recall,
             columns_cross_val_results_df[10]: cv_delta_f_score,
-            columns_cross_val_results_df[11]: s_fit_time,
-            columns_cross_val_results_df[12]: s_score_time,
-            columns_cross_val_results_df[13]: cv_total_time,
+            columns_cross_val_results_df[11]: s_fit_time_sec,
+            columns_cross_val_results_df[12]: s_score_time_sec,
+            columns_cross_val_results_df[13]: cv_total_time_sec,
         }
     # TODO save each list on a separate column (e.g. use cv_folds to control the number of columns)
 
@@ -282,7 +284,7 @@ if (run_cross_val):
     columns_cross_val_results_df = ["model_name", "data_num_rows", "train_precision_avg", "train_recall_avg",
                                 "train_f1_score_avg", "test_precision_avg", "test_recall_avg",
                                 "test_f1_score_avg", "delta_prec", "delta_rec", "delta_f_score",
-                                "fit_time", "score_time", "total_cross_val_time"]
+                                "fit_time_sec", "score_time_sec", "total_cross_val_time_sec"]
     cross_val_results_df = pd.DataFrame(columns=columns_cross_val_results_df) # df to save the CV results
 
     X, y = read_and_split_train_data(csv_files, split=False) # prepare data splits to cross val
