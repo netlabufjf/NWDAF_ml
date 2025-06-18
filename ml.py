@@ -249,7 +249,7 @@ def cross_val(clf, X, y):
 csv_files = glob_get_files_list(input_files_path, "csv")
 
 # Preprocess the data
-preprocess_data(csv_files, output_files_path_preprocessed_data, output_files_path_results, timestamp)
+preprocess_data(csv_files, output_files_path_preprocessed_data, output_files_path_results, timestamp, drop_protocols_and_ports=True)
 
 # Update the list of CSV files
 csv_files = glob_get_files_list(output_files_path_preprocessed_data, "csv")

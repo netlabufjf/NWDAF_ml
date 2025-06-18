@@ -141,7 +141,7 @@ def plot_confusion_matrix(matrix, output_dir, data_input_file_name, model_name, 
         plt.show() # DEBUG
     plt.close() # close figure to be able to plot other iterations correctly
 
-def preprocess_data(files_path, preprocessed_data_output_dir, results_output_dir, timestamp):
+def preprocess_data(files_path, preprocessed_data_output_dir, results_output_dir, timestamp, drop_protocols_and_ports):
     """
     A function to preprocess the data before labeling it and running the train and inference steps of the ML pipeline.
 
@@ -155,6 +155,8 @@ def preprocess_data(files_path, preprocessed_data_output_dir, results_output_dir
             The output path where the results (e.g. file name, num of rows and process time) file should be saved.
         timestamp: string
             A datetime-like formatted string that represents the time when this plot's data was created.
+        drop_protocols_and_ports: bool
+            If True, the protocol and port related features will be dropped from the preprocessed output file.
     """
     columns_preprocess_time_df = ["file_name", "file_num_rows", "preprocess_time_ms", "preprocess_disk_time_ms", "preprocess_total_time_ms"]
     preprocess_time_df = pd.DataFrame(columns=columns_preprocess_time_df) # df to save the results
@@ -175,6 +177,10 @@ def preprocess_data(files_path, preprocessed_data_output_dir, results_output_dir
             # which was expected, but most models I've tested can't handle this
             df.drop(columns=["Source_IP", "Destination_IP"], axis=1, inplace=True) # drop IP addresses to avoid using them in the models
             df.drop(columns=["Packet_no"], axis=1, inplace=True) # drop packet number to avoid using it in the models
+            if (drop_protocols_and_ports):
+                # drop also stream related features to avoid using them in the models thus avoiding overfitting
+                df.drop(columns=["Frame_protocols", "IP_protocols", "Source_port", "Destination_port"], axis=1, inplace=True)
+            # TODO evaluate dropping the Frame_type also
             
             # Encode the categorical features
             feature_encoder = OrdinalEncoder()
