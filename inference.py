@@ -33,7 +33,7 @@ def run_inference(models_file_list, inference_data_file_list):
                         "inference_result_label", "inference_result",
                         "accuracy", "precision", "recall", "f_score_class",
                         "inference_result_count_0", "inference_result_count_1", "inference_result_count_2",
-                        "inf_pred_time_ms", "inf_total_time_ms"]
+                        "inf_disk_time_ms", "inf_pred_time_ms", "inf_total_time_ms"]
             # Initialize results_df with columns
             results_df = pd.DataFrame(columns=columns)
             
@@ -42,7 +42,9 @@ def run_inference(models_file_list, inference_data_file_list):
 
             for path in models_file_list:
                 total_inference_time_begin = time_ns()
+                model_load_time_begin = time_ns()
                 model = pickle.load(open(path, 'rb')) # load model from disk
+                model_load_time_end = time_ns() # TODO measure and save it
                 model_name = model.__class__.__name__ 
                 print("[INFO] Using", model_name)
                 
@@ -63,6 +65,7 @@ def run_inference(models_file_list, inference_data_file_list):
 
                 total_inference_time = (total_inference_time_end - total_inference_time_begin) / 10**6
                 inference_pred_time = (inference_pred_time_end - inference_pred_time_begin) / 10**6
+                inference_disk_time = (model_load_time_end - model_load_time_begin) / 10**6
 
                 # Model evaluation data
                 accuracy = accuracy_score(y_true, y_pred)
@@ -98,8 +101,9 @@ def run_inference(models_file_list, inference_data_file_list):
                     columns[9]: int(inference_result_counts[0]) if 0 in inference_result_counts else np.nan,
                     columns[10]: int(inference_result_counts[1]) if 1 in inference_result_counts else np.nan,
                     columns[11]: int(inference_result_counts[2]) if 2 in inference_result_counts else np.nan,
-                    columns[12]: inference_pred_time,
-                    columns[13]: total_inference_time,
+                    columns[12]: inference_disk_time,
+                    columns[13]: inference_pred_time,
+                    columns[14]: total_inference_time,
                 }
                 
                 # Add new row to the dataframe using loc[] method
