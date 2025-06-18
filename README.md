@@ -63,6 +63,8 @@ Considering an application of our work (5G user equipment traffic classification
 
 With those objectives in mind, it was possible to find two public 5G datasets ("[5G Traffic Datasets](https://dx.doi.org/10.21227/ewhk-n061)" and "[5G Campus Networks: Measurement Traces](https://dx.doi.org/10.21227/xe3c-e968)") that contained data that we could use to train models. For the inference set, the description of the steps taken to create the datasets we've used in training were taken into account and, as close as possible, implemented on our 5G simulated testing environment.
 
+**NOTE:** The files listed below are publicly available on [this Zenodo record](https://doi.org/10.5281/zenodo.15064129)
+
 ### Training set
 
 - file_name.pcap: disk_size; number_of_packets; class**; comments
