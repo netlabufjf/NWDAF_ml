@@ -268,14 +268,18 @@ if (run_model_training or run_SMOTE):
 
 # Apply some data augmentation
 if (run_SMOTE):
-    print("[INFO] Applying SMOTE to training data ... ", end='')
+    print("[INFO] Applying SMOTE on training data ... ", end='')
     SMOTE_run_time_begin = datetime.now()
     X_train_smote, y_train_smote = data_augmentation(X_train, y_train)
     print("[ OK ]")
     # print("[DEBU] Data before SMOTE")
-    # print("[DEBU]", len(y_train))
+    # print("[DEBU] Class distrib.:", y_train.value_counts()) # summarize class distribution
+    # print("[DEBU] Class distrib. (%):\n", y_train.value_counts(dropna=False, normalize=True)) # summarize class distribution
+    # print("[DEBU] Total no. training samples:", len(y_train))
     # print("[DEBU] Data after SMOTE")
-    # print("[DEBU]", len(y_train_smote))
+    # print("[DEBU] Class distrib.:", y_train_smote.value_counts()) # summarize class distribution
+    # print("[DEBU] Class distrib. (%):\n", y_train_smote.value_counts(dropna=False, normalize=True)) # summarize class distribution
+    # print("[DEBU] Total no. training samples:", len(y_train_smote))
     del X_train, y_train
     SMOTE_run_time_end = datetime.now()
     print("[INFO] SMOTE run time:", (SMOTE_run_time_end - SMOTE_run_time_begin).total_seconds(), "(seconds)")
