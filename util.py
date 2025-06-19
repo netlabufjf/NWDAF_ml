@@ -274,8 +274,8 @@ def read_and_label_data(file_path, out_dir, remove_old_files=False):
     else:
         print(f"[INFO] The file {file_name_without_path} was already labeled")
 
-# Augment data using SMOTE
-def data_augmentation(X_train, y_train):
+# Oversample data using SMOTE
+def data_oversample(X_train, y_train):
     """
     A function that applies SMOTE to training data.
 

@@ -28,7 +28,7 @@ from util import (glob_get_files_list,
                   plot_confusion_matrix,
                   preprocess_data,
                   read_and_label_data,
-                  data_augmentation)
+                  data_oversample)
 
 # File paths
 working_folder = "./pcap/output/4-ML/"
@@ -266,11 +266,11 @@ if (run_model_training or run_SMOTE):
     X_train, X_test, y_train, y_test = read_and_split_train_data(csv_files, split=True)
     print("[ OK ]")
 
-# Apply some data augmentation
+# Apply some data oversampling with SMOTE
 if (run_SMOTE):
     print("[INFO] Applying SMOTE on training data ... ", end='')
     SMOTE_run_time_begin = datetime.now()
-    X_train_smote, y_train_smote = data_augmentation(X_train, y_train)
+    X_train_smote, y_train_smote = data_oversample(X_train, y_train)
     print("[ OK ]")
     # print("[DEBU] Data before SMOTE")
     # print("[DEBU] Class distrib.:", y_train.value_counts()) # summarize class distribution
