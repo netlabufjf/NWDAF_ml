@@ -291,7 +291,7 @@ def data_augmentation(X_train, y_train):
         pandas.DataFrame, pandas.Series
             The training data after applying the SMOTE resampling.
     """
-    smote = SMOTE(sampling_strategy='not majority', random_state=42, k_neighbors=5)
+    smote = SMOTE(sampling_strategy='minority', random_state=42, k_neighbors=5)
     X_train_smote, y_train_smote = smote.fit_resample(X_train, y_train)
 
     return X_train_smote, y_train_smote
