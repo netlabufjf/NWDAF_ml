@@ -280,7 +280,8 @@ if (run_SMOTE):
     # print("[DEBU] Class distrib.:", y_train_smote.value_counts()) # summarize class distribution
     # print("[DEBU] Class distrib. (%):\n", y_train_smote.value_counts(dropna=False, normalize=True)) # summarize class distribution
     # print("[DEBU] Total no. training samples:", len(y_train_smote))
-    del X_train, y_train
+    X_train = X_train_smote
+    y_train = y_train_smote
     SMOTE_run_time_end = datetime.now()
     print("[INFO] SMOTE run time:", (SMOTE_run_time_end - SMOTE_run_time_begin).total_seconds(), "(seconds)")
 
