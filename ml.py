@@ -41,7 +41,7 @@ output_files_path_results = output_files_path_models + "training_results/" # sav
 # Control the execution of each function
 run_model_training = True
 run_cross_val = True
-run_SMOTE = False
+run_SMOTE = True
 
 timestamp = datetime.now().strftime("%Y%m%d-%H%M%S")
 
@@ -269,6 +269,7 @@ if (run_model_training or run_SMOTE):
 # Apply some data augmentation
 if (run_SMOTE):
     print("[INFO] Applying SMOTE to training data ... ", end='')
+    SMOTE_run_time_begin = datetime.now()
     X_train_smote, y_train_smote = data_augmentation(X_train, y_train)
     print("[ OK ]")
     # print("[DEBU] Data before SMOTE")
@@ -276,6 +277,8 @@ if (run_SMOTE):
     # print("[DEBU] Data after SMOTE")
     # print("[DEBU]", len(y_train_smote))
     del X_train, y_train
+    SMOTE_run_time_end = datetime.now()
+    print("[INFO] SMOTE run time:", (SMOTE_run_time_end - SMOTE_run_time_begin).total_seconds(), "(seconds)")
 
 model_names_list = ['LR', 'DT', 'RF', 'MLP', 'SVM', 'HGB', 'LightGBM', 'XGB']
 
