@@ -8,7 +8,7 @@ from time import time_ns
 from sklearn.preprocessing import MinMaxScaler,OrdinalEncoder
 from sklearn.model_selection import train_test_split,cross_val_score,RepeatedStratifiedKFold,cross_validate,GridSearchCV
 from sklearn.linear_model import LogisticRegression
-from sklearn.ensemble import HistGradientBoostingClassifier,RandomForestClassifier
+from sklearn.ensemble import HistGradientBoostingClassifier,RandomForestClassifier,AdaBoostClassifier,StackingClassifier,VotingClassifier
 from sklearn.tree import DecisionTreeClassifier
 from sklearn.neural_network import MLPClassifier
 from sklearn.svm import LinearSVC
@@ -63,6 +63,20 @@ def classifier_select(classifier_acronym):
             clf = LGBMClassifier(verbose=-1)
         case 'XGB':
             clf = XGBClassifier()
+        case 'AdaBoost':
+            clf = AdaBoostClassifier()
+        case 'Stacking':
+            estimators = [
+            ('rf', RandomForestClassifier(n_estimators=10)),
+            ('svc', LinearSVC())
+            ]
+            clf = StackingClassifier(estimators=estimators, final_estimator=LogisticRegression())
+        case 'Voting':
+            estimators = [
+            ('rf', RandomForestClassifier(n_estimators=10)),
+            ('svc', LinearSVC())
+            ]
+            clf = VotingClassifier(estimators=estimators)
         case _:
             print("[ERRO] Failed to load the model")
             exit()
