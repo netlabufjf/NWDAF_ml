@@ -94,18 +94,21 @@ def save_model_locally(model, file_name, out_dir):
     print(f"[INFO] Model {model_name} sucessfully saved on {file_path}")
 
 # Load and prepare splits from labeled training data
-def read_and_split_train_data(csv_file_list, split):
+def read_and_split_train_data(csv_file_list, split, dataset_percentage=100):
     training_data = pd.DataFrame()
-    for file in csv_file_list:
-        if 'training' in file:
-            df = read_csv(file)
-            training_data = pd.concat([training_data, df], ignore_index=True)
-        elif 'inference' in file:
-            # print("[DEBU] Skipped inference file found at", file) # DEBUG
-            pass
-        else:
-            raise ValueError(f"[ERRO] Could not determine data set type from filename {file}")
-            exit()
+    if (dataset_percentage == 100): # use the whole dataset
+        for file in csv_file_list:
+            if 'training' in file:
+                df = read_csv(file)
+                training_data = pd.concat([training_data, df], ignore_index=True)
+            elif 'inference' in file:
+                # print("[DEBU] Skipped inference file found at", file) # DEBUG
+                pass
+            else:
+                raise ValueError(f"[ERRO] Could not determine data set type from filename {file}")
+                exit()
+    else: # or a smaller portion of it (useful for testing the implementation)
+        training_data = generate_smaller_dataframe(csv_file_list, dataset_percentage)
 
     # Prepare data for supervised learning
     X = training_data.drop('label', axis=1)  # Features
@@ -281,7 +284,11 @@ csv_files = glob_get_files_list(output_files_path_labeled_data, "csv")
 # Prepare data splits to train the models
 if (run_model_training or run_SMOTE or run_OSS):
     print("[INFO] Preparing training data splits ... ", end='')
-    X_train, X_test, y_train, y_test = read_and_split_train_data(csv_files, split=True)
+    if (run_OSS):
+        data_amount = 1
+    else:
+        data_amount = 100
+    X_train, X_test, y_train, y_test = read_and_split_train_data(csv_files, split=True, dataset_percentage=data_amount)
     print("[ OK ]")
 
 # Apply some data undersampling with OSS
@@ -340,7 +347,7 @@ if (run_cross_val):
                                 "fit_time_sec", "score_time_sec", "total_cross_val_time_sec"]
     cross_val_results_df = pd.DataFrame(columns=columns_cross_val_results_df) # df to save the CV results
 
-    X, y = read_and_split_train_data(csv_files, split=False) # prepare data splits to cross val
+    X, y = read_and_split_train_data(csv_files, split=False, dataset_percentage=100) # prepare data splits to cross val
     for i in model_names_list:
         clf = classifier_select(i)
         cross_val(clf, X, y)
