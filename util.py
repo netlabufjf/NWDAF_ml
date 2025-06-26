@@ -384,9 +384,6 @@ def generate_smaller_dataframe(file_list: list[str], percentage: int):
     pl.DataFrame
         Sampled DataFrame.
     """
-
-    print("[INFO] Generating dataframe")
-
     dfs = []
     for file in file_list:
         if 'training' in file:
