@@ -6,3 +6,5 @@ scikit-learn==1.6.1
 lightgbm==4.6.0
 xgboost-cpu==3.0.2
 imbalanced-learn==0.13.0
+polars==1.31.0
+pyarrow==20.0.0
