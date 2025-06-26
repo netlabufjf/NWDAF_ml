@@ -337,7 +337,7 @@ if (run_SMOTE):
     SMOTE_run_time_end = datetime.now()
     print("[INFO] SMOTE run time:", (SMOTE_run_time_end - SMOTE_run_time_begin).total_seconds(), "(seconds)")
 
-model_names_list = ['LR', 'DT', 'RF', 'MLP', 'SVM', 'HGB', 'LightGBM', 'XGB']
+model_names_list = ['LR', 'DT', 'RF', 'MLP', 'SVM', 'HGB', 'LightGBM', 'XGB', 'AdaBoost', 'Stacking', 'Voting']
 
 # Cross validation steps
 if (run_cross_val):
