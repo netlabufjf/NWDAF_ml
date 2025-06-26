@@ -28,20 +28,24 @@ from util import (glob_get_files_list,
                   plot_confusion_matrix,
                   preprocess_data,
                   read_and_label_data,
-                  data_oversample)
+                  data_oversample,
+                  data_undersample,
+                  generate_smaller_dataframe)
 
 # File paths
 working_folder = "./pcap/output/4-ML/"
 input_files_path = working_folder + "preprocess/labeled_files/" # read CSV files from here
 output_files_path_preprocessed_data = working_folder + "preprocess/data_ready_to_ml/" # save preprocessed data there
 output_files_path_labeled_data = working_folder + "preprocess/labeled_data/" # save the labeled output files there
+output_files_path_resampled_data = working_folder + "preprocess/resampled_data/" # save the labeled output files there
 output_files_path_models = working_folder + "models/" # save the model files there
 output_files_path_results = output_files_path_models + "training_results/" # save the model files there
 
 # Control the execution of each function
 run_model_training = True
-run_cross_val = True
-run_SMOTE = True
+run_cross_val = True #Cross validation
+run_SMOTE = False # Oversampling
+run_OSS = True # Undersampling
 
 timestamp = datetime.now().strftime("%Y%m%d-%H%M%S")
 
@@ -275,10 +279,37 @@ csv_files = glob_get_files_list(output_files_path_preprocessed_data, "csv")
 csv_files = glob_get_files_list(output_files_path_labeled_data, "csv")
 
 # Prepare data splits to train the models
-if (run_model_training or run_SMOTE):
+if (run_model_training or run_SMOTE or run_OSS):
     print("[INFO] Preparing training data splits ... ", end='')
     X_train, X_test, y_train, y_test = read_and_split_train_data(csv_files, split=True)
     print("[ OK ]")
+
+# Apply some data undersampling with OSS
+if (run_OSS):
+    print("[INFO] Applying OSS on training data ... ", end='')
+    OSS_run_time_begin = datetime.now()
+    X_train_oss, y_train_oss, k_oss, S_oss = data_undersample(X_train, y_train)
+    print("[ OK ]")
+    # print("[DEBU] Data before OSS")
+    # print("[DEBU] Class distrib.:", y_train.value_counts()) # summarize class distribution
+    # print("[DEBU] Class distrib. (%):\n", y_train.value_counts(dropna=False, normalize=True)) # summarize class distribution
+    # print("[DEBU] Total no. training samples:", len(y_train))
+    # print("[DEBU] Data after OSS")
+    # print("[DEBU] Class distrib.:", y_train_oss.value_counts()) # summarize class distribution
+    # print("[DEBU] Class distrib. (%):\n", y_train_oss.value_counts(dropna=False, normalize=True)) # summarize class distribution
+    # print("[DEBU] Total no. training samples:", len(y_train_oss))
+    
+    # Save the undersampled dataset on disk
+    undersampled_data = X_train_oss.join(y_train_oss)
+    undersampled_data.to_csv(f"{output_files_path_resampled_data}{timestamp}_OSS_undersample_k_{k_oss}_S_{S_oss}.csv", header=True, index=False)
+    
+    # Use the undersampled data in the model training
+    X_train = X_train_oss
+    y_train = y_train_oss
+    
+    OSS_run_time_end = datetime.now()
+    print(f"[INFO] Parameters: k = {k_oss}, S = {S_oss}")
+    print("[INFO] OSS run time:", (OSS_run_time_end - OSS_run_time_begin).total_seconds(), "(seconds)")
 
 # Apply some data oversampling with SMOTE
 if (run_SMOTE):
