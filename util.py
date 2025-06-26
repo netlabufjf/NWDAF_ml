@@ -1,4 +1,5 @@
 import pandas as pd
+import polars as pl
 import glob
 import seaborn as sns
 import matplotlib.pyplot as plt
@@ -6,6 +7,24 @@ import os
 from time import time_ns
 from sklearn.preprocessing import MinMaxScaler,OrdinalEncoder
 from imblearn.over_sampling import SMOTE
+from imblearn.under_sampling import OneSidedSelection
+from math import floor
+
+def get_available_threads(max_num_used=0.5):
+    """
+    A function to return the number of CPU threads to be used
+
+    Parameters
+    ----------
+        max_num_used : float
+            The fraction of available threads to be used.
+
+    Returns
+    ----------
+        float
+            The fraction of available threads.
+    """
+    return floor(os.cpu_count() * max_num_used)
 
 def read_csv(file_path):
     """
@@ -295,3 +314,93 @@ def data_oversample(X_train, y_train):
     X_train_smote, y_train_smote = smote.fit_resample(X_train, y_train)
 
     return X_train_smote, y_train_smote
+
+# Undersample data using OSS
+def data_undersample(X_train, y_train):
+    """
+    A function that applies One-Sided Selection (OSS) to training data.
+
+    Parameters
+    ----------
+        X_train: pandas.DataFrame
+            Dataframe containing the training data split.
+        y_train: pandas.Series
+            Series containing the class labels from the training data split.
+    
+    Returns
+    ----------
+        pandas.DataFrame, pandas.Series
+            The training data after applying the OSS resampling technique.
+    """
+    # OSS parameters
+    k = 1
+    S = 70
+
+    oss = OneSidedSelection(sampling_strategy='not minority', n_neighbors=k, n_seeds_S=S, n_jobs=get_available_threads(0.8))
+    X_train_oss, y_train_oss = oss.fit_resample(X_train, y_train)
+
+    return X_train_oss, y_train_oss, k, S
+
+def sample_rows(group_by: pl.dataframe.group_by.GroupBy, percentage: int):
+    """
+    A function to sample rows from a DataFrame using a GroupBy object.
+    
+    Parameters
+    ----------
+    group_by : pl.dataframe.group_by.GroupBy
+        GroupBy object.
+    percentage : float
+        Row sample percentage.
+
+    Returns
+    -------
+    pl.DataFrame
+        Sampled DataFrame.
+    """
+
+    percentage /= 100
+    dfs = []
+    for _, df in group_by:
+        if len(df) * percentage <= 1:
+            dfs.append(df.sample(n=1))
+            continue
+        dfs.append(df.sample(fraction=percentage, seed=42))
+
+    return pl.concat(dfs)
+
+def generate_smaller_dataframe(file_list: list[str], percentage: int):
+    """
+    A function to create a DataFrame from a given amount of samples from input CSV files.
+    
+    Parameters
+    ----------
+    file_list : list
+        CSV file list.
+    percentage : int
+        Sampled amount of rows.
+
+    Returns
+    -------
+    pl.DataFrame
+        Sampled DataFrame.
+    """
+
+    print("[INFO] Generating dataframe")
+
+    dfs = []
+    for file in file_list:
+        if 'training' in file:
+            df = pl.read_csv(file)
+            dfs.append(
+                sample_rows(
+                    group_by=df.group_by(["label"], maintain_order=True),
+                    percentage=percentage,
+                )
+            )
+        elif 'inference' in file:
+            # print("[DEBU] Skipped inference file found at", file) # DEBUG
+            pass
+        else:
+            raise ValueError(f"[ERRO] Could not determine data set type from filename {file}")
+            exit()
+    return pl.concat(dfs).to_pandas()
