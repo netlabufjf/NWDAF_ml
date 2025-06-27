@@ -293,9 +293,13 @@ if (run_model_training or run_SMOTE or run_OSS):
 
 # Apply some data undersampling with OSS
 if (run_OSS):
+    # OSS parameters
+    k = 1
+    seed = 70
+
     print("[INFO] Applying OSS on training data ... ", end='')
     OSS_run_time_begin = datetime.now()
-    X_train_oss, y_train_oss, k_oss, S_oss = data_undersample(X_train, y_train)
+    X_train_oss, y_train_oss = data_undersample(X_train, y_train, k, seed)
     print("[ OK ]")
     # print("[DEBU] Data before OSS")
     # print("[DEBU] Class distrib.:", y_train.value_counts()) # summarize class distribution
@@ -308,14 +312,14 @@ if (run_OSS):
     
     # Save the undersampled dataset on disk
     undersampled_data = X_train_oss.join(y_train_oss)
-    undersampled_data.to_csv(f"{output_files_path_resampled_data}{timestamp}_OSS_undersample_k_{k_oss}_S_{S_oss}.csv", header=True, index=False)
+    undersampled_data.to_csv(f"{output_files_path_resampled_data}{timestamp}_OSS_undersample_k_{k}_seed_{seed}.csv", header=True, index=False)
     
     # Use the undersampled data in the model training
     X_train = X_train_oss
     y_train = y_train_oss
     
     OSS_run_time_end = datetime.now()
-    print(f"[INFO] Parameters: k = {k_oss}, S = {S_oss}")
+    print(f"[INFO] Parameters: k = {k}, seed = {seed}")
     print("[INFO] OSS run time:", (OSS_run_time_end - OSS_run_time_begin).total_seconds(), "(seconds)")
 
 # Apply some data oversampling with SMOTE

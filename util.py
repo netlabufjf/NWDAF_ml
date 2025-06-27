@@ -316,7 +316,7 @@ def data_oversample(X_train, y_train):
     return X_train_smote, y_train_smote
 
 # Undersample data using OSS
-def data_undersample(X_train, y_train):
+def data_undersample(X_train, y_train, k=1, seed=1):
     """
     A function that applies One-Sided Selection (OSS) to training data.
 
@@ -326,20 +326,21 @@ def data_undersample(X_train, y_train):
             Dataframe containing the training data split.
         y_train: pandas.Series
             Series containing the class labels from the training data split.
-    
+        k: int
+            Number of nearest neighbours used in the K-NN classification algorithm.
+        seed: int
+            Number of randomly negative examples to initially extract from the original training set.
+
     Returns
     ----------
         pandas.DataFrame, pandas.Series
             The training data after applying the OSS resampling technique.
     """
-    # OSS parameters
-    k = 1
-    S = 70
-
-    oss = OneSidedSelection(sampling_strategy='not minority', n_neighbors=k, n_seeds_S=S, n_jobs=get_available_threads(0.8))
+    
+    oss = OneSidedSelection(sampling_strategy='all', n_neighbors=k, n_seeds_S=seed, n_jobs=get_available_threads(0.9))
     X_train_oss, y_train_oss = oss.fit_resample(X_train, y_train)
 
-    return X_train_oss, y_train_oss, k, S
+    return X_train_oss, y_train_oss
 
 def sample_rows(group_by: pl.dataframe.group_by.GroupBy, percentage: int):
     """
