@@ -80,14 +80,15 @@ def run_inference(models_file_list, inference_data_file_list):
                 # print("[DEBU] Precision :", round(precision, 10))
                 # print("[DEBU] Recall    :", round(recall, 10))
                 # print("[DEBU] F1-score of class :", round(f_score_class, 10))
-                # # TODO fix ROC AUC score
-                # # if (model_name != "LinearSVC"): # LinearSVC doesn't implement proba
-                # #     auc_score = roc_auc_score(y_true, model.predict_proba(inference_data), average='macro', multi_class='ovo', labels=[0, 1, 2])
-                # #     print("[DEBU] ROC AUC Score :", round(auc_score, 10))
-                # # else:
-                # #     print("[DEBU] ROC AUC Score : Not calculated for", model_name)
-                # #     auc_score = "N.A."
-                
+                # if (model_name != "LinearSVC"): # LinearSVC doesn't implement proba
+                #     auc_score = roc_auc_score(y_true, model.predict_proba(inference_data), average='macro', multi_class='ovo', labels=[0, 1, 2])
+                #     print("[DEBU] ROC AUC Score :", round(auc_score, 10))
+                # else:
+                #     print("[DEBU] ROC AUC Score : Not calculated for", model_name)
+                #     auc_score = "N.A."
+                # TODO fix ROC AUC score
+                # RuntimeWarning: invalid value encountered in scalar divide ret = ret.dtype.type(ret / rcount) /n [DEBU] ROC AUC Score : nan
+                                
                 new_row = {
                     columns[0]: file_name,
                     columns[1]: data_num_rows,
