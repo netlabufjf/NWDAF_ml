@@ -174,6 +174,14 @@ The diagram depicted below outlines the execution order of the scripts after the
 
 Please, refer to [the traffic-gen README file](./traffic-gen/README.md)
 
+### Automated pipeline execution
+
+The script [run-all.sh](./run-all.sh) was designed to execute all the pipeline steps automatically.
+
+Load the PCAP data in the `input` folder, install [the requisites](#install-the-prerequisites), then run the [run-all.sh](./run-all.sh) script.
+
+**NOTE:** For more information on the directory structure, check the `pcap-folder-dir-tree` files on [this page](https://doi.org/10.5281/zenodo.15473394)
+
 ## Citing this work
 
 TBD
