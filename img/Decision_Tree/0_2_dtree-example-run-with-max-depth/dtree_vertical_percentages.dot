@@ -1,0 +1,38 @@
+digraph Tree {
+node [shape=box, style="rounded", color="black", fontname="helvetica"] ;
+edge [fontname="helvetica"] ;
+rankdir=LR ;
+0 [label="QUIC_packet_length <= 0.01\ngini = 0.542\nsamples = 100.0%\nvalue = [0.489, 0.465, 0.045]\nclass = eMBB"] ;
+1 [label="Time_delta <= 0.001\ngini = 0.182\nsamples = 51.7%\nvalue = [0.012, 0.9, 0.088]\nclass = URLLC"] ;
+0 -> 1 [labeldistance=2.5, labelangle=-45, headlabel="True"] ;
+2 [label="Time_delta <= 0.0\ngini = 0.024\nsamples = 47.1%\nvalue = [0.012, 0.988, 0.0]\nclass = URLLC"] ;
+1 -> 2 ;
+3 [label="Time_delta <= 0.0\ngini = 0.001\nsamples = 46.0%\nvalue = [0.001, 0.999, 0.0]\nclass = URLLC"] ;
+2 -> 3 ;
+4 [label="gini = 0.0\nsamples = 45.8%\nvalue = [0.0, 1.0, 0.0]\nclass = URLLC"] ;
+3 -> 4 ;
+5 [label="gini = 0.233\nsamples = 0.2%\nvalue = [0.135, 0.865, 0.0]\nclass = URLLC"] ;
+3 -> 5 ;
+6 [label="TCP_window_size <= 0.333\ngini = 0.5\nsamples = 1.1%\nvalue = [0.488, 0.512, 0.0]\nclass = URLLC"] ;
+2 -> 6 ;
+7 [label="gini = 0.38\nsamples = 0.6%\nvalue = [0.745, 0.255, 0.0]\nclass = eMBB"] ;
+6 -> 7 ;
+8 [label="gini = 0.275\nsamples = 0.5%\nvalue = [0.165, 0.835, 0.0]\nclass = URLLC"] ;
+6 -> 8 ;
+9 [label="Frame_total_length <= 0.003\ngini = 0.015\nsamples = 4.6%\nvalue = [0.008, 0.0, 0.992]\nclass = mMTC"] ;
+1 -> 9 ;
+10 [label="TCP_window_size <= 0.0\ngini = 0.001\nsamples = 4.5%\nvalue = [0.001, 0.0, 0.999]\nclass = mMTC"] ;
+9 -> 10 ;
+11 [label="gini = 0.0\nsamples = 4.5%\nvalue = [0.0, 0.0, 1.0]\nclass = mMTC"] ;
+10 -> 11 ;
+12 [label="gini = 0.0\nsamples = 0.0%\nvalue = [1.0, 0.0, 0.0]\nclass = eMBB"] ;
+10 -> 12 ;
+13 [label="Time_delta <= 0.948\ngini = 0.0\nsamples = 0.0%\nvalue = [1.0, 0.0, 0.0]\nclass = eMBB"] ;
+9 -> 13 ;
+14 [label="gini = 0.0\nsamples = 0.0%\nvalue = [1.0, 0.0, 0.0]\nclass = eMBB"] ;
+13 -> 14 ;
+15 [label="gini = 0.5\nsamples = 0.0%\nvalue = [0.5, 0.5, 0.0]\nclass = eMBB"] ;
+13 -> 15 ;
+16 [label="gini = 0.0\nsamples = 48.3%\nvalue = [1.0, 0.0, 0.0]\nclass = eMBB"] ;
+0 -> 16 [labeldistance=2.5, labelangle=45, headlabel="False"] ;
+}
