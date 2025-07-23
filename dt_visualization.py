@@ -4,7 +4,8 @@ from subprocess import check_call
 from sklearn.tree import DecisionTreeClassifier,export_graphviz
 from sklearn.model_selection import train_test_split
 from util import (glob_get_files_list,
-                  read_csv)
+                  read_csv,
+                  data_oversample)
 
 # File paths
 working_folder = "./pcap/output/4-ML/"
@@ -72,10 +73,11 @@ csv_files = glob_get_files_list(output_files_path_labeled_data, "csv")
 # Create the splits
 X_train, X_test, y_train, y_test, features_names_list = read_and_split_train_data(csv_files, True, True)
 
-dt = DecisionTreeClassifier() # default parameter DT
-# dt = DecisionTreeClassifier(max_depth=4) # a first parameter that could be adjusted is the tree depth
-# dt = DecisionTreeClassifier(min_samples_leaf=1000, min_samples_split=10000)
-# dt = DecisionTreeClassifier(max_depth=6, min_samples_leaf=1000, min_samples_split=10000)
+# Uncomment one of the lines below
+# dt = DecisionTreeClassifier() # default parameter DT (run #0)
+# dt = DecisionTreeClassifier(max_depth=4) # a first parameter that could be adjusted is the tree depth (param example for run #0)
+# dt = DecisionTreeClassifier(min_samples_leaf=1000, min_samples_split=10000) # (run #1)
+# dt = DecisionTreeClassifier(max_depth=6, min_samples_leaf=1000, min_samples_split=10000) # (run #2)
 # For more parameters see: https://scikit-learn.org/stable/modules/generated/sklearn.tree.DecisionTreeClassifier.html
 dt.fit(X_train, y_train)
 print(" [ OK ] ")
