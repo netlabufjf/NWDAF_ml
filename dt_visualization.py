@@ -73,6 +73,9 @@ csv_files = glob_get_files_list(output_files_path_labeled_data, "csv")
 # Create the splits
 X_train, X_test, y_train, y_test, features_names_list = read_and_split_train_data(csv_files, True, True)
 
+# Apply SMOTE to oversample the underrepresented class
+# X_train, y_train = data_oversample(X_train, y_train) # Uncomment to apply SMOTE
+
 # Uncomment one of the lines below
 # dt = DecisionTreeClassifier() # default parameter DT (run #0)
 # dt = DecisionTreeClassifier(max_depth=4) # a first parameter that could be adjusted is the tree depth (param example for run #0)
