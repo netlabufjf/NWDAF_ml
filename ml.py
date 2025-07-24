@@ -327,6 +327,9 @@ if (run_OSS):
     print(f"[INFO] Parameters: k = {k}, seed = {seed}")
     print("[INFO] OSS run time:", (OSS_run_time_end - OSS_run_time_begin).total_seconds(), "(seconds)")
 
+# resampled_csv_files = glob_get_files_list(output_files_path_resampled_data, "csv")
+# TODO load the preprocessed files and use them to train the models
+
 # Apply some data oversampling with SMOTE
 if (run_SMOTE):
     print("[INFO] Applying SMOTE on training data ... ", end='')
