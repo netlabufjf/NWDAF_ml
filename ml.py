@@ -71,14 +71,15 @@ def classifier_select(classifier_acronym):
             clf = AdaBoostClassifier()
         case 'Stacking':
             estimators = [
-            ('rf', RandomForestClassifier(n_estimators=10)),
-            ('svc', LinearSVC())
+            ('lgbm', LGBMClassifier(verbose=-1)),
+            ('xgb', XGBClassifier())
             ]
             clf = StackingClassifier(estimators=estimators, final_estimator=LogisticRegression())
         case 'Voting':
             estimators = [
-            ('rf', RandomForestClassifier(n_estimators=10)),
-            ('svc', LinearSVC())
+            ('lgbm', LGBMClassifier(verbose=-1)),
+            ('xgb', XGBClassifier()),
+            ('svc', LinearSVC()),
             ]
             clf = VotingClassifier(estimators=estimators)
         case _:
