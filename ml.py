@@ -114,6 +114,11 @@ def read_and_split_train_data(csv_file_list, split, dataset_percentage=100):
     X = training_data.drop('label', axis=1)  # Features
     y = training_data['label']  # Target variable
 
+    # print("\n[DEBU] Split data")
+    # print("[DEBU] Class distrib.:", y.value_counts()) # summarize class distribution
+    # print("[DEBU] Class distrib. (%):\n", y.value_counts(dropna=False, normalize=True)) # summarize class distribution
+    # print("[DEBU] Total no. training samples:", len(y))
+
     if (split):
         # Now X and y are ready for supervised learning
         X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.3, random_state=42)
@@ -285,7 +290,7 @@ csv_files = glob_get_files_list(output_files_path_labeled_data, "csv")
 if (run_model_training or run_SMOTE or run_OSS):
     print("[INFO] Preparing training data splits ... ", end='')
     if (run_OSS):
-        data_amount = 1
+        data_amount = 1 # amount of data to be used in OSS
     else:
         data_amount = 100
     X_train, X_test, y_train, y_test = read_and_split_train_data(csv_files, split=True, dataset_percentage=data_amount)
@@ -343,7 +348,7 @@ if (run_SMOTE):
 
 model_names_list = ['LR', 'DT', 'RF', 'MLP', 'SVM', 'HGB', 'LightGBM', 'XGB', 'AdaBoost', 'Stacking', 'Voting']
 
-# Cross validation steps
+# Cross validation
 if (run_cross_val):
     columns_cross_val_results_df = ["model_name", "data_num_rows", "train_precision_avg", "train_recall_avg",
                                 "train_f1_score_avg", "test_precision_avg", "test_recall_avg",
@@ -356,6 +361,7 @@ if (run_cross_val):
         clf = classifier_select(i)
         cross_val(clf, X, y)
 
+# Model training
 if (run_model_training):
     columns_training_results_df = ["model_name", "data_num_rows", "accuracy", "precision_avg", "recall_avg", 
                                 "f1_score_avg", "f1_score_class0", "f1_score_class1", "f1_score_class2",
