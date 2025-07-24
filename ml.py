@@ -44,8 +44,8 @@ output_files_path_results = output_files_path_models + "training_results/" # sav
 # Control the execution of each function
 run_model_training = True
 run_cross_val = True #Cross validation
-run_SMOTE = False # Oversampling
-run_OSS = True # Undersampling
+run_SMOTE = True # Oversampling
+run_OSS = False # Undersampling
 
 timestamp = datetime.now().strftime("%Y%m%d-%H%M%S")
 
