@@ -295,7 +295,7 @@ if (run_model_training or run_SMOTE or run_OSS):
 if (run_OSS):
     # OSS parameters
     k = 1
-    seed = 70
+    seed = 100
 
     print("[INFO] Applying OSS on training data ... ", end='')
     OSS_run_time_begin = datetime.now()
