@@ -81,6 +81,8 @@ X_train, X_test, y_train, y_test, features_names_list = read_and_split_train_dat
 # dt = DecisionTreeClassifier(max_depth=4) # a first parameter that could be adjusted is the tree depth (param example for run #0)
 # dt = DecisionTreeClassifier(min_samples_leaf=1000, min_samples_split=10000) # (run #1)
 # dt = DecisionTreeClassifier(max_depth=6, min_samples_leaf=1000, min_samples_split=10000) # (run #2)
+# dt = DecisionTreeClassifier(max_depth=3) # try another value for the tree depth (param example for run #3)
+# dt = DecisionTreeClassifier(max_depth=2) # try yet another value for the tree depth (param example for run #3)
 # For more parameters see: https://scikit-learn.org/stable/modules/generated/sklearn.tree.DecisionTreeClassifier.html
 dt.fit(X_train, y_train)
 print(" [ OK ] ")
