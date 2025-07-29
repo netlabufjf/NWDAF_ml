@@ -6,11 +6,11 @@ This repository presents a proof-of-concept (PoC) demonstrating the application 
 
 ### Software
 
-- python: 3.13.1
-- pip: 25.0.1
+- python: 3.13.1 (also tested on 3.13.5)
+- pip: 25.1.1
 - python packages from [requirements.txt](./requirements.txt)
 - tshark: 4.4.3
-- perl: 5.40.1
+- perl: 5.40.1 (also tested on 5.42.0)
 
 ### Hardware
 
@@ -88,7 +88,7 @@ With those objectives in mind, it was possible to find two public 5G datasets ("
 
 ## Install the prerequisites
 
-**NOTE:** In this section the commands are supported on a BASH console
+**NOTE:** The commands in this section are supported on a Bash console
 
 1. Clone the repo
 ```
