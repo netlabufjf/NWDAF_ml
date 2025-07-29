@@ -333,9 +333,13 @@ if (run_OSS):
 
 # Apply some data oversampling with SMOTE
 if (run_SMOTE):
+    # SMOTE parameters
+    k = 5
+    strategy = 'minority'
+    
     print("[INFO] Applying SMOTE on training data ... ", end='')
     SMOTE_run_time_begin = datetime.now()
-    X_train_smote, y_train_smote = data_oversample(X_train, y_train)
+    X_train_smote, y_train_smote = data_oversample(X_train, y_train, strategy=strategy, k=k)
     print("[ OK ]")
     # print("[DEBU] Data before SMOTE")
     # print("[DEBU] Class distrib.:", y_train.value_counts()) # summarize class distribution

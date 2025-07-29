@@ -294,7 +294,7 @@ def read_and_label_data(file_path, out_dir, remove_old_files=False):
         print(f"[INFO] The file {file_name_without_path} was already labeled")
 
 # Oversample data using SMOTE
-def data_oversample(X_train, y_train):
+def data_oversample(X_train, y_train, strategy='minority', k=5):
     """
     A function that applies Synthetic Minority Over-sampling Technique (SMOTE) to training data.
 
@@ -310,7 +310,7 @@ def data_oversample(X_train, y_train):
         pandas.DataFrame, pandas.Series
             The training data after applying the SMOTE resampling technique.
     """
-    smote = SMOTE(sampling_strategy='minority', random_state=42, k_neighbors=5)
+    smote = SMOTE(sampling_strategy=strategy, random_state=42, k_neighbors=k)
     X_train_smote, y_train_smote = smote.fit_resample(X_train, y_train)
 
     return X_train_smote, y_train_smote
