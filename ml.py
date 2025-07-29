@@ -30,7 +30,8 @@ from util import (glob_get_files_list,
                   read_and_label_data,
                   data_oversample,
                   data_undersample,
-                  generate_smaller_dataframe)
+                  generate_smaller_dataframe,
+                  get_available_threads)
 
 # File paths
 working_folder = "./pcap/output/4-ML/"
@@ -216,9 +217,10 @@ def cross_val(clf, X, y):
             }
     cv_folds = 10 # reduce this number to reduce RAM usage during CV
     # 3 uses up to around 50GB, 10 uses up to around 128GB (except for LinearSVC that requires more)
+    amount_of_cpus_to_use = 0.9 # e.g. if there are 16 CPUs available, 90% will be equals to 14
     
     # Run StratifiedKFold
-    scores = cross_validate(clf, X, y, scoring=scoring, cv=cv_folds, return_train_score=True, n_jobs=8)
+    scores = cross_validate(clf, X, y, scoring=scoring, cv=cv_folds, return_train_score=True, n_jobs=get_available_threads(amount_of_cpus_to_use))
 
     s_fit_time_sec = scores['fit_time'] # time is in seconds for more information, see the URLs below
     s_score_time_sec = scores['score_time'] # time is in seconds for more information, see the URLs below
