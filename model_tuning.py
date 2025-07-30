@@ -330,7 +330,7 @@ adaboost_params = {
 model_names_list = ['LR', 'DT', 'RF', 'MLP', 'SVM', 'HGB', 'LightGBM', 'XGB', 'AdaBoost']
 
 # Buid the CSV files list
-csv_files = glob_get_files_list(input_files_path, "csv")
+csv_files = glob_get_files_list(input_files_path, file_format="csv")
 
 X, y = read_and_split_train_data(csv_files, split=False, dataset_percentage=100) # prepare data splits to tuning
 

@@ -275,19 +275,19 @@ def cross_val(clf, X, y):
     print(f"[INFO] {model_name} Cross Validation done")
 
 # Buid the CSV files list
-csv_files = glob_get_files_list(input_files_path, "csv")
+csv_files = glob_get_files_list(input_files_path, file_format="csv")
 
 # Preprocess the data
 preprocess_data(csv_files, output_files_path_preprocessed_data, output_files_path_results, timestamp, drop_protocols_and_ports=True)
 
 # Update the list of CSV files
-csv_files = glob_get_files_list(output_files_path_preprocessed_data, "csv")
+csv_files = glob_get_files_list(output_files_path_preprocessed_data, file_format="csv")
 
 # Label all data inside CSV files
 [read_and_label_data(file, output_files_path_labeled_data, False) for file in csv_files]
 
 # Update the list of CSV files
-csv_files = glob_get_files_list(output_files_path_labeled_data, "csv")
+csv_files = glob_get_files_list(output_files_path_labeled_data, file_format="csv")
 
 # Prepare data splits to train the models
 if (run_model_training or run_SMOTE or run_OSS):
@@ -330,7 +330,7 @@ if (run_OSS):
     print(f"[INFO] Parameters: k = {k}, seed = {seed}")
     print("[INFO] OSS run time:", (OSS_run_time_end - OSS_run_time_begin).total_seconds(), "(seconds)")
 
-# resampled_csv_files = glob_get_files_list(output_files_path_resampled_data, "csv")
+# resampled_csv_files = glob_get_files_list(output_files_path_resampled_data, file_format="csv")
 # TODO load the preprocessed files and use them to train the models
 
 # Apply some data oversampling with SMOTE

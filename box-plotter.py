@@ -34,7 +34,7 @@ def plot_box_plot(file_path):
 start_time = time.time() # record the start of execution
 
 # List of CSV files
-csv_files = glob_get_files_list(input_files_path, "csv")
+csv_files = glob_get_files_list(input_files_path, file_format="csv")
 
 for i in csv_files:
     try:

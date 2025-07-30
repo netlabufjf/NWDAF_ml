@@ -122,13 +122,13 @@ print("[INFO] Running inference preprocess")
 # Run preprocess in case the inference data wasn't already preprocessed
 total_preprocess_time_begin = datetime.now()
 # Get the list of CSV files
-csv_files = glob_get_files_list(input_files_path, "csv")
+csv_files = glob_get_files_list(input_files_path, file_format="csv")
 
 # Preprocess the data
 preprocess_data(csv_files, output_files_path_preprocessed_data, results_folder, timestamp, drop_protocols_and_ports=True)
 
 # Update the list of CSV files
-csv_files = glob_get_files_list(output_files_path_preprocessed_data, "csv")
+csv_files = glob_get_files_list(output_files_path_preprocessed_data, file_format="csv")
 
 # Label all data inside CSV files
 [read_and_label_data(file, data_folder, False) for file in csv_files]
@@ -136,8 +136,8 @@ total_preprocess_time_end = datetime.now()
 
 print("[INFO] Running inference")
 # Buid the PKL and CSV files lists
-pkl_files = glob_get_files_list(models_folder, "pkl")
-inference_data_files = glob_get_files_list(data_folder, "csv")
+pkl_files = glob_get_files_list(models_folder, file_format="pkl")
+inference_data_files = glob_get_files_list(data_folder, file_format="csv")
 
 total_run_time_begin = datetime.now()
 run_inference(pkl_files, inference_data_files)
