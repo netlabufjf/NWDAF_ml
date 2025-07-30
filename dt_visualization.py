@@ -68,7 +68,7 @@ def create_and_plot_tree_visualization(file_name_suffix, rounded_rectangles, hor
 print("[INFO] Loading files and creating the model ... ", end='')
 
 # Update the list of CSV files
-csv_files = glob_get_files_list(output_files_path_labeled_data, "csv")
+csv_files = glob_get_files_list(input_files_path_labeled_data, file_format="csv")
 
 # Create the splits
 X_train, X_test, y_train, y_test, features_names_list = read_and_split_train_data(csv_files, True, True)
