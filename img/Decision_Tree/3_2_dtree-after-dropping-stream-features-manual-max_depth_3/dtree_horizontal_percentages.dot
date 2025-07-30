@@ -1,0 +1,22 @@
+digraph Tree {
+node [shape=box, style="rounded", color="black", fontname="helvetica"] ;
+edge [fontname="helvetica"] ;
+rankdir=LR ;
+0 [label="QUIC_packet_length <= 0.01\ngini = 0.542\nsamples = 100.0%\nvalue = [0.489, 0.465, 0.045]\nclass = eMBB"] ;
+1 [label="Time_delta <= 0.001\ngini = 0.182\nsamples = 51.7%\nvalue = [0.012, 0.9, 0.088]\nclass = URLLC"] ;
+0 -> 1 [labeldistance=2.5, labelangle=-45, headlabel="True"] ;
+2 [label="Time_delta <= 0.0\ngini = 0.024\nsamples = 47.1%\nvalue = [0.012, 0.988, 0.0]\nclass = URLLC"] ;
+1 -> 2 ;
+3 [label="gini = 0.001\nsamples = 46.0%\nvalue = [0.001, 0.999, 0.0]\nclass = URLLC"] ;
+2 -> 3 ;
+4 [label="gini = 0.5\nsamples = 1.1%\nvalue = [0.488, 0.512, 0.0]\nclass = URLLC"] ;
+2 -> 4 ;
+5 [label="Frame_total_length <= 0.003\ngini = 0.015\nsamples = 4.6%\nvalue = [0.008, 0.0, 0.992]\nclass = mMTC"] ;
+1 -> 5 ;
+6 [label="gini = 0.001\nsamples = 4.5%\nvalue = [0.001, 0.0, 0.999]\nclass = mMTC"] ;
+5 -> 6 ;
+7 [label="gini = 0.0\nsamples = 0.0%\nvalue = [1.0, 0.0, 0.0]\nclass = eMBB"] ;
+5 -> 7 ;
+8 [label="gini = 0.0\nsamples = 48.3%\nvalue = [1.0, 0.0, 0.0]\nclass = eMBB"] ;
+0 -> 8 [labeldistance=2.5, labelangle=45, headlabel="False"] ;
+}

@@ -1,0 +1,34 @@
+digraph Tree {
+node [shape=box, style="rounded", color="black", fontname="helvetica"] ;
+edge [fontname="helvetica"] ;
+rankdir=LR ;
+0 [label="Time_delta <= 0.079\ngini = 0.666\nsamples = 100.0%\nvalue = [0.339, 0.322, 0.339]\nclass = eMBB"] ;
+1 [label="TCP_window_size <= 0.0\ngini = 0.5\nsamples = 66.1%\nvalue = [0.512, 0.488, 0.001]\nclass = eMBB"] ;
+0 -> 1 [labeldistance=2.5, labelangle=-45, headlabel="True"] ;
+2 [label="Frame_payload_length <= 0.011\ngini = 0.002\nsamples = 33.5%\nvalue = [0.999, 0.0, 0.001]\nclass = eMBB"] ;
+1 -> 2 ;
+3 [label="gini = 0.016\nsamples = 0.0%\nvalue = [0.008, 0.0, 0.992]\nclass = mMTC"] ;
+2 -> 3 ;
+4 [label="gini = 0.0\nsamples = 33.5%\nvalue = [1.0, 0.0, 0.0]\nclass = eMBB"] ;
+2 -> 4 ;
+5 [label="Time_delta <= 0.0\ngini = 0.023\nsamples = 32.6%\nvalue = [0.012, 0.988, 0.0]\nclass = URLLC"] ;
+1 -> 5 ;
+6 [label="gini = 0.001\nsamples = 31.9%\nvalue = [0.001, 0.999, 0.0]\nclass = URLLC"] ;
+5 -> 6 ;
+7 [label="gini = 0.499\nsamples = 0.8%\nvalue = [0.479, 0.521, 0.0]\nclass = URLLC"] ;
+5 -> 7 ;
+8 [label="Frame_payload_length <= 0.008\ngini = 0.002\nsamples = 33.9%\nvalue = [0.001, 0.0, 0.999]\nclass = mMTC"] ;
+0 -> 8 [labeldistance=2.5, labelangle=45, headlabel="False"] ;
+9 [label="TCP_window_size <= 0.004\ngini = 0.0\nsamples = 33.8%\nvalue = [0.0, 0.0, 1.0]\nclass = mMTC"] ;
+8 -> 9 ;
+10 [label="gini = 0.0\nsamples = 33.8%\nvalue = [0.0, 0.0, 1.0]\nclass = mMTC"] ;
+9 -> 10 ;
+11 [label="gini = 0.0\nsamples = 0.0%\nvalue = [1.0, 0.0, 0.0]\nclass = eMBB"] ;
+9 -> 11 ;
+12 [label="Time_delta <= 0.99\ngini = 0.0\nsamples = 0.0%\nvalue = [1.0, 0.0, 0.0]\nclass = eMBB"] ;
+8 -> 12 ;
+13 [label="gini = 0.0\nsamples = 0.0%\nvalue = [1.0, 0.0, 0.0]\nclass = eMBB"] ;
+12 -> 13 ;
+14 [label="gini = 0.5\nsamples = 0.0%\nvalue = [0.5, 0.5, 0.0]\nclass = eMBB"] ;
+12 -> 14 ;
+}

@@ -1,0 +1,17 @@
+digraph Tree {
+node [shape=box, style="rounded", color="black", fontname="helvetica"] ;
+edge [fontname="helvetica"] ;
+0 [label="Time_delta <= 0.079\ngini = 0.666\nsamples = 22257597\nvalue = [7541146.0, 7175305.0, 7541146.0]\nclass = eMBB"] ;
+1 [label="TCP_window_size <= 0.0\ngini = 0.5\nsamples = 14717860\nvalue = [7534629.0, 7175304.0, 7927.0]\nclass = eMBB"] ;
+0 -> 1 [labeldistance=2.5, labelangle=45, headlabel="True"] ;
+2 [label="gini = 0.002\nsamples = 7457246\nvalue = [7448859.0, 460.0, 7927.0]\nclass = eMBB"] ;
+1 -> 2 ;
+3 [label="gini = 0.023\nsamples = 7260614\nvalue = [85770, 7174844, 0]\nclass = URLLC"] ;
+1 -> 3 ;
+4 [label="Frame_payload_length <= 0.008\ngini = 0.002\nsamples = 7539737\nvalue = [6517.0, 1.0, 7533219.0]\nclass = mMTC"] ;
+0 -> 4 [labeldistance=2.5, labelangle=-45, headlabel="False"] ;
+5 [label="gini = 0.0\nsamples = 7533332\nvalue = [113, 0, 7533219]\nclass = mMTC"] ;
+4 -> 5 ;
+6 [label="gini = 0.0\nsamples = 6405\nvalue = [6404, 1, 0]\nclass = eMBB"] ;
+4 -> 6 ;
+}
