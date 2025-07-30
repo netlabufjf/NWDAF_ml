@@ -9,7 +9,7 @@ from util import (glob_get_files_list,
 
 # File paths
 working_folder = "./pcap/output/4-ML/"
-output_files_path_labeled_data = working_folder + "preprocess/labeled_data/" # save the labeled output files there
+input_files_path_labeled_data = working_folder + "preprocess/labeled_data/" # read the labeled output files from here
 # Vars
 class_names_list = ["eMBB","URLLC","mMTC"]
 features_names_list = []
