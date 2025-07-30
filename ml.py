@@ -106,6 +106,8 @@ def read_and_split_train_data(csv_file_list, split, dataset_percentage=100):
             elif 'inference' in file:
                 # print("[DEBU] Skipped inference file found at", file) # DEBUG
                 pass
+            elif 'SMOTE' in file and len(csv_file_list) == 1:
+                training_data = read_csv(csv_file_list[0])
             else:
                 raise ValueError(f"[ERRO] Could not determine data set type from filename {file}")
                 exit()
@@ -338,28 +340,40 @@ if (run_SMOTE):
     # SMOTE parameters
     k = 5
     strategy = 'minority'
-    
-    print("[INFO] Applying SMOTE on training data ... ", end='')
-    SMOTE_run_time_begin = datetime.now()
-    X_train_smote, y_train_smote = data_oversample(X_train, y_train, strategy=strategy, k=k)
-    print("[ OK ]")
-    # print("[DEBU] Data before SMOTE")
-    # print("[DEBU] Class distrib.:", y_train.value_counts()) # summarize class distribution
-    # print("[DEBU] Class distrib. (%):\n", y_train.value_counts(dropna=False, normalize=True)) # summarize class distribution
-    # print("[DEBU] Total no. training samples:", len(y_train))
-    # print("[DEBU] Data after SMOTE")
-    # print("[DEBU] Class distrib.:", y_train_smote.value_counts()) # summarize class distribution
-    # print("[DEBU] Class distrib. (%):\n", y_train_smote.value_counts(dropna=False, normalize=True)) # summarize class distribution
-    # print("[DEBU] Total no. training samples:", len(y_train_smote))
-    X_train = X_train_smote
-    y_train = y_train_smote
+    # Update the list of CSV files
+    smote_files_available = glob_get_files_list(output_files_path_resampled_data, file_name_pattern=f"{k}*{strategy}", file_format="csv")
+    smote_files_available.sort()
+    smote_file = smote_files_available[-1] # get the most recent file
 
-    # Save the oversampled dataset on disk
-    oversampled_data = X_train_smote.join(y_train_smote)
-    oversampled_data.to_csv(f"{output_files_path_resampled_data}{timestamp}_SMOTE_oversample_k_{k}_strategy_{strategy}.csv", header=True, index=False)
+    if smote_file:
+        print(f"[INFO] File {smote_file} was found, skipping SMOTE")
 
-    SMOTE_run_time_end = datetime.now()
-    print("[INFO] SMOTE run time:", (SMOTE_run_time_end - SMOTE_run_time_begin).total_seconds(), "(seconds)")
+        print("[INFO] Reading preprocessed SMOTE file ... ", end='')
+        X_train, X_test, y_train, y_test = read_and_split_train_data([str(smote_file)], split=True)
+        print("[ OK ]")
+
+    else:
+        print("[INFO] Applying SMOTE on training data ... ", end='')
+        SMOTE_run_time_begin = datetime.now()
+        X_train_smote, y_train_smote = data_oversample(X_train, y_train, strategy=strategy, k=k)
+        print("[ OK ]")
+        # print("[DEBU] Data before SMOTE")
+        # print("[DEBU] Class distrib.:", y_train.value_counts()) # summarize class distribution
+        # print("[DEBU] Class distrib. (%):\n", y_train.value_counts(dropna=False, normalize=True)) # summarize class distribution
+        # print("[DEBU] Total no. training samples:", len(y_train))
+        # print("[DEBU] Data after SMOTE")
+        # print("[DEBU] Class distrib.:", y_train_smote.value_counts()) # summarize class distribution
+        # print("[DEBU] Class distrib. (%):\n", y_train_smote.value_counts(dropna=False, normalize=True)) # summarize class distribution
+        # print("[DEBU] Total no. training samples:", len(y_train_smote))
+        X_train = X_train_smote
+        y_train = y_train_smote
+
+        # Save the oversampled dataset on disk
+        oversampled_data = X_train_smote.join(y_train_smote)
+        oversampled_data.to_csv(f"{output_files_path_resampled_data}{timestamp}_SMOTE_oversample_k_{k}_strategy_{strategy}.csv", header=True, index=False)
+
+        SMOTE_run_time_end = datetime.now()
+        print("[INFO] SMOTE run time:", (SMOTE_run_time_end - SMOTE_run_time_begin).total_seconds(), "(seconds)")
 
 model_names_list = ['LR', 'DT', 'RF', 'MLP', 'SVM', 'HGB', 'LightGBM', 'XGB', 'AdaBoost', 'Stacking', 'Voting']
 
