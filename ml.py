@@ -254,20 +254,19 @@ def cross_val(clf, X, y):
     new_row = {
             columns_cross_val_results_df[0]: model_name,
             columns_cross_val_results_df[1]: data_num_rows,
-            columns_cross_val_results_df[2]: s_train_precision,
-            columns_cross_val_results_df[3]: s_train_recall,
-            columns_cross_val_results_df[4]: s_train_f_score,
-            columns_cross_val_results_df[5]: s_test_precision,
-            columns_cross_val_results_df[6]: s_test_recall,
-            columns_cross_val_results_df[7]: s_test_f_score,
-            columns_cross_val_results_df[8]: cv_delta_precision,
-            columns_cross_val_results_df[9]: cv_delta_recall,
-            columns_cross_val_results_df[10]: cv_delta_f_score,
-            columns_cross_val_results_df[11]: s_fit_time_sec,
-            columns_cross_val_results_df[12]: s_score_time_sec,
-            columns_cross_val_results_df[13]: cv_total_time_sec,
+            columns_cross_val_results_df[2]: mean(s_train_precision),
+            columns_cross_val_results_df[3]: mean(s_train_recall),
+            columns_cross_val_results_df[4]: mean(s_train_f_score),
+            columns_cross_val_results_df[5]: mean(s_test_precision),
+            columns_cross_val_results_df[6]: mean(s_test_recall),
+            columns_cross_val_results_df[7]: mean(s_test_f_score),
+            columns_cross_val_results_df[8]: mean(cv_delta_precision),
+            columns_cross_val_results_df[9]: mean(cv_delta_recall),
+            columns_cross_val_results_df[10]: mean(cv_delta_f_score),
+            columns_cross_val_results_df[11]: mean(s_fit_time_sec),
+            columns_cross_val_results_df[12]: mean(s_score_time_sec),
+            columns_cross_val_results_df[13]: mean(cv_total_time_sec),
         }
-    # TODO save each list on a separate column (e.g. use cv_folds to control the number of columns)
 
     # Add new row to the dataframe using loc[] method
     cross_val_results_df.loc[len(cross_val_results_df)] = new_row
@@ -381,8 +380,8 @@ model_names_list = ['LR', 'DT', 'RF', 'MLP', 'SVM', 'HGB', 'LightGBM', 'XGB', 'A
 if (run_cross_val):
     columns_cross_val_results_df = ["model_name", "data_num_rows", "train_precision_avg", "train_recall_avg",
                                 "train_f1_score_avg", "test_precision_avg", "test_recall_avg",
-                                "test_f1_score_avg", "delta_prec", "delta_rec", "delta_f_score",
-                                "fit_time_sec", "score_time_sec", "total_cross_val_time_sec"]
+                                "test_f1_score_avg", "delta_prec_avg", "delta_rec_avg", "delta_f_score_avg",
+                                "fit_time_sec_avg", "score_time_sec_avg", "total_cross_val_time_sec_avg"]
     cross_val_results_df = pd.DataFrame(columns=columns_cross_val_results_df) # df to save the CV results
 
     X, y = read_and_split_train_data(csv_files, split=False, dataset_percentage=100) # prepare data splits to cross val
