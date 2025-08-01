@@ -49,6 +49,7 @@ run_SMOTE = True # Oversampling
 run_OSS = False # Undersampling
 
 timestamp = datetime.now().strftime("%Y%m%d-%H%M%S")
+total_run_time_begin = datetime.now()
 
 def classifier_select(classifier_acronym):
     match classifier_acronym:
@@ -400,3 +401,6 @@ if (run_model_training):
         clf = classifier_select(i)
 
         train_models(clf, X_train, X_test, y_train, y_test)
+
+total_run_time_end = datetime.now()
+print("[INFO] ML total run time:", (total_run_time_end - total_run_time_begin).total_seconds(), "(seconds)")
