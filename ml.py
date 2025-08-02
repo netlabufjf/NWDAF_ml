@@ -247,9 +247,9 @@ def cross_val(clf, X, y):
     # print("[DEBU] Recall:", s_test_recall)
     # print("[DEBU] Average F1-Score:", s_test_f_score)
 
-    cv_delta_precision = s_test_precision - s_train_precision
-    cv_delta_recall = s_test_recall - s_train_recall
-    cv_delta_f_score = s_test_f_score - s_train_f_score
+    avg_s_test_precision = mean(s_test_precision)
+    avg_s_test_recall = mean(s_test_recall)
+    avg_s_test_f_score = mean(s_test_f_score)
     cv_total_time_sec = s_fit_time_sec + s_score_time_sec
 
     new_row = {
@@ -258,12 +258,12 @@ def cross_val(clf, X, y):
             columns_cross_val_results_df[2]: mean(s_train_precision),
             columns_cross_val_results_df[3]: mean(s_train_recall),
             columns_cross_val_results_df[4]: mean(s_train_f_score),
-            columns_cross_val_results_df[5]: mean(s_test_precision),
-            columns_cross_val_results_df[6]: mean(s_test_recall),
-            columns_cross_val_results_df[7]: mean(s_test_f_score),
-            columns_cross_val_results_df[8]: mean(cv_delta_precision),
-            columns_cross_val_results_df[9]: mean(cv_delta_recall),
-            columns_cross_val_results_df[10]: mean(cv_delta_f_score),
+            columns_cross_val_results_df[5]: avg_s_test_precision,
+            columns_cross_val_results_df[6]: avg_s_test_recall,
+            columns_cross_val_results_df[7]: avg_s_test_f_score,
+            columns_cross_val_results_df[8]: std(s_test_precision, mean=avg_s_test_precision), # reuse the mean to improve performance
+            columns_cross_val_results_df[9]: std(s_test_recall, mean=avg_s_test_recall),       # see the URL below
+            columns_cross_val_results_df[10]: std(s_test_f_score, mean=avg_s_test_f_score),    # https://numpy.org/doc/stable/reference/generated/numpy.std.html
             columns_cross_val_results_df[11]: mean(s_fit_time_sec),
             columns_cross_val_results_df[12]: mean(s_score_time_sec),
             columns_cross_val_results_df[13]: mean(cv_total_time_sec),
@@ -380,8 +380,8 @@ model_names_list = ['LR', 'DT', 'RF', 'MLP', 'SVM', 'HGB', 'LightGBM', 'XGB', 'A
 # Cross validation
 if (run_cross_val):
     columns_cross_val_results_df = ["model_name", "data_num_rows", "train_precision_avg", "train_recall_avg",
-                                "train_f1_score_avg", "test_precision_avg", "test_recall_avg",
-                                "test_f1_score_avg", "delta_prec_avg", "delta_rec_avg", "delta_f_score_avg",
+                                "train_f1_score_avg", "test_precision_avg", "test_recall_avg", "test_f1_score_avg",
+                                "test_precision_stdev", "test_recall_stdev", "test_f1_score_stdev",
                                 "fit_time_sec_avg", "score_time_sec_avg", "total_cross_val_time_sec_avg"]
     cross_val_results_df = pd.DataFrame(columns=columns_cross_val_results_df) # df to save the CV results
 
