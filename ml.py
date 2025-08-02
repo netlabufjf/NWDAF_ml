@@ -56,7 +56,7 @@ def classifier_select(classifier_acronym):
         case 'LR':
             clf = LogisticRegression()
         case 'DT':
-            clf = DecisionTreeClassifier()
+            clf = DecisionTreeClassifier(max_depth=3)
         case 'RF':
             clf = RandomForestClassifier()
         case 'MLP':
@@ -73,17 +73,18 @@ def classifier_select(classifier_acronym):
             clf = AdaBoostClassifier()
         case 'Stacking':
             estimators = [
-            ('lgbm', LGBMClassifier(verbose=-1)),
-            ('xgb', XGBClassifier())
+            ('dt', DecisionTreeClassifier(max_depth=2)),
+            ('svc', LinearSVC()),
+            ('ada', AdaBoostClassifier())
             ]
             clf = StackingClassifier(estimators=estimators, final_estimator=LogisticRegression())
         case 'Voting':
             estimators = [
-            ('lgbm', LGBMClassifier(verbose=-1)),
-            ('xgb', XGBClassifier()),
-            ('svc', LinearSVC()),
+            ('dt', DecisionTreeClassifier(max_depth=3)),
+            ('lr', LogisticRegression()),
+            ('ada', AdaBoostClassifier())
             ]
-            clf = VotingClassifier(estimators=estimators)
+            clf = VotingClassifier(estimators=estimators, voting='soft', weights=[0.1, 0.1, 0.8])
         case _:
             print("[ERRO] Failed to load the model")
             exit()
