@@ -165,7 +165,7 @@ def train_models(model, X_train, X_test, y_train, y_test):
     # print("[DEBU] Recall    :", round(recall_avg, 10))
     # print("[DEBU] F1-score  :", round(f_score_avg, 10))
     # print("[DEBU] F1-score/class :", f1_score(y_test, y_pred, average=None, labels=[0, 1, 2]))
-    if (model_name != "LinearSVC" and model_name != "VotingClassifier"): # LinearSVC doesn't implement proba
+    if (model_name != "LinearSVC" and model_name != "StackingClassifier"): # LinearSVC doesn't implement proba
         auc_score = roc_auc_score(y_test, model.predict_proba(X_test), average='macro', multi_class='ovo', labels=[0, 1, 2])
         # print("[DEBU] ROC AUC Score :", round(auc_score, 10))
     else:
