@@ -287,9 +287,8 @@ def read_and_label_data(file_path, out_dir, remove_old_files=False):
             raise ValueError(f"Could not determine label from filename {file_path}")
             exit()
         
-        
         # Add label to DataFrame
-        print(f"[INFO] Labeling {file_name_without_path} ... ", end='')
+        print(f"[INFO] Labeling {file_name_without_path} ... ", end='', flush=True)
         df['label'] = label
         df.to_csv(new_file_name_and_path, index=False)
         print("[ OK ]")

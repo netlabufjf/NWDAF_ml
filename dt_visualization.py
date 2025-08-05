@@ -54,18 +54,18 @@ def create_and_plot_tree_visualization(file_name_suffix, rounded_rectangles, hor
     png_file_path = file_path_without_format + ".png"
     pdf_file_path = file_path_without_format + ".pdf"
 
-    print(f"[INFO] Exporting {dot_file_path} ... ", end='')
+    print(f"[INFO] Exporting {dot_file_path} ... ", end='', flush=True)
     export_graphviz(dt, out_file=dot_file_path, class_names=class_names_list, feature_names=features_names_list, 
                    rounded=rounded_rectangles, rotate=horizontal, proportion=print_percentages, leaves_parallel=parallel_leaves)
     # For more parameters see: https://scikit-learn.org/stable/modules/generated/sklearn.tree.export_graphviz.html
     print(" [ OK ] ")
 
-    print(f"[INFO] Plotting {file_path_without_format} ... ", end='')
+    print(f"[INFO] Plotting {file_path_without_format} ... ", end='', flush=True)
     # check_call(['dot', '-Tpng', dot_file_path, '-o', png_file_path]) # save as PNG
     check_call(['dot', '-Tpdf', dot_file_path, '-o', pdf_file_path]) # save as PDF
     print(" [ OK ] ")
 
-print("[INFO] Loading files and creating the model ... ", end='')
+print("[INFO] Loading files and creating the model ... ", end='', flush=True)
 
 # Update the list of CSV files
 csv_files = glob_get_files_list(input_files_path_labeled_data, file_format="csv")

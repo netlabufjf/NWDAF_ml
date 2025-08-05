@@ -294,7 +294,7 @@ csv_files = glob_get_files_list(output_files_path_labeled_data, file_format="csv
 
 # Prepare data splits to train the models
 if (run_model_training or run_SMOTE or run_OSS):
-    print("[INFO] Preparing training data splits ... ", end='')
+    print("[INFO] Preparing training data splits ... ", end='', flush=True)
     if (run_OSS):
         data_amount = 1 # amount of data to be used in OSS
     else:
@@ -308,7 +308,7 @@ if (run_OSS):
     k = 1
     seed = 100
 
-    print("[INFO] Applying OSS on training data ... ", end='')
+    print("[INFO] Applying OSS on training data ... ", end='', flush=True)
     OSS_run_time_begin = datetime.now()
     X_train_oss, y_train_oss = data_undersample(X_train, y_train, k, seed)
     print("[ OK ]")
@@ -349,12 +349,12 @@ if (run_SMOTE):
     if smote_file:
         print(f"[INFO] File {smote_file} was found, skipping SMOTE")
 
-        print("[INFO] Reading preprocessed SMOTE file ... ", end='')
+        print("[INFO] Reading preprocessed SMOTE file ... ", end='', flush=True)
         X_train, X_test, y_train, y_test = read_and_split_train_data([str(smote_file)], split=True)
         print("[ OK ]")
 
     else:
-        print("[INFO] Applying SMOTE on training data ... ", end='')
+        print("[INFO] Applying SMOTE on training data ... ", end='', flush=True)
         SMOTE_run_time_begin = datetime.now()
         X_train_smote, y_train_smote = data_oversample(X_train, y_train, strategy=strategy, k=k)
         print("[ OK ]")
