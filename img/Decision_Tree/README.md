@@ -17,6 +17,7 @@ The first number in the subfolders represents a given dataset configuration as l
 - `0` = example run (baseline)
 - `1` = dataset after dropping the stream related features
 - `2` = dataset after dropping the stream related features and applying SMOTE
+- `3`-`6` = same as `2` + manual analysis and parameter adjustment based on previous results
 
 The second number represents a parameter configuration as listed below:
 
