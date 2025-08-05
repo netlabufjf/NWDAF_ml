@@ -54,7 +54,7 @@ def read_csv(file_path):
         print("[ERRO]", type(e).__name__, e)
         exit()
 
-def glob_get_files_list(path, file_name_pattern='*', file_format='*'):
+def glob_get_files_list(path, file_name_pattern='*', file_format='*', allow_empty_list=False):
     """
     A function to list files in a given directory
 
@@ -75,7 +75,8 @@ def glob_get_files_list(path, file_name_pattern='*', file_format='*'):
     full_path = path + "*" + file_name_pattern + '*.' + file_format
     files = glob.glob(full_path)
 
-    if not files: # check if glob is empty
+    if not allow_empty_list:
+        if not files: # check if glob is empty
             print("[ERRO] No files were read by glob. Please, check its parameters")
             print("[DEBU] Current parameters:")
             print("file_format:", file_format)
