@@ -4,7 +4,7 @@ seaborn==0.13.2
 pandas==2.3.1
 scikit-learn==1.6.1
 lightgbm==4.6.0
-xgboost-cpu==3.0.3
+xgboost==3.0.3
 imbalanced-learn==0.13.0
 polars==1.32.0
 pyarrow==21.0.0

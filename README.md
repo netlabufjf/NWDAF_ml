@@ -11,6 +11,7 @@ This repository presents a proof-of-concept (PoC) demonstrating the application 
 - python packages from [requirements.txt](./requirements.txt)
 - tshark: 4.4.3
 - perl: 5.40.1 (also tested on 5.42.0)
+- glibc: 2.42
 
 ### Hardware
 
