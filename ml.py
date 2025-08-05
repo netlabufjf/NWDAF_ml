@@ -1,12 +1,10 @@
-import os
 import pandas as pd
 import pickle
 import csv
-from numpy import mean,std,linspace
+from numpy import mean,std
 from datetime import datetime
 from time import time_ns
-from sklearn.preprocessing import MinMaxScaler,OrdinalEncoder
-from sklearn.model_selection import train_test_split,cross_val_score,RepeatedStratifiedKFold,cross_validate,GridSearchCV
+from sklearn.model_selection import train_test_split,cross_validate
 from sklearn.linear_model import LogisticRegression
 from sklearn.ensemble import HistGradientBoostingClassifier,RandomForestClassifier,AdaBoostClassifier,StackingClassifier,VotingClassifier
 from sklearn.tree import DecisionTreeClassifier
@@ -24,7 +22,6 @@ from sklearn.metrics import (accuracy_score,
 
 from util import (glob_get_files_list,
                   read_csv,
-                  delete_files,
                   plot_confusion_matrix,
                   preprocess_data,
                   read_and_label_data,
