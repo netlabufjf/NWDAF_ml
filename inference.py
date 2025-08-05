@@ -22,7 +22,7 @@ results_folder = working_folder + "inference_results/" # save the results here
 
 timestamp = datetime.now().strftime("%Y%m%d-%H%M%S")
 
-def run_inference(models_file_list, inference_data_file_list):
+def run_inference(models_file_list, inference_data_file_list, extra_run=False):
     for file in inference_data_file_list:
         file_name = file.split('/')[-1]
 
@@ -113,7 +113,11 @@ def run_inference(models_file_list, inference_data_file_list):
             # Get the original input file name without format
             output_filename = file_name.split('/')[-1].split('_inference_')[0]
             # Save the results dataframe to a CSV file with a unique filename based on the current time
-            results_df.to_csv(f"{results_folder}{output_filename}_{timestamp}_inference_results.csv", index=False)
+            if not extra_run:
+                results_df.to_csv(f"{results_folder}{output_filename}_{timestamp}_inference_results.csv", index=False)
+            else:
+                # adjust parameters if running multiple times
+                results_df.to_csv(f"{results_folder}{output_filename}_{timestamp}_inference_results.csv", index=False, mode='a', header=False)
 
         else:
             print(f"[WARN] Skipping file {file_name}")
@@ -141,6 +145,8 @@ inference_data_files = glob_get_files_list(data_folder, file_format="csv")
 
 total_run_time_begin = datetime.now()
 run_inference(pkl_files, inference_data_files)
+run_inference(pkl_files, inference_data_files, extra_run=True)
+run_inference(pkl_files, inference_data_files, extra_run=True)
 total_run_time_end = datetime.now()
 print("[INFO] Total preprocess run time:", (total_preprocess_time_end - total_preprocess_time_begin).total_seconds(), "(seconds)")
 print("[INFO] Total inference run time:", (total_run_time_end - total_run_time_begin).total_seconds(), "(seconds)")
