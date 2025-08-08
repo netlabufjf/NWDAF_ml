@@ -339,13 +339,13 @@ if (run_SMOTE):
     k = 5
     strategy = 'minority'
     # Update the list of CSV files
-    smote_files_available = glob_get_files_list(output_files_path_resampled_data, file_name_pattern=f"{k}*{strategy}", file_format="csv")
-    smote_files_available.sort()
-    smote_file = smote_files_available[-1] # get the most recent file
+    smote_files_available = glob_get_files_list(output_files_path_resampled_data, file_name_pattern=f"{k}*{strategy}", file_format="csv", allow_empty_list=True)
+    
+    if smote_files_available:
+        smote_files_available.sort()
+        smote_file = smote_files_available[-1] # get the most recent file
 
-    if smote_file:
         print(f"[INFO] File {smote_file} was found, skipping SMOTE")
-
         print("[INFO] Reading preprocessed SMOTE file ... ", end='', flush=True)
         X_train, X_test, y_train, y_test = read_and_split_train_data([str(smote_file)], split=True)
         print("[ OK ]")
