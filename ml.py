@@ -248,6 +248,9 @@ def cross_val(clf, X, y):
     avg_s_test_precision = mean(s_test_precision)
     avg_s_test_recall = mean(s_test_recall)
     avg_s_test_f_score = mean(s_test_f_score)
+    avg_s_fit_time_sec = mean(s_fit_time_sec)
+    avg_s_score_time_sec = mean(s_score_time_sec)
+    
     cv_total_time_sec = s_fit_time_sec + s_score_time_sec
 
     new_row = {
@@ -262,9 +265,11 @@ def cross_val(clf, X, y):
             columns_cross_val_results_df[8]: std(s_test_precision, mean=avg_s_test_precision), # reuse the mean to improve performance
             columns_cross_val_results_df[9]: std(s_test_recall, mean=avg_s_test_recall),       # see the URL below
             columns_cross_val_results_df[10]: std(s_test_f_score, mean=avg_s_test_f_score),    # https://numpy.org/doc/stable/reference/generated/numpy.std.html
-            columns_cross_val_results_df[11]: mean(s_fit_time_sec),
-            columns_cross_val_results_df[12]: mean(s_score_time_sec),
+            columns_cross_val_results_df[11]: avg_s_fit_time_sec,
+            columns_cross_val_results_df[12]: avg_s_score_time_sec,
             columns_cross_val_results_df[13]: mean(cv_total_time_sec),
+            columns_cross_val_results_df[14]: std(s_fit_time_sec, mean=avg_s_fit_time_sec),  # reuse the mean to improve performance
+            columns_cross_val_results_df[15]: std(s_test_recall, mean=avg_s_score_time_sec), # see comment above
         }
 
     # Add new row to the dataframe using loc[] method
@@ -380,7 +385,9 @@ if (run_cross_val):
     columns_cross_val_results_df = ["model_name", "data_num_rows", "train_precision_avg", "train_recall_avg",
                                 "train_f1_score_avg", "test_precision_avg", "test_recall_avg", "test_f1_score_avg",
                                 "test_precision_stdev", "test_recall_stdev", "test_f1_score_stdev",
-                                "fit_time_sec_avg", "score_time_sec_avg", "total_cross_val_time_sec_avg"]
+                                "fit_time_sec_avg", "score_time_sec_avg", "total_cross_val_time_sec_avg",
+                                "fit_time_sec_stdev", "score_time_sec_stdev"
+                                ]
     cross_val_results_df = pd.DataFrame(columns=columns_cross_val_results_df) # df to save the CV results
 
     X, y = read_and_split_train_data(csv_files, split=False, dataset_percentage=100) # prepare data splits to cross val
