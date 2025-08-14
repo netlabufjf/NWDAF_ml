@@ -1,24 +1,13 @@
 import pandas as pd
-# from numpy.random import seed
-# from numpy.random import randn
+
 from scipy.stats import mannwhitneyu
 from scipy.stats import kruskal
 from scipy.stats import chi2_contingency
 from util import glob_get_files_list,read_csv
-# seed the random number generator
-# seed(1)
-# generate two independent samples
-# data1 = 5 * randn(1000) + 50
-# data2 = 5 * randn(100) + 50
-#data1 = [19, 22, 16, 29, 24]
-#data2 = [20, 11, 17, 12]
-#data1 = [48, 40, 39, 50, 41, 38, 53]
-#data2 = [14, 18, 20, 10, 12, 102, 17]
 
 # File paths
 output_folder = "./pcap/output/"
 working_folder = output_folder + "4-ML/"
-# models_folder = working_folder + "models/" # read the models from here
 input_files_path_preprocessed_data = working_folder + "preprocess/data_ready_to_ml/" # read preprocessed data from here
 
 def chi_squared_hypothesis_test(data1, data2):
