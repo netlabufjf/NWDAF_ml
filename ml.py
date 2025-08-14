@@ -107,6 +107,8 @@ def read_and_split_train_data(csv_file_list, split, dataset_percentage=100):
                 pass
             elif 'SMOTE' in file and len(csv_file_list) == 1:
                 training_data = read_csv(csv_file_list[0])
+            elif 'OSS' in file:
+                training_data = read_csv(file)
             else:
                 raise ValueError(f"[ERRO] Could not determine data set type from filename {file}")
                 exit()
