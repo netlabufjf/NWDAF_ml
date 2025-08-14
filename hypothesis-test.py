@@ -33,12 +33,12 @@ def chi_squared_hypothesis_test(data1, data2):
     print("[DEBU] === Chi-Squared Test ===")
     stat, p, dof, expected = chi2_contingency(table)
     alpha = 0.05 # 95% confidence level
-    passed = p <= alpha
+    passed = p > alpha
     print('[DEBU] stat=%.3f, p=%.3f' % (stat, p))
     if passed:
-        print('[DEBU] Probably dependent (reject H0)')
-    else:
         print('[DEBU] Probably independent (fail to reject H0)')
+    else:
+        print('[DEBU] Probably dependent (reject H0)')
     return alpha, stat, p, passed
 
 def kruskal_wallis_hypothesis_test(data1, data2):
