@@ -80,18 +80,19 @@ def mann_whitney_hypothesis_test(data1, data2):
     # compare samples
     u1, p = mannwhitneyu(data1, data2)
     u2 = n1 * n2 - u1
+    stat = min(u1, u2)
     print("[DEBU] === Mann-Whitney U Test ===")
-    # TODO format on screen messages properly
     print('[DEBU] Statistics1 (U1) = %.3f\n Statistics2 (U2) = %.3f\n p = %.3f' % (u1, u2, p))
 
     # statistical results
-    print("[DEBU] U:", min(u1, u2))
+    print("[DEBU] U:", stat)
     print("[DEBU] n1:", n1)
     print("[DEBU] n2:", n2)
 
     # interpret
     alpha = 0.05 # 95% confidence level
-    if p > alpha:
+    passed = p > alpha
+    if passed:
         print("[DEBU] p > alpha")
         print("[DEBU] %.3f > %.2f" % (p, alpha))
         print('[DEBU] Same distribution (fail to reject H0)')
@@ -100,8 +101,7 @@ def mann_whitney_hypothesis_test(data1, data2):
         print("[DEBU] %.3f < %.2f" % (p, alpha))
         print('[DEBU] Different distribution (reject H0)')
 
-    # Salvar no disco
-    # file name, feature name, n1, n2, u1, u2, alpha, p, result (str)
+    return alpha, stat, p, passed
 
 def load_data(csv_files_list):
     data = {
