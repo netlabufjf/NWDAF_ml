@@ -177,8 +177,8 @@ for train_data, infer_data, class_label in data_to_be_tested:
         print(f"[INFO] Testing {feature} feature", flush=True)
 
         if feature == "Time_delta" or feature == "Timestamp":
-            test_name = "Kruskal-Wallis H Test"
-            alpha, stat, p, passed = kruskal_wallis_hypothesis_test(df1, df2)
+            test_name = "Mann-Whitney U test"
+            alpha, stat, p, passed = mann_whitney_hypothesis_test(df1, df2)
         else:
             test_name = "Chi-Squared Test"
             alpha, stat, p, passed = chi_squared_hypothesis_test(df1, df2)
