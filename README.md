@@ -50,9 +50,7 @@ Previously, a reprodction of [Kim et al. 2022]'s work was made on [[de Oliveira 
 
 Our current work focused on two main points: (i) creating a larger 5G simulated public PCAP dataset; and (ii) enhancing the classification results obtained on [de Oliveira et al. 2024].
 
-The dataset was created with 1 million packets for each capture. Builing upon the implementation done by [de Oliveira et al. 2024], the current work reimplemented the complete ML pipeline to include 8 models and 33 features (previously there was only 3 models and 7 features) extracted from the PCAP files. The data used for training and testing the models didn't overlap with the data used for inference (more details in the [section below](./README.md#dataset-description)).
-
-TODO: detail our results
+The dataset was created with 1 million packets for each capture. Builing upon the implementation done by [de Oliveira et al. 2024], the current work completely reimplemented the ML pipeline to include 11 models and 33 features (previously there was only 3 models and 7 features) extracted from the PCAP files. The data used for training and testing the models didn't overlap with the data used for inference (more details in the [section below](./README.md#dataset-description)). Despite being possible to greatly enhance the model performance, the models suffered from overfitting not being able to correctly classify the packets of the mMTC class.
 
 ## Dataset description
 
