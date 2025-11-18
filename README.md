@@ -183,7 +183,26 @@ Load the PCAP data in the `input` folder, install [the requisites](#install-the-
 
 ## Citing this work
 
-TBD
+Please, cite it as:
+
+L. A. de Oliveira, "User equipment traffic classification in the 5G core", UFJF, 06 2025.
+
+Or use the BibTex below:
+
+```
+@masterthesis{de_Oliveira_2025,
+    title={User equipment traffic classification in the 5G core}, 
+    author={{de Oliveira}, Leonardo Azalim},
+    month={06},
+    year={2025},
+    url={https://repositorio.ufjf.br/jspui/handle/ufjf/19385},
+    doi={https://doi.org/10.5281/zenodo.17635905},
+    institution={UFJF},
+    publisher = {Universidade Federal de Juiz de Fora (UFJF)},
+    copyright = {Creative Commons Attribution 3.0 Unported},
+    language={en}
+}
+```
 
 ## Acknowledgements
 
